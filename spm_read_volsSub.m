@@ -1,6 +1,5 @@
 % --- load NIfTI voxel data: mimics spm_read_vol without requiring SPM
 function [img] = spm_read_volsSub(hdr)
-	print('hello');
 if (exist(hdr.fname, 'file') ~= 2)
     fprintf('Error: unable to find %s', hdr.fname);
     return;
