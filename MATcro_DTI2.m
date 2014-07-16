@@ -35,6 +35,9 @@ if nargout>0
 end
 %end MATcro() --- SUBFUNCTIONS FOLLOW
 
+function saveBitmap(v,varargin)
+	fileUtils.saveBitmap(v, varargin)
+% end saveBitmap()
 
 % --- Load trackvis fibers http://www.trackvis.org/docs/?subsect=fileformat
 function addTrack(v,varargin)
