@@ -115,36 +115,3 @@ redrawSurface(v);
 function simplifyMesh(v, reduce)
 	doSimplifyMesh(v, reduce)
 %end simplifyMesh()
-
-
-% --- clip all values of 'in' to the range min..max
-function [out] = boundArray(in, min,max)
-out = in;
-i = out > max;
-out(i) = max;
-i = out < min;
-out(i) = min;
-%end boundArray()
-
-% --- threshold for converting continuous brightness to binary image using Otsu's method.
-function [thresh] = otsuSub(I)
-% BSD license: http://www.mathworks.com/matlabcentral/fileexchange/26532-image-segmentation-using-otsu-thresholding
-% Damien Garcia 2010/03 http://www.biomecardio.com/matlab/otsu.html
-nbins = 256;
-if (min(I(:)) == max(I(:)) ), disp('otu error: no intensity variability'); thresh =min(I(:)); return; end; 
-intercept = min(I(:)); %we will translate min-val to be zero
-slope = (nbins-1)/ (max(I(:))-intercept); %we will scale images to range 0..(nbins-1)
-%% Convert to 256 levels
-I = round((I - intercept) * slope);
-%% Probability distribution
-[histo,pixval] = hist(I(:),256);
-P = histo/sum(histo);
-%% Zeroth- and first-order cumulative moments
-w = cumsum(P);
-mu = cumsum((1:nbins).*P);
-sigma2B =(mu(end)*w(2:end-1)-mu(2:end-1)).^2./w(2:end-1)./(1-w(2:end-1));
-[maxsig,k] = max(sigma2B);
-thresh=    pixval(k+1);
-if (thresh >= nbins), thresh = nbins-1; end;
-thresh = thresh/slope + intercept;
-%end otsuSub()
