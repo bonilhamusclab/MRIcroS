@@ -35,6 +35,9 @@ if nargout>0
 end
 %end MATcro() --- SUBFUNCTIONS FOLLOW
 
+function openLayer(v, varargin)
+	doOpenLayer(v, varargin)
+
 function saveBitmap(v,varargin)
 	fileUtils.saveBitmap(v, varargin)
 % end saveBitmap()
