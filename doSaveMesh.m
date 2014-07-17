@@ -13,9 +13,9 @@ for i=1:length(v.surface)
             fprintf('Error: Unable to save GIfTI files - make sure SPM is installed');
         end;
     elseif (length(ext) == 4) && strcmpi(ext,'.vtk')
-        writeVtkSub(v.surface(i).vertices,v.surface(i).faces,filename);
+        fileUtils.vtk.writeVtkSub(v.surface(i).vertices,v.surface(i).faces,filename);
     else
-        writePlySub(v.surface(i).vertices,v.surface(i).faces,filename);
+        fileUtils.ply.writePlySub(v.surface(i).vertices,v.surface(i).faces,filename);
     end;
 end;
 %end doSaveMesh()
