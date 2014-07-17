@@ -7,5 +7,5 @@ vIn = cell2mat(varargin);
 v.vprefs.az = vIn(1);
 if (nargin > 1), v.vprefs.el = vIn(2); end;
 guidata(v.hMainFigure,v);%store settings
-redrawSurface(v);
+drawing.redrawSurface(v);
 %end setView()

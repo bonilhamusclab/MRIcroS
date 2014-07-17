@@ -17,5 +17,5 @@ if isempty(answer), disp('options cancelled'); return; end;
  v.vprefs.bgMode = round(str2double(answer(5)));
  v.vprefs.backFaceLighting = round(str2double(answer(6)));
  guidata(v.hMainFigure,v);%store settings
-redrawSurface(v);
+drawing.redrawSurface(v);
 %end MaterialOptionsMenu_Callback()

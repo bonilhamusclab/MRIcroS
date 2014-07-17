@@ -23,5 +23,5 @@ else
 end;
 v.vprefs.demoObjects = false;
 guidata(v.hMainFigure,v);%store settings
-redrawSurface(v);
+drawing.redrawSurface(v);
 %end meshToOpen()

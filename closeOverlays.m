@@ -7,7 +7,7 @@ if (~isempty(v.surface))
     v.surface(2) = sphereFV;
     v.vprefs.demoObjects = true;
     guidata(v.hMainFigure,v);%store settings
-    redrawSurface(v);
+    drawing.redrawSurface(v);
 else
     fprintf('Unable to close overlays: no overlays loaded\n');
 end;

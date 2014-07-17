@@ -12,5 +12,5 @@ if (length(varargin) > 3), v.vprefs.materialKaKdKsn(4) = vIn(4); end;
 if (length(varargin) > 4), v.vprefs.bgMode = vIn(5); end;
 if (length(varargin) > 5), v.vprefs.backFaceLighting = vIn(6); end;
 guidata(v.hMainFigure,v);%store settings
-redrawSurface(v);
+drawing.redrawSurface(v);
 %end setMaterial()

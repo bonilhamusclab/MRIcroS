@@ -16,5 +16,5 @@ if isempty(answer), disp('options cancelled'); return; end;
 v.vprefs.colors(layer,4) = str2double(answer(1));
 v.vprefs.colors(layer,:) = boundArray( v.vprefs.colors(layer,:), 0,1);
 guidata(v.hMainFigure,v);%store settings
-redrawSurface(v); %display new settings
+drawing.redrawSurface(v); %display new settings
 %end OverlayOptionsMenu_Callback()

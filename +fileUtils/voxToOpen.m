@@ -55,5 +55,5 @@ v.surface(layer).vertices = vx(:,1:3);
 %display results
 guidata(v.hMainFigure,v);%store settings
 fprintf('Surface threshold %f and reduction ratio %f yields mesh  with %d vertices and %d faces from image %s\n', thresh, reduce,size( v.surface(layer).vertices,1),size( v.surface(layer).faces,1),filename);
-redrawSurface(v);
+drawing.redrawSurface(v);
 %end voxToOpen()

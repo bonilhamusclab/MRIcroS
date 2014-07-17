@@ -9,5 +9,5 @@ for i=1:length(v.surface)
     clear('FVr');    
 end;
 guidata(v.hMainFigure,v);%store settings
-redrawSurface(v);
+drawing.redrawSurface(v);
 %end doSimplifyMesh()
