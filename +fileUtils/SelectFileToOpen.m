@@ -23,11 +23,11 @@ isBackground = v.vprefs.demoObjects;
 if exist(filename, 'file') == 0, fprintf('Unable to find "%s"\n',filename); return; end;
 [pathstr, name, ext] = fileparts(filename);
 if (length(ext) == 4) && strcmpi(ext,'.vtk')
-        meshToOpen (v,filename, isBackground);
+        fileUtils.openMesh(v,filename, isBackground);
         return;
 end; %VTK file
 if (exist('gifti.m', 'file') == 2) &&  (length(ext) == 4) && strcmpi(ext,'.gii')
-        meshToOpen (v,filename, isBackground);
+        openMesh(v,filename, isBackground);
         return;
 end; %GIFTI file
 if isnan(thresh)

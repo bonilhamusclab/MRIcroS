@@ -67,11 +67,7 @@ doCloseOverlays(v);
 function layerRGBA(v,varargin)
 % inputs: layerNumber, Red, Green, Blue, Alpha
 %MATcro('layerRGBA', 1, 0.9, 0, 0, 0.2) %set layer 1 to bright red (0.9) with 20% opacity
-if (length(varargin) < 2), return; end;
-vIn = cell2mat(varargin);
-v.vprefs.colors(vIn(1),1:(length(varargin)-1)) = vIn(2:length(varargin)); %change layer 1's red/green/blue/opacity 
-guidata(v.hMainFigure,v);%store settings
-redrawSurface(v);
+doSetLayerRgba(v, varargin)
 %end layerRGBA()
 
 % ---  reduce mesh complexity
@@ -125,35 +121,7 @@ end;
 guidata(v.hMainFigure,v);%store settings
 redrawSurface(v);
 %end simplifyMesh()
-    
 
-% --- open pre-generated mesh
-function meshToOpen (v,filename, isBackground)
-if isequal(filename,0), return; end;
-if exist(filename, 'file') == 0, fprintf('Unable to find %s\n',filename); return; end;
-[~, ~, ext] = fileparts(filename);
-if (length(ext) == 4) && strcmpi(ext,'.gii') && (~exist('gifti.m', 'file') == 2)
-    fprintf('Unable to open GIfTI files: this feature requires SPM to be installed');
-end;
-if (isBackground) 
-    v = rmfield(v,'surface');
-    layer = 1;
-else
-    layer = length( v.surface)+1;
-end;
-if (length(ext) == 4) && strcmpi(ext,'.gii')
-    gii = gifti(filename);
-     v.surface(layer).faces = double(gii.faces); %convert to double or reducepatch fails
-     v.surface(layer).vertices = double(gii.vertices); %convert to double or reducepatch fails
-else
-    [gii.vertices gii.faces] = read_vtkSub(filename);
-     v.surface(layer).faces = gii.faces'; 
-     v.surface(layer).vertices = gii.vertices'; 
-end;
-v.vprefs.demoObjects = false;
-guidata(v.hMainFigure,v);%store settings
-redrawSurface(v);
-%end meshToOpen()
 
 % --- clip all values of 'in' to the range min..max
 function [out] = boundArray(in, min,max)
