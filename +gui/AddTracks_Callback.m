@@ -7,5 +7,5 @@ v=guidata(obj);
     'Select a Track (trk) file');
     if isempty(track_filename), disp('load tracks cancelled'); return; end;
     track_filename=[track_pathname track_filename];
-    addTrack(obj,track_filename);    
+    fileUtils.trk.addTrack(obj,track_filename);    
 %end Add_tracks_Callback()
