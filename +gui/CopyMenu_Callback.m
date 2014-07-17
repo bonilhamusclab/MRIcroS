@@ -1,4 +1,4 @@
 function CopyMenu_Callback(obj, eventdata)
 v=guidata(obj);
-copyBitmap(v);
+doCopyBitmap(v);
 %end CopyMenu_Callback()

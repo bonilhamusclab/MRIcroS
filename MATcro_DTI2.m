@@ -38,6 +38,9 @@ end
 function openLayer(v, varargin)
 	doOpenLayer(v, varargin)
 
+function copyBitmap(v)
+	doCopyBitmap(v)
+
 function saveBitmap(v,varargin)
 	fileUtils.saveBitmap(v, varargin)
 % end saveBitmap()

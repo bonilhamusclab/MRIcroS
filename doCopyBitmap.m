@@ -1,5 +1,5 @@
 % --- Copy screenshot to clipboard
-function copyBitmap(v)
+function doCopyBitmap(v)
 %MATcro('copyBitmap')
 editmenufcn(v.hAxes,'EditCopyFigure');
-%end copyBitmap()
+%end doCopyBitmap()
