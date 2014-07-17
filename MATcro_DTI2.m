@@ -21,7 +21,6 @@ function varargout = MATcro_DTI(varargin)
 mOutputArgs = {}; % Variable for storing output when GUI returns
 h = findall(0,'Tag','makeGui'); %run as singleton
 if (isempty(h)) % new instance
-   'need to make a gui'
    h = gui.makeGui(); %set up user interface
 else % instance already running
    figure(h);  %Figure exists so bring Figure to the focus

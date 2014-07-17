@@ -7,8 +7,8 @@ function voxToOpen (v,filename, thresh, reduce, smooth, isBackground)
 if isequal(filename,0), return; end;
 if exist(filename, 'file') == 0, fprintf('Unable to find %s\n',filename); return; end;
 if (reduce > 1) || (reduce <= 0), reduce = 1; end;
-Hdr = spm_volSub(filename); %this call clones spm_vol without dependencies
-Vol = spm_read_volsSub(Hdr);%this call clones spm_read_vols without dependencies
+Hdr = fileUtils.nifti.spm_volSub(filename); %this call clones spm_vol without dependencies
+Vol = fileUtils.nifti.spm_read_volsSub(Hdr);%this call clones spm_read_vols without dependencies
 %Hdr = spm_vol(filename); % <- these are the actual SPM calls
 %Vol = spm_read_vols(Hdr); % <- these are the actual SPM calls
 Vol(isnan(Vol)) = 0; 

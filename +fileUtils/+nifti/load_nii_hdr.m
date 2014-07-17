@@ -36,7 +36,7 @@ if fid < 0,
 else
   fseek(fid,0,'bof');
   if fread(fid,1,'int32') == 348
-     hdr = read_header(fid);
+     hdr = fileUtils.nifti.read_header(fid);
      fclose(fid);
   else
      fclose(fid);
@@ -57,7 +57,7 @@ else
            msg = sprintf('File "%s" is corrupted.',fn);
            error(msg);
         end
-        hdr = read_header(fid);
+        hdr = fileUtils.nifti.read_header(fid);
         fclose(fid);
      end
   end
