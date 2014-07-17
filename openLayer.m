@@ -15,5 +15,5 @@ filename = char(varargin{1});
 if (length(varargin) > 1), thresh = cell2mat(varargin(2)); end;
 if (length(varargin) > 2), reduce = cell2mat(varargin(3)); end;
 if (length(varargin) > 3), smooth = cell2mat(varargin(4)); end;
-SelectFileToOpen(v,filename, thresh, reduce, smooth);
+fileUtils.SelectFileToOpen(v,filename, thresh, reduce, smooth);
 %end openLayer()
