@@ -8,5 +8,5 @@ end
 if isequal(file,0), return; end;
 filename=[path file];
 v=guidata(obj);
-doSaveMesh(v, filename);
+fileUtils.doSaveMesh(v, filename);
 %end SaveMeshesMenu_Callback()

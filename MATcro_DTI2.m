@@ -91,7 +91,7 @@ function saveMesh(v,varargin)
 %MATcro('saveMesh',{'myMesh.ply'});
 if (length(varargin) < 1), return; end;
 filename = char(varargin{1});
-doSaveMesh(v,filename)
+fileUtils.doSaveMesh(v,filename)
 %end saveMesh()
 
 
