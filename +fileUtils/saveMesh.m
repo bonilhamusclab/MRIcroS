@@ -1,5 +1,5 @@
 % --- save mesh(es) as PLY, VTK or (if SPM is installed) GIfTI format file
-function doSaveMesh(v, filename)
+function saveMesh(v, filename)
 [path,file,ext] = fileparts(filename);
 for i=1:length(v.surface)
     if (i > 1) 
@@ -18,4 +18,4 @@ for i=1:length(v.surface)
         fileUtils.ply.writePlySub(v.surface(i).vertices,v.surface(i).faces,filename);
     end;
 end;
-%end doSaveMesh()
+%end saveMesh()

@@ -1,5 +1,5 @@
 % --- add an image as a new layer on top of previously opened images
-function doOpenLayer(v,varargin)
+function openLayer(v,varargin)
 %  filename, threshold(optional), reduce(optional), smooth(optional)
 % Optional values only influence NIfTI volumes, not meshes (VTK, GIfTI)
 %  nb: threshold=Inf for midrange, threshold=-Inf for otsu, threshold=NaN for dialog box
@@ -16,4 +16,4 @@ if (length(varargin) > 1), thresh = cell2mat(varargin(2)); end;
 if (length(varargin) > 2), reduce = cell2mat(varargin(3)); end;
 if (length(varargin) > 3), smooth = cell2mat(varargin(4)); end;
 fileUtils.SelectFileToOpen(v,filename, thresh, reduce, smooth);
-%end doOpenLayer()
+%end openLayer()

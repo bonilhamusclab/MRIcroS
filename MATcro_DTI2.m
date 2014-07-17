@@ -26,92 +26,11 @@ else % instance already running
    figure(h);  %Figure exists so bring Figure to the focus
 end;
 if (nargin) && (ischar(varargin{1})) 
- f = str2func(varargin{1});
+ f = strcat('commands.', str2func(varargin{1}));
  f(guidata(h),varargin{2:nargin})
 end
 mOutputArgs{1} = h;% return handle to main figure
 if nargout>0
  [varargout{1:nargout}] = mOutputArgs{:};
 end
-%end MATcro() --- SUBFUNCTIONS FOLLOW
-
-function openLayer(v, varargin)
-	doOpenLayer(v, varargin)
-
-function copyBitmap(v)
-	doCopyBitmap(v)
-
-function saveBitmap(v,varargin)
-	fileUtils.saveBitmap(v, varargin)
-% end saveBitmap()
-
-% --- Save each surface as a polygon file
-function saveMesh(v,varargin)
-% filename should be .ply, .vtk or (if SPM installed) .gii
-%MATcro('saveMesh',{'myMesh.ply'});
-if (length(varargin) < 1), return; end;
-filename = char(varargin{1});
-fileUtils.doSaveMesh(v,filename)
-%end saveMesh()
-
-function addTrack(v, varargin)	
-	if (length(varargin) < 1), return; end;
-	filename = char(varargin{1});
-	fileUtils.trk.addTrack(v, filename)
-%end addTrack()
-
-% --- close all open layers 
-function closeLayers(v,varargin)
-%MATcro('closeLayers');
-doCloseOverlays(v);
-%end closeLayers()
-
-% --- set a Layer's color and transparency
-function layerRGBA(v,varargin)
-% inputs: layerNumber, Red, Green, Blue, Alpha
-%MATcro('layerRGBA', 1, 0.9, 0, 0, 0.2) %set layer 1 to bright red (0.9) with 20% opacity
-doSetLayerRgba(v, varargin)
-%end layerRGBA()
-
-% ---  reduce mesh complexity
-function simplifyLayers(v, varargin)
-% inputs: reductionRatio
-%MATcro('simplifyLayers', 0.2); %reduce mesh to 20% complexity
-if (length(varargin) < 1), return; end;
-reduce = cell2mat(varargin(1));
-doSimplifyMesh(v,reduce)
-%end simplifyLayers()
-
-% --- set surface appearance (shiny, matte, etc)
-function setMaterial(v,varargin)
-% inputs: ambient(0..1), diffuse(0..1), specular(0..1), specularExponent(0..inf), bgMode (0 or 1), backFaceLighting (0 or 1)
-%MATcro('setMaterial', 0.5, 0.5, 0.7, 100, 1, 1);
-if (length(varargin) < 1), return; end;
-vIn = cell2mat(varargin);
-v.vprefs.materialKaKdKsn(1) = vIn(1);
-if (length(varargin) > 1), v.vprefs.materialKaKdKsn(2) = vIn(2); end;
-if (length(varargin) > 2), v.vprefs.materialKaKdKsn(3) = vIn(3); end;
-v.vprefs.materialKaKdKsn(1:3) = boundArray(v.vprefs.materialKaKdKsn(1:3),0,1);
-if (length(varargin) > 3), v.vprefs.materialKaKdKsn(4) = vIn(4); end;
-if (length(varargin) > 4), v.vprefs.bgMode = vIn(5); end;
-if (length(varargin) > 5), v.vprefs.backFaceLighting = vIn(6); end;
-guidata(v.hMainFigure,v);%store settings
-redrawSurface(v);
-%end setMaterial()
-
-% --- set view by moving camera position
-function setView(v,varargin)
-% inputs: azimuth(0..360), elevation(=90..90)
-%MATcro('setView', 15, 25);
-if (nargin < 1), return; end;
-vIn = cell2mat(varargin);
-v.vprefs.az = vIn(1);
-if (nargin > 1), v.vprefs.el = vIn(2); end;
-guidata(v.hMainFigure,v);%store settings
-redrawSurface(v);
-%end setView()
-
-% --- reduce mesh complexity
-function simplifyMesh(v, reduce)
-	doSimplifyMesh(v, reduce)
-%end simplifyMesh()
+%end MATcro()

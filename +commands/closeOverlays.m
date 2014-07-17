@@ -1,5 +1,5 @@
 % --- close all open images
-function doCloseOverlays(v)
+function closeOverlays(v)
 if (~isempty(v.surface)) 
     v = rmfield(v,'surface');
     [heartFV, sphereFV] = createDemoObjects;
@@ -11,4 +11,4 @@ if (~isempty(v.surface))
 else
     fprintf('Unable to close overlays: no overlays loaded\n');
 end;
-%end doCloseOverlays()
+%end closeOverlays()
