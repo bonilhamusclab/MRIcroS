@@ -1,5 +1,5 @@
 % --- Generate a rotation matrix from a quaternion xi+yj+zk+w,
-function M = Q2M(Q)
+function M = q2m(Q)
 %from SPM decode_qform0 Copyright (C) 2008 Wellcome Trust Centre for Neuroimaging, GPL
 % where Q = [x y z], and w = 1-x^2-y^2-z^2.
 % See: http://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation#Conversion_to_and_from_the_matrix_representation
@@ -21,4 +21,4 @@ M = [...
     2*(xy+zw) (-xx+yy-zz+ww)      2*(yz-xw) 0
     2*(xz-yw)      2*(yz+xw) (-xx-yy+zz+ww) 0
            0              0              0  1];
-%end Q2M()
+%end q2m()

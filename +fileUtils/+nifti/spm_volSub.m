@@ -4,9 +4,9 @@ function [Hdr] = spm_volSub(filename)
 Hdr.dim = [h.dime.dim(2) h.dime.dim(3) h.dime.dim(4)];
 if (h.hist.sform_code == 0) && (h.hist.qform_code == 0)
     fprintf('Warning: no spatial transform detected. Perhaps Analyze rather than NIfTI format');
-    Hdr.mat = hdr2M(h.dime.dim,h.dime.pixdim );
+    Hdr.mat = fileUtils.nifti.hdr2m(h.dime.dim,h.dime.pixdim );
 elseif (h.hist.sform_code == 0) && (h.hist.qform_code > 0) %use qform Quaternion only if no sform
-    Hdr.mat = quarternion.hdrQ2m(h.hist,h.dime.dim,h.dime.pixdim );
+    Hdr.mat = fileUtils.nifti.quarternion.hdrQ2m(h.hist,h.dime.dim,h.dime.pixdim );
 else %precedence: get spatial transform from matrix (sform)
     Hdr.mat = [h.hist.srow_x; h.hist.srow_y; h.hist.srow_z; 0 0 0 1];
     Hdr.mat = Hdr.mat*[eye(4,3) [-1 -1 -1 1]']; % mimics SPM: Matlab arrays indexed from 1 not 0 so translate one voxel
