@@ -1,12 +1,11 @@
 % --- Load trackvis fibers http://www.trackvis.org/docs/?subsect=fileformat
-function addTrack(v,filename)
+function addTrack(v,filename, trackSpacing)
 %  filename
-%MATcro('addTrack','dti.trk');
+%MATcro('addTrack','dti.trk', 100)
 tic
-
     hold on
     [header,tracks] = fileUtils.trk.trk_read(filename);
-	tracksSmall = tracks(1:100:end);
+	tracksSmall = tracks(1:trackSpacing:end);
     fib_len=5;
     pointPos = 1;
     for i=1:numel(tracksSmall)
