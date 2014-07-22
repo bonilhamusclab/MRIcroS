@@ -5,22 +5,25 @@ function addTrack(v,filename)
 tic
 
     hold on
-    [header,tracks] = trk_read2(filename,true);
+    [header,tracks] = fileUtils.trk.trk_read(filename);
+	tracksSmall = tracks(1:100:end);
     fib_len=5;
     pointPos = 1;
-    for i=1:numel(tracks.nPoints)
+    for i=1:numel(tracksSmall)
         %stream=tracks(i).matrix;
-        if tracks.nPoints(i)>fib_len
-            stream = tracks.matrix(pointPos:(pointPos+tracks.nPoints(i)-1), :);
+		nPoints = tracksSmall(i).nPoints;
+        if tracksSmall(i).nPoints>fib_len
+            %stream = tracksSmall(i).matrix(pointPos:(pointPos+nPoints-1), :); ask about pointPos
+			stream = tracksSmall(i).matrix;
             x=stream(:,1);
             y=stream(:,2);
             z=stream(:,3);
-            x_first=stream(1,1);
-            x_last=stream(end,1);
-            y_first=stream(1,2);
-            y_last=stream(end,2);
-            z_first=stream(1,3);
-            z_last=stream(end,3);
+            x_first=x(1);
+            x_last=x(end);
+            y_first=y(1);
+            y_last=y(end);
+            z_first=z(1);
+            z_last=z(end);
             % x displacement
             xdisp=abs(x_first-x_last);
             % y displacement
@@ -36,7 +39,8 @@ tic
             plot3(x,y,z,'LineWidth',1,'Color',col)
             hold on
         end
-        pointPos = pointPos+tracks.nPoints(i);
+        %pointPos = pointPos+nPoints; ask about pointPos
+
     end    
     
 toc

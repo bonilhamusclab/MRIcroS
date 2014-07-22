@@ -26,8 +26,8 @@ else % instance already running
    figure(h);  %Figure exists so bring Figure to the focus
 end;
 if (nargin) && (ischar(varargin{1})) 
- funcName = str2func(varargin{1});
- f = strcat('commands.', funcName);
+ funcName = varargin{1};
+ f = str2func(strcat('commands.', funcName));
  f(guidata(h),varargin{2:nargin})
 end
 mOutputArgs{1} = h;% return handle to main figure
