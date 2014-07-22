@@ -1,17 +1,18 @@
 % --- Load trackvis fibers http://www.trackvis.org/docs/?subsect=fileformat
-function addTrack(v,filename, trackSpacing)
+function addTrack(v,filename, trackSpacing, fiber_len)
 %  filename
 %MATcro('addTrack','dti.trk', 100)
+	if(nargin < 3) trackSpacing = 1; end
+	if(nargin < 4) fiber_len = 5; end
 tic
     hold on
     [header,tracks] = fileUtils.trk.trk_read(filename);
 	tracksSmall = tracks(1:trackSpacing:end);
-    fib_len=5;
     pointPos = 1;
     for i=1:numel(tracksSmall)
         %stream=tracks(i).matrix;
 		nPoints = tracksSmall(i).nPoints;
-        if tracksSmall(i).nPoints>fib_len
+        if tracksSmall(i).nPoints>fiber_len
             %stream = tracksSmall(i).matrix(pointPos:(pointPos+nPoints-1), :); ask about pointPos
 			stream = tracksSmall(i).matrix;
             x=stream(:,1);
