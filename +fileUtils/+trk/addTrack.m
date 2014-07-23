@@ -2,7 +2,7 @@
 function addTrack(v,filename, trackSpacing, fiber_len)
 %  filename
 %MATcro('addTrack','dti.trk', 100)
-	if(nargin < 3) trackSpacing = 1; end
+	if(nargin < 3) trackSpacing = 100; end
 	if(nargin < 4) fiber_len = 5; end
 tic
     hold on
