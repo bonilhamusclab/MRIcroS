@@ -54,6 +54,6 @@ if (length(ext)==3)  && min((ext=='.gz')==1)
         isGZ = true;
     end;
 end;
-fileUtils.voxToOpen (v,filename, thresh, reduce,smooth, isBackground); %load voxel image
+fileUtils.voxToOpen(v,filename, thresh, reduce,smooth, isBackground); %load voxel image
 if (isGZ), delete(filename); end; %remove temporary uncompressed image
 %end SelectFileToOpen() 
