@@ -47,14 +47,14 @@ end
 if header.hdr_size~=1000, error('Header length is wrong'), end
 
 % Check orientation
-[tmp ix] = max(abs(header.image_orientation_patient(1:3)));
-[tmp iy] = max(abs(header.image_orientation_patient(4:6)));
-iz = 1:3;
-iz([ix iy]) = [];
+%[tmp ix] = max(abs(header.image_orientation_patient(1:3)));
+%[tmp iy] = max(abs(header.image_orientation_patient(4:6)));
+%iz = 1:3;
+%iz([ix iy]) = [];
 
 % Fix volume dimensions to match the reported orientation.
-header.dim        = header.dim([ix iy iz]);
-header.voxel_size = header.voxel_size([ix iy iz]);
+%header.dim        = header.dim([ix iy iz]);
+%header.voxel_size = header.voxel_size([ix iy iz]);
 
 % Parse in body
 if header.n_count > 0
@@ -82,15 +82,17 @@ while iTrk <= max_n_trks
     end
     
     % Modify orientation of tracks (always LPS) to match orientation of volume
-    coords = tracks(iTrk).matrix(:,1:3);
-    coords = coords(:,[ix iy iz]);
-    if header.image_orientation_patient(ix) < 0
-        coords(:,ix) = header.dim(ix)*header.voxel_size(ix) - coords(:,ix);
-    end
-    if header.image_orientation_patient(3+iy) < 0
-        coords(:,iy) = header.dim(iy)*header.voxel_size(iy) - coords(:,iy);
-    end
-    tracks(iTrk).matrix(:,1:3) = coords;
+    %coords = tracks(iTrk).matrix(:,1:3);
+    %coords = coords(:,[ix iy iz]);
+	%without this flip it would match RPS if x negative
+    %if header.image_orientation_patient(ix) < 0
+    %    coords(:,ix) = header.dim(ix)*header.voxel_size(ix) - coords(:,ix);
+    %end
+	%without this flip it would match LAS if y negative
+    %if header.image_orientation_patient(3+iy) < 0
+    %    coords(:,iy) = header.dim(iy)*header.voxel_size(iy) - coords(:,iy);
+    %end
+    %tracks(iTrk).matrix(:,1:3) = coords;
 	iTrk = iTrk + 1;
 end
 
