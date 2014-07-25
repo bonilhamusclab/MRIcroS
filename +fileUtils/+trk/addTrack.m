@@ -7,17 +7,26 @@ function addTrack(v,filename, trackSpacing, fiber_len)
 tic
     hold on
     [header,tracks] = fileUtils.trk.trk_read(filename);
-	tracksSmall = tracks(1:trackSpacing:end);
+	voxel_size = header.voxel_size;
+	tracksSampled = tracks(1:trackSpacing:end);
     pointPos = 1;
-    for i=1:numel(tracksSmall)
-        %stream=tracks(i).matrix;
-		nPoints = tracksSmall(i).nPoints;
-        if tracksSmall(i).nPoints>fiber_len
-            %stream = tracksSmall(i).matrix(pointPos:(pointPos+nPoints-1), :); ask about pointPos
-			stream = tracksSmall(i).matrix;
-            x=stream(:,1);
-            y=stream(:,2);
-            z=stream(:,3);
+    for i=1:numel(tracksSampled)
+		nPoints = tracksSampled(i).nPoints;
+        if tracksSampled(i).nPoints>fiber_len
+            %stream = tracksSampled(i).matrix(pointPos:(pointPos+nPoints-1), :); ask about pointPos
+			nPoints = tracksSampled(i).nPoints;
+			stream = tracksSampled(i).matrix;
+			%normalize voxels to mm
+			stream(:,1) = stream(:,1)./voxel_size(1);
+			stream(:,2) = stream(:,2)./voxel_size(2);
+			stream(:,3) = stream(:,3)./voxel_size(3);
+			%change to ras
+			stream = [stream ones(nPoints, 1)] * header.vox_to_ras';
+			%change to las
+			stream(:,1) = -1 * stream(:,1);
+			x = stream(:,1);
+			y = stream(:,2);
+			z = stream(:,3);
             x_first=x(1);
             x_last=x(end);
             y_first=y(1);
