@@ -81,18 +81,6 @@ while iTrk <= max_n_trks
         tracks(iTrk).props = fread(fid, header.n_properties, '*float');
     end
     
-    % Modify orientation of tracks (always LPS) to match orientation of volume
-    %coords = tracks(iTrk).matrix(:,1:3);
-    %coords = coords(:,[ix iy iz]);
-	%without this flip it would match RPS if x negative
-    %if header.image_orientation_patient(ix) < 0
-    %    coords(:,ix) = header.dim(ix)*header.voxel_size(ix) - coords(:,ix);
-    %end
-	%without this flip it would match LAS if y negative
-    %if header.image_orientation_patient(3+iy) < 0
-    %    coords(:,iy) = header.dim(iy)*header.voxel_size(iy) - coords(:,iy);
-    %end
-    %tracks(iTrk).matrix(:,1:3) = coords;
 	iTrk = iTrk + 1;
 end
 
