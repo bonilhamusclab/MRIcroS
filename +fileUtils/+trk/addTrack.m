@@ -6,16 +6,13 @@ function addTrack(v,filename, trackSpacing, fiber_len)
 	if(nargin < 4) fiber_len = 5; end
 tic
     hold on
-    [header,tracks] = fileUtils.trk.trk_read(filename);
+    [header,tracks] = fileUtils.trk.trk_read(filename, trackSpacing);
 	voxel_size = header.voxel_size;
-	tracksSampled = tracks(1:trackSpacing:end);
     pointPos = 1;
-    for i=1:numel(tracksSampled)
-		nPoints = tracksSampled(i).nPoints;
-        if tracksSampled(i).nPoints>fiber_len
-            %stream = tracksSampled(i).matrix(pointPos:(pointPos+nPoints-1), :); ask about pointPos
-			nPoints = tracksSampled(i).nPoints;
-			stream = tracksSampled(i).matrix;
+    for i=1:numel(tracks)
+		nPoints = tracks(i).nPoints;
+        if nPoints>fiber_len
+			stream = tracks(i).matrix;
 			%normalize voxels to mm
 			stream(:,1) = stream(:,1)./voxel_size(1);
 			stream(:,2) = stream(:,2)./voxel_size(2);

@@ -96,7 +96,7 @@ function track = readTrack(fid, header)
 	track = {};
 	pts = fread(fid, 1, 'int');
 	track.nPoints = pts;
-	matrix = fread(fid, [3 + header.n_scalars, pts], '*float');
+	matrix = fread(fid, [3 + header.n_scalars, pts], '*float')';
 	track.matrix = matrix;
 	if header.n_properties
 		track.props = fread(fid, header.n_properties, '*float');
