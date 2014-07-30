@@ -8,7 +8,7 @@ function [header,tracks] = trk_read(filePath, trackSpacing)
 %
 % Inputs:
 %    filePath - Full path to .trk file [char]
-%    trackSpacing - 1/trackSpacing tracks will be saved. Greatly speeds loading but loses information
+%    trackSpacing - 1/trackSpacing tracks will be saved. Greatly speeds loading but loses information; ALSO, HEADER INFORMATION NOT CHANGED DESPITE BODY CHANGE (SUCH AS dim AND n_count)
 %
 % Outputs:
 %    header - Header information from .trk file [struc]
