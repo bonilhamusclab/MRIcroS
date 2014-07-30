@@ -1,5 +1,5 @@
 % --- Load trackvis fibers http://www.trackvis.org/docs/?subsect=fileformat
-function addTrack(v,filename, trackSpacing, fiber_len)
+function addTrack(obj,filename, trackSpacing, fiber_len)
 %  filename
 %MATcro('addTrack','dti.trk', 100)
 	if(nargin < 3) trackSpacing = 100; end
@@ -9,7 +9,10 @@ tic
     [header,tracks] = fileUtils.trk.trk_read(filename, trackSpacing);
 	voxel_size = header.voxel_size;
     pointPos = 1;
-    for i=1:numel(tracks)
+	renderedFiberIndex = 0;
+	numTracks = numel(tracks);
+	renderedFibers = zeros(numTracks, 1);
+    for i=1:numTracks
 		nPoints = tracks(i).nPoints;
         if nPoints>fiber_len
 			stream = tracks(i).matrix;
@@ -42,12 +45,19 @@ tic
             Rzdisp=zdisp/(xdisp+ydisp+zdisp);
             col=[Rxdisp,Rydisp,Rzdisp];
             % plot
-            plot3(x,y,z,'LineWidth',1,'Color',col)
+			renderedFiberIndex = renderedFiberIndex + 1;
+            renderedFibers(renderedFiberIndex) = plot3(x,y,z,'LineWidth',1,'Color',col);
             hold on
         end
         %pointPos = pointPos+nPoints; ask about pointPos
 
     end    
+    v = guidata(obj);
+	hasTrack = isfield(v,'tracks');
+	tracksIndex = 1;
+	if(hasTrack) tracksIndex = tracksIndex + length(v.tracks); end
+	v.tracks(tracksIndex).fibers = renderedFibers(1:renderedFiberIndex);
+	guidata(obj, v);
     
 toc
 %end addTrack()

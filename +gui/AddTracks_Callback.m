@@ -1,6 +1,5 @@
 % --- allow user to add deterministic tracks
 function AddTracks_Callback(obj, eventdata)
-v=guidata(obj);
 [track_filename, track_pathname] = uigetfile( ...
     {'*.trk;', 'trk files'; ...
     '*.*',                   'All Files (*.*)'}, ...
@@ -11,5 +10,5 @@ v=guidata(obj);
 	ans = inputdlg(prompt, 'Track Options', 1, {num2str(100), num2str(5)});
 	trackSpacing = str2double(ans(1));
 	fiberLen = str2double(ans(2));
-    fileUtils.trk.addTrack(v,track_filename, trackSpacing, fiberLen);
+    fileUtils.trk.addTrack(obj,track_filename, trackSpacing, fiberLen);
 %end Add_tracks_Callback()
