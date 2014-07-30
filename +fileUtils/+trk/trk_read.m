@@ -1,4 +1,4 @@
-function [header,tracks] = trk_read(filePath)
+function [header,tracks] = trk_read(filePath, trackSpacing)
 %TRK_READ - Load TrackVis .trk files
 %TrackVis displays and saves .trk files in LPS orientation. After import, this
 %function attempts to reorient the fibers to match the orientation of the
@@ -8,6 +8,7 @@ function [header,tracks] = trk_read(filePath)
 %
 % Inputs:
 %    filePath - Full path to .trk file [char]
+%    trackSpacing - 1/trackSpacing tracks will be saved. Greatly speeds loading but loses information
 %
 % Outputs:
 %    header - Header information from .trk file [struc]
@@ -33,6 +34,8 @@ function [header,tracks] = trk_read(filePath)
 % UCLA Developmental Cognitive Neuroimaging Group (Sowell Lab)
 % Mar 2010
 
+if(nargin == 1) trackSpacing = 1; end
+
 % Parse in header
 fid    = fopen(filePath, 'r');
 header = get_header(fid);
@@ -45,16 +48,6 @@ if header.hdr_size~=1000
 end
 
 if header.hdr_size~=1000, error('Header length is wrong'), end
-
-% Check orientation
-%[tmp ix] = max(abs(header.image_orientation_patient(1:3)));
-%[tmp iy] = max(abs(header.image_orientation_patient(4:6)));
-%iz = 1:3;
-%iz([ix iy]) = [];
-
-% Fix volume dimensions to match the reported orientation.
-%header.dim        = header.dim([ix iy iz]);
-%header.voxel_size = header.voxel_size([ix iy iz]);
 
 % Parse in body
 if header.n_count > 0
@@ -70,25 +63,50 @@ end
 %#ok<*AGROW>
 
 iTrk = 1;
+iTrkSave = 1;
+start = tic;
 while iTrk <= max_n_trks
-	pts = fread(fid, 1, 'int');
 	if feof(fid)
 		break;
 	end
-    tracks(iTrk).nPoints = pts;
-    tracks(iTrk).matrix  = fread(fid, [3+header.n_scalars, tracks(iTrk).nPoints], '*float')';
-    if header.n_properties
-        tracks(iTrk).props = fread(fid, header.n_properties, '*float');
-    end
-    
+	if(trackSpacing == 1 || mod(iTrk, trackSpacing) == 0)
+		track = readTrack(fid, header);
+		tracks(iTrkSave).nPoints = track.nPoints;
+		tracks(iTrkSave).matrix = track.matrix;
+		
+		if header.n_properties
+			tracks(iTrkSave).props = track.props;
+		end
+		iTrkSave = iTrkSave + 1;
+	else
+		skipTrack(fid, header);
+	end
 	iTrk = iTrk + 1;
 end
+toc(start)
 
 if header.n_count == 0
 	header.n_count = length(tracks);
 end
 
 fclose(fid);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function track = readTrack(fid, header)
+	track = {};
+	pts = fread(fid, 1, 'int');
+	track.nPoints = pts;
+	matrix = fread(fid, [3 + header.n_scalars, pts], '*float');
+	track.matrix = matrix;
+	if header.n_properties
+		track.props = fread(fid, header.n_properties, '*float');
+	end
+
+function skipTrack(fid, header)
+	pts = fread(fid, 1, 'int');
+	floatsOrIntsToSkip = (3 + header.n_scalars) * pts + header.n_properties; 
+	bytesToSkip = floatsOrIntsToSkip * 4;
+	fseek(fid, bytesToSkip, 'cof');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function header = get_header(fid)
