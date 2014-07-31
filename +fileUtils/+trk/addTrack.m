@@ -6,27 +6,19 @@ function addTrack(v,filename, trackSpacing, fiber_len)
 	if(nargin < 4) fiber_len = 5; end
 tic
     hold on
-    [header,tracks] = fileUtils.trk.trk_read(filename, trackSpacing);
-	voxel_size = header.voxel_size;
-    pointPos = 1;
-	renderedFiberIndex = 0;
-	numTracks = numel(tracks);
-	renderedFibers = zeros(numTracks, 1);
-    for i=1:numTracks
-		nPoints = tracks(i).nPoints;
-        if nPoints>fiber_len
-			stream = tracks(i).matrix;
-			%normalize voxels to mm
-			stream(:,1) = stream(:,1)./voxel_size(1);
-			stream(:,2) = stream(:,2)./voxel_size(2);
-			stream(:,3) = stream(:,3)./voxel_size(3);
-			%change to ras
-			stream = [stream ones(nPoints, 1)] * header.vox_to_ras';
-			%change to las
-			stream(:,1) = -1 * stream(:,1);
-			x = stream(:,1);
-			y = stream(:,2);
-			z = stream(:,3);
+    [header,data] = fileUtils.trk.readTrack(filename);
+	dataLen = length(data);
+	ptr = 1;
+	renderedFiberIndex = 1;
+	while ptr < dataLen
+		track = utils.trk.extractTrack(data, header, ptr);
+		ptr = utils.trk.skipTracks(data, header, ptr, trackSpacing);
+		nPoints = size(track, 1);
+		if nPoints>fiber_len
+			normalizedTrack = utils.trk.normalizeTrack(track, header);
+			x = normalizedTrack(:,1);
+			y = normalizedTrack(:,2);
+			z = normalizedTrack(:,3);
             x_first=x(1);
             x_last=x(end);
             y_first=y(1);
@@ -45,17 +37,16 @@ tic
             Rzdisp=zdisp/(xdisp+ydisp+zdisp);
             col=[Rxdisp,Rydisp,Rzdisp];
             % plot
-			renderedFiberIndex = renderedFiberIndex + 1;
             renderedFibers(renderedFiberIndex) = plot3(x,y,z,'LineWidth',1,'Color',col);
+			renderedFiberIndex = renderedFiberIndex + 1;
             hold on
-        end
-        %pointPos = pointPos+nPoints; ask about pointPos
+		end
+	end
 
-    end    
 	hasTrack = isfield(v,'tracks');
 	tracksIndex = 1;
 	if(hasTrack) tracksIndex = tracksIndex + length(v.tracks); end
-	v.tracks(tracksIndex).fibers = renderedFibers(1:renderedFiberIndex);
+	v.tracks(tracksIndex).fibers = renderedFibers(1:renderedFiberIndex - 1);
 	guidata(v.hMainFigure, v);
 	drawing.removeDemoObjects(v);
     
