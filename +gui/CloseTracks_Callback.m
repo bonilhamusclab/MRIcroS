@@ -1,9 +1,9 @@
-function CloseTracks_Callback(obj, eventdata)
-v=guidata(obj);
+function CloseTracks_Callback(h, eventdata)
+v = guidata(h);
 hasTracks = isfield(v, 'tracks');
 if(hasTracks)
 	tracks = v.tracks;
 	arrayfun(@(t)(delete(t.fibers)), tracks);
 	v = rmfield(v, 'tracks');
-	guidata(obj, v);
+	guidata(v.hMainFigure, v);
 end

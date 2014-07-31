@@ -10,5 +10,6 @@ function AddTracks_Callback(obj, eventdata)
 	ans = inputdlg(prompt, 'Track Options', 1, {num2str(100), num2str(5)});
 	trackSpacing = str2double(ans(1));
 	fiberLen = str2double(ans(2));
-    fileUtils.trk.addTrack(obj,track_filename, trackSpacing, fiberLen);
+	v = guidata(obj);
+    fileUtils.trk.addTrack(v,track_filename, trackSpacing, fiberLen);
 %end Add_tracks_Callback()

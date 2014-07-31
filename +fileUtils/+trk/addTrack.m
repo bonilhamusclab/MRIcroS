@@ -1,5 +1,5 @@
 % --- Load trackvis fibers http://www.trackvis.org/docs/?subsect=fileformat
-function addTrack(obj,filename, trackSpacing, fiber_len)
+function addTrack(v,filename, trackSpacing, fiber_len)
 %  filename
 %MATcro('addTrack','dti.trk', 100)
 	if(nargin < 3) trackSpacing = 100; end
@@ -52,12 +52,12 @@ tic
         %pointPos = pointPos+nPoints; ask about pointPos
 
     end    
-    v = guidata(obj);
 	hasTrack = isfield(v,'tracks');
 	tracksIndex = 1;
 	if(hasTrack) tracksIndex = tracksIndex + length(v.tracks); end
 	v.tracks(tracksIndex).fibers = renderedFibers(1:renderedFiberIndex);
-	guidata(obj, v);
+	guidata(v.hMainFigure, v);
+	drawing.removeDemoObjects(v);
     
 toc
 %end addTrack()
