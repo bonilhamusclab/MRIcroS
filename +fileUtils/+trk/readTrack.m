@@ -18,6 +18,7 @@ seekFirstDataPoint(fid);
 pointCountsPerTrack = fread(fid, inf, 'int32');
 
 data = mergeDataPointsAndCounts(dataAsFloat, pointCountsPerTrack, header);
+fclose(fid);
 
 function seekFirstDataPoint(fid)
 	fseek(fid, 1000, -1);
