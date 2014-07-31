@@ -8,5 +8,3 @@ function normalizedTrack = normalizeTrack(track, header)
 	nPoints = size(track, 1);
 	normalizedTrack = header.vox_to_ras *[track ones(nPoints, 1)]';
 	normalizedTrack = normalizedTrack';
-	%change to las
-	normalizedTrack(:, 1) = -1 * normalizedTrack(:, 1);
