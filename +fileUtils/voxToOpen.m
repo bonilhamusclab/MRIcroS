@@ -23,11 +23,9 @@ elseif (isnan(thresh)) || (isinf(thresh)) %if +Inf, use midpoint
     %thresh = mean(Vol(:)); %use mean to detect isosurface threshold - heavily influenced by proportion of dark air
 end;
 if (isBackground) 
-    v = rmfield(v,'surface');
-    layer = 1;
-else
-    layer = length( v.surface)+1;
+    v = drawing.removeDemoObjects(v);
 end;
+layer = utils.fieldIndex(v, 'surface');
 FV = isosurface(Vol,thresh);
 if (reduce ~= 1.0) %next: simplify mesh
     FV = reducepatch(FV,reduce);

@@ -48,7 +48,7 @@ tic
 	if(hasTrack) tracksIndex = tracksIndex + length(v.tracks); end
 	v.tracks(tracksIndex).fibers = renderedFibers(1:renderedFiberIndex - 1);
 	guidata(v.hMainFigure, v);
-	drawing.removeDemoObjects(v);
+	v = drawing.removeDemoObjects(v);
     
 toc
 %end addTrack()

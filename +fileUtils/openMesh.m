@@ -7,11 +7,9 @@ if (length(ext) == 4) && strcmpi(ext,'.gii') && (~exist('gifti.m', 'file') == 2)
     fprintf('Unable to open GIfTI files: this feature requires SPM to be installed');
 end;
 if (isBackground) 
-    v = rmfield(v,'surface');
-    layer = 1;
-else
-    layer = length( v.surface)+1;
+	v = drawing.removeDemoObjects(v);
 end;
+layer = utils.fieldIndex(v, 'surface');
 if (length(ext) == 4) && strcmpi(ext,'.gii')
     gii = gifti(filename);
      v.surface(layer).faces = double(gii.faces); %convert to double or reducepatch fails
