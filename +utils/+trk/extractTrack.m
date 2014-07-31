@@ -1,4 +1,4 @@
-function [track nextTrackIndex] = extractTrack(data, header, trackIndex)
+function [track, nextTrackIndex] = extractTrack(data, header, trackIndex)
 	%function [track nextTrackIndex] = extractTrack(data, header, trackIndex)
 	pointDim = 3 + header.n_scalars;
 	numPts = data(trackIndex);
