@@ -4,3 +4,5 @@ sample_trk_files/
 
 #vim temp files
 *.swp
+#matlab tmp files
+*.m~
