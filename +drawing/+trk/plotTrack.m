@@ -12,7 +12,7 @@ function plotHandles = plotTrack(header, data, fiberSpacing, fiber_len)
 		nPoints = size(fiber, 1);
 		if nPoints>fiber_len
 			normalizedFiber = utils.trk.normalizeFiber(fiber, header);
-			plotHandles(renderedFiberIndex) = drawing.trk.plotFiber(fiber);
+			plotHandles(renderedFiberIndex) = drawing.trk.plotFiber(normalizedFiber);
 			renderedFiberIndex = renderedFiberIndex + 1;
             hold on
 		end
