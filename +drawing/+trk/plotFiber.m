@@ -1,7 +1,7 @@
 function plotHandle = plotFiber(fiber)
-			x = fiber(:,1);
-			y = fiber(:,2);
-			z = fiber(:,3);
+			x = fiber(1,:);
+			y = fiber(2,:);
+			z = fiber(3,:);
             x_first=x(1);
             x_last=x(end);
             y_first=y(1);

@@ -5,15 +5,19 @@ function plotHandles = plotTrack(header, data, fiberSpacing, fiber_len)
 	voxToRas = utils.trk.prepAffine(header);
 	dataLen = length(data);
 	ptr = 1;
-	renderedFiberIndex = 1;
+	renderedFiberIndex = 0;
+    plotHandles = zeros(1,ceil(dataLen/fiberSpacing));
 	while ptr < dataLen
 		fiber = utils.trk.extractFiber(data, header, ptr);
 		ptr = utils.trk.skipFibers(data, header, ptr, fiberSpacing);
-		nPoints = size(fiber, 1);
+		[~, nPoints] = size(fiber);
 		if nPoints>fiber_len
 			normalizedFiber = utils.trk.normalizeFiber(fiber, voxToRas);
+            renderedFiberIndex = renderedFiberIndex + 1;
 			plotHandles(renderedFiberIndex) = drawing.trk.plotFiber(normalizedFiber);
-			renderedFiberIndex = renderedFiberIndex + 1;
             hold on
 		end
-	end
+    end
+    if(renderedFiberIndex) 
+        plotHandles = plotHandles(1:renderedFiberIndex);
+    end
