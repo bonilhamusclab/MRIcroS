@@ -14,4 +14,4 @@ function voxToRasFn = voxToRasFnGen(header)
 	
 	putInAffSpace = @(x)(utils.trk.flipAxes(x, notMatched));
 
-    voxToRasFn = @(x)(affine*[putInAffSpace(x); ones(1, size(x,2))]);
+	voxToRasFn = @(x)(affine*[putInAffSpace(x); ones(1, size(x,2))]);
