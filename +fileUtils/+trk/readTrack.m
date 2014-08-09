@@ -27,7 +27,7 @@ function data = mergeDataPointsAndCounts(dataAsFloat, pointCountsPerTrack, heade
 	countIndex = 1;
 	dataPointCount = length(dataAsFloat);
 	data = dataAsFloat;
-	pointDim = 3 + header.n_scalars;%almost always 3 for xyz and 0 scalars
+	pointDim = 3 + header.n_scalars;%3 (xyz) + num scalars
 	while countIndex < dataPointCount
 		pointsInBatch = pointCountsPerTrack(countIndex);
 		data(countIndex) = pointsInBatch;
