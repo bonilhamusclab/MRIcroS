@@ -7,8 +7,4 @@ function flipped = flipAxes(x, axesToFlip)
 %	axesToFlip: a length n vector where 1 means flip and 0 means dont flip
 
 flipped = x;
-numFlips = length(axesToFlip);
-for i=1:numFlips
-	axis = axesToFlip(i);
-	flipped(axis,:) = -1* x(axis,:);
-end
+flipped(axesToFlip,:) = -1 * x(axesToFlip,:);
