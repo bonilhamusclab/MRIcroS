@@ -3,9 +3,11 @@
 Extending [Matcro](http://www.mccauslandcenter.sc.edu/CRNL/tools/surface-rendering-with-matlab) image viewing software.  
 
 ###Main Goal
-Add ability to view [Travis TRK](http://www.trackvis.org/) files on a Matlab 3D plot. Including orientation and spacing.  
+Add ability to view [Trackvis TRK](http://www.trackvis.org/) files in Matcro.
 
 ###How To Use Track Layers
+After starting Matlab
+
 	`MATcro_DTI2('addTrack', trackFilePath)
 	
 or  
