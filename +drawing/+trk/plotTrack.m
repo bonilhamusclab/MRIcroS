@@ -2,7 +2,7 @@ function plotHandles = plotTrack(header, data, fiberSpacing, fiber_len)
 	if(nargin < 3) fiberSpacing = 100; end
 	if(nargin < 4) fiber_len = 5; end
 
-	voxToRas = utils.trk.prepAffine(header);
+	voxToRasFn = utils.trk.voxToRasFnGen(header);
 	dataLen = length(data);
 	ptr = 1;
 	renderedFiberIndex = 0;
@@ -12,9 +12,9 @@ function plotHandles = plotTrack(header, data, fiberSpacing, fiber_len)
 		ptr = utils.trk.skipFibers(data, header, ptr, fiberSpacing);
 		[~, nPoints] = size(fiber);
 		if nPoints>fiber_len
-			normalizedFiber = utils.trk.normalizeFiber(fiber, voxToRas);
+			rasFiber = voxToRasFn(fiber);
             renderedFiberIndex = renderedFiberIndex + 1;
-			plotHandles(renderedFiberIndex) = drawing.trk.plotFiber(normalizedFiber);
+			plotHandles(renderedFiberIndex) = drawing.trk.plotFiber(rasFiber);
             hold on
 		end
     end
