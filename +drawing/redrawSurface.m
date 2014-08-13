@@ -8,7 +8,10 @@ if ( v.vprefs.backFaceLighting == 1)
 else
     bf = 'unlit'; % 'reverselit';
 end
-surfaceCount = length(v.surface);
+surfaceCount = 0;
+if(isfield(v, 'surface'))
+    surfaceCount = length(v.surface);
+end
 v.surfacePatches = zeros(surfaceCount, 1);
 for i=1:surfaceCount
     clr =  v.vprefs.colors ( (mod(i-1,length( v.vprefs.colors))+1) ,1:3);
