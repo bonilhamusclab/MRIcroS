@@ -1,6 +1,7 @@
 % --- creates renderings
 function redrawSurface(v)
-delete(allchild(v.hAxes));%
+drawing.removeSurfaces(v);
+%delete(allchild(v.hAxes));%
 set(v.hMainFigure,'CurrentAxes',v.hAxes)
 set(0, 'CurrentFigure', v.hMainFigure);  %# for figures
 if ( v.vprefs.backFaceLighting == 1)
