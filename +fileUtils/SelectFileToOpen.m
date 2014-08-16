@@ -27,7 +27,7 @@ if (length(ext) == 4) && strcmpi(ext,'.vtk')
         return;
 end; %VTK file
 if (exist('gifti.m', 'file') == 2) &&  (length(ext) == 4) && strcmpi(ext,'.gii')
-        openMesh(v,filename, isBackground);
+        fileUtils.openMesh(v,filename, isBackground);
         return;
 end; %GIFTI file
 if isnan(thresh)
