@@ -8,11 +8,11 @@ Add ability to view [Trackvis TRK](http://www.trackvis.org/) files in Matcro.
 ###How To Use Track Layers
 After starting Matlab
 
-	`MATcro_DTI2('addTrack', trackFilePath)
+	MATcro_DTI2('addTrack', trackFilePath)
 	
 or  
 	
-	`MATcro_DTI2('addTrack', trackFilePath, trackSampling, minFiberLen)
+	MATcro_DTI2('addTrack', trackFilePath, trackSampling, minFiberLen)
 or
 	MATcro_DTI2 % open in gui
 
