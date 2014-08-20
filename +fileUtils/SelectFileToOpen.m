@@ -6,8 +6,8 @@ function SelectFileToOpen(v, filename, thresh, reduce,smooth)
 % smooth : (NIFTI only) radius of smoothing, 0 = no smoothing
 if length(filename) < 1
 
-	supportedFileExts = '*.nii;*.hdr;*.nii.gz;*.vtk';
-	supportedFileDescs = 'NIfTI/VTK';
+	supportedFileExts = '*.nii;*.hdr;*.nii.gz;*.vtk;*.nv;*.pial';
+	supportedFileDescs = 'NIfTI/VTK/NV/Pial';
 	if isGiftiInstalled()
 		supportedFileExts = [supportedFileExts ';*.gii'];
 		supportedFileDescs = [supportedFileDescs '/GIfTI'];
@@ -25,8 +25,14 @@ if exist(filename, 'file') == 0, fprintf('Unable to find "%s"\n',filename); retu
 isBackground = v.vprefs.demoObjects;
 [pathstr, name, ext] = fileparts(filename);
 if isVtkExt(ext) || (isGiftiInstalled() && isGiftiExt(ext))
-        fileUtils.openMesh(v,filename, isBackground);
-        return;
+	fileUtils.openMesh(v,filename, isBackground);
+	return;
+elseif isNvExt(ext)
+    fileUtils.surfaceToOpen(@fileUtils.nv.readNv, v, filename, isBackground);
+	return
+elseif isPialExt(ext)
+	fileUtils.surfaceToOpen(@fileUtils.pial.readPial, v, filename, isBackground);
+	return
 end;
 
 if isnan(thresh)
@@ -41,7 +47,7 @@ if isnan(thresh)
     smooth = round(str2double(answer(3)))*2+1; %e.g. +1 for 3x3x3, +2 for 5x5x5
 end; 
 %next - detect and unpack .nii.gz to .nii
-isGZ = false;
+isTmpUnpackedGz = false;
 if isGzExt(ext) 
     ungzname = fullfile(pathstr, name);
     if exist(ungzname, 'file') ~= 0
@@ -49,11 +55,11 @@ if isGzExt(ext)
         filename = ungzname;
     else
         filename = char(gunzip(filename));
-        isGZ = true;
+        isTmpUnpackedGz = true;
     end;
 end;
 fileUtils.voxToOpen(v,filename, thresh, reduce,smooth, isBackground); %load voxel image
-if (isGZ), delete(filename); end; %remove temporary uncompressed image
+if (isTmpUnpackedGz), delete(filename); end; %remove temporary uncompressed image
 %end SelectFileToOpen() 
 
 function installed = isGiftiInstalled()
@@ -67,3 +73,9 @@ function isGifti = isGiftiExt(fileExt)
 
 function isGz = isGzExt(fileExt)
 	isGz = length(fileExt)==3  && min((fileExt=='.gz')==1);
+
+function isNv = isNvExt(fileExt)
+	isNv = strcmpi(fileExt, '.nv');
+
+function isPial = isPialExt(fileExt)
+	isPial = strcmpi(fileExt, '.pial');
