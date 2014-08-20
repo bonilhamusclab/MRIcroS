@@ -27,26 +27,28 @@ isBackground = v.vprefs.demoObjects;
 if isVtkExt(ext) || (isGiftiInstalled() && isGiftiExt(ext))
 	fileUtils.openMesh(v,filename, isBackground);
 	return;
-elseif isNvExt(ext)
-    fileUtils.surfaceToOpen(@fileUtils.nv.readNv, v, filename, isBackground);
-	return
-elseif isPialExt(ext)
-	fileUtils.surfaceToOpen(@fileUtils.pial.readPial, v, filename, isBackground);
+elseif isNvExt(ext) || isPialExt(ext)
+    if isnan(thresh)
+        [reduce, cancelled] = promptNvPialDialog(reduce);
+        if(cancelled), disp('load cancelled'); return; end;
+    end
+    
+    fileReadFn = @fileUtils.nv.readNv;
+    if isPialExt(ext)
+        fileReadFn = @fileUtils.pial.readPial;
+    end
+    
+    fileUtils.surfaceToOpen(fileReadFn, v, filename, reduce, isBackground);
 	return
 end;
 
 if isnan(thresh)
     thresh = Inf;%infinity means auto-select
-    prompt = {'Surface intensity threshold (Inf=midrange, -Inf=Otsu):','Reduce Path, e.g. 0.5 means half resolution (0..1):','Smoothing radius in voxels (0=none):'};
-    dlg_title = 'Select options for loading image';
-    def = {num2str(thresh),num2str(reduce),num2str(smooth)};
-    answer = inputdlg(prompt,dlg_title,1,def);
-    if isempty(answer), disp('load cancelled'); return; end;
-    thresh = str2double(answer(1));
-    reduce = str2double(answer(2));
-    smooth = round(str2double(answer(3)))*2+1; %e.g. +1 for 3x3x3, +2 for 5x5x5
-end; 
-%next - detect and unpack .nii.gz to .nii
+    [thresh, reduce, smooth, cancelled] = promptOptionsDialog(num2str(thresh),num2str(reduce),num2str(smooth));
+    if(cancelled), disp('load cancelled'); return; end;
+end
+
+%detect and unpack .nii.gz to .nii
 isTmpUnpackedGz = false;
 if isGzExt(ext) 
     ungzname = fullfile(pathstr, name);
@@ -61,6 +63,26 @@ end;
 fileUtils.voxToOpen(v,filename, thresh, reduce,smooth, isBackground); %load voxel image
 if (isTmpUnpackedGz), delete(filename); end; %remove temporary uncompressed image
 %end SelectFileToOpen() 
+
+function [thresh, reduce, smooth, cancelled] = promptOptionsDialog(defThresh, defReduce, defSmooth)
+    prompt = {'Surface intensity threshold (Inf=midrange, -Inf=Otsu):','Reduce Path, e.g. 0.5 means half resolution (0..1):','Smoothing radius in voxels (0=none):'};
+    dlg_title = 'Select options for loading image';
+    def = {num2str(defThresh),num2str(defReduce),num2str(defSmooth)};
+    answer = inputdlg(prompt,dlg_title,1,def);
+    cancelled = isempty(answer);
+    if cancelled; return; end;
+    thresh = str2double(answer(1));
+    reduce = str2double(answer(2));
+    smooth = round(str2double(answer(3)))*2+1; %e.g. +1 for 3x3x3, +2 for 5x5x5
+    
+function [reduce, cancelled] = promptNvPialDialog(defReduce)
+    prompt = {'Reduce Path, e.g. 0.5 means half resolution (0..1):'};
+    dlg_title = 'Select options for loading Nv/Pial';
+    def = {num2str(defReduce)};
+    answer = inputdlg(prompt,dlg_title,1,def);
+    cancelled = isempty(answer);
+    if cancelled; return; end;
+    reduce = str2double(answer(1));
 
 function installed = isGiftiInstalled()
 	installed = (exist('gifti.m', 'file') == 2);
