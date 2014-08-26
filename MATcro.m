@@ -1,4 +1,4 @@
-function varargout = MATcro_DTI(varargin)
+function varargout = MATcro(varargin)
 % surface rendering for NIfTI images, can be run from user interface or scripted
 %Examples:
 % MATcro %launch MATcro
