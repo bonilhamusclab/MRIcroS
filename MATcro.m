@@ -18,6 +18,9 @@ function varargout = MATcro(varargin)
 % MATcro('copyBitmap'); %copy screenshot to clipboard
 % MATcro('saveBitmap',{'myPicture.png'}); %save screenshot
 % MATcro('saveMesh',{'myMesh.ply'}); %export mesh to PLY format
+% MATcro('addTrack','myTrack.trk');
+% MATcro('addTrack','myTrack.trk',trackSpacing,minLength);
+% MATcro('closeTracks');
 mOutputArgs = {}; % Variable for storing output when GUI returns
 h = findall(0,'Tag','makeGui'); %run as singleton
 if (isempty(h)) % new instance
