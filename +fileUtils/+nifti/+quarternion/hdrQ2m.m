@@ -1,7 +1,7 @@
 % --- Rotations from quaternions
 function M = hdrQ2m(hdr, dim, pixdim)
 %from SPM decode_qform0 Copyright (C) 2008 Wellcome Trust Centre for Neuroimaging, GPL
-R = quarternion.q2m(double([hdr.quatern_b hdr.quatern_c hdr.quatern_d]));
+R = fileUtils.nifti.quarternion.q2m(double([hdr.quatern_b hdr.quatern_c hdr.quatern_d]));
 T = [eye(4,3) double([hdr.qoffset_x hdr.qoffset_y hdr.qoffset_z 1]')];
 n = min(dim(1),3);
 Z = [pixdim(2:(n+1)) ones(1,4-n)];
