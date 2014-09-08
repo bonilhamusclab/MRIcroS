@@ -1,5 +1,5 @@
 % --- creates binary format ply file, e.g. for meshlab
-function writePlySub(vertex,face,filename)
+function writePly(vertex,face,filename)
 %for format details, see http://paulbourke.net/dataformats/ply/
 [fid,Msg] = fopen(filename,'Wt');
 if fid == -1, error(Msg); end;
@@ -53,4 +53,4 @@ else
     fwrite(fid,face8);
 end;
 fclose(fid);
-%end writePlySub()
+%end writePly()

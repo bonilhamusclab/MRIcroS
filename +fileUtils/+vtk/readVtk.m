@@ -1,5 +1,5 @@
 % --- read VTK format mesh
-function [vertex,face] = read_vtkSub(filename)
+function [vertex,face] = readVtk(filename)
 %   [vertex,face] = read_vtk(filename);
 %   'vertex' is a 'nb.vert x 3' array specifying the position of the vertices.
 %   'face' is a 'nb.face x 3' array specifying the connectivity of the mesh.
@@ -61,4 +61,4 @@ if((info ~= 'P') && (info ~= 'V'))
     face = 0;
 end
 fclose(fid);
-%end read_vtkSub()
+%end readVtk()

@@ -1,5 +1,5 @@
 % --- threshold for converting continuous brightness to binary image using Otsu's method.
-function [thresh] = otsuSub(I)
+function [thresh] = otsu(I)
 % BSD license: http://www.mathworks.com/matlabcentral/fileexchange/26532-image-segmentation-using-otsu-thresholding
 % Damien Garcia 2010/03 http://www.biomecardio.com/matlab/otsu.html
 nbins = 256;
@@ -19,4 +19,4 @@ sigma2B =(mu(end)*w(2:end-1)-mu(2:end-1)).^2./w(2:end-1)./(1-w(2:end-1));
 thresh=    pixval(k+1);
 if (thresh >= nbins), thresh = nbins-1; end;
 thresh = thresh/slope + intercept;
-%end otsuSub()
+%end otsu()
