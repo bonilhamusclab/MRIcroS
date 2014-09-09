@@ -36,7 +36,7 @@ if fid < 0,
 else
   fseek(fid,0,'bof');
   if fread(fid,1,'int32') == 348
-     hdr = fileUtils.nifti.read_header(fid);
+     hdr = fileUtils.nifti.hdr.read_header(fid);
      fclose(fid);
   else
      fclose(fid);
