@@ -7,10 +7,10 @@ function AddTracks_Callback(obj, eventdata)
     if (~track_filename), disp('load tracks cancelled'); return; end;
     track_filename=[track_pathname track_filename];
     prompt = {'Track Sampling (1/ts tracks will be loaded, increases speed but decreases information):','Minimum fiber length (only sampled tracks with this minimum fiber length will be rendered, increases speed but decreases information):'};
-	ans = inputdlg(prompt, 'Track Options', 1, {num2str(100), num2str(5)});
-    if isempty(ans), disp('load cancelled'); return; end;
-	trackSpacing = str2double(ans(1));
-	fiberLen = str2double(ans(2));
+	opts = inputdlg(prompt, 'Track Options', 1, {num2str(100), num2str(5)});
+    if isempty(opts), disp('load cancelled'); return; end;
+	trackSpacing = str2double(opts(1));
+	fiberLen = str2double(opts(2));
 	v = guidata(obj);
-    fileUtils.trk.addTrack(v,track_filename, trackSpacing, fiberLen);
+    commands.addTrack(v, track_filename, trackSpacing, fiberLen);
 %end Add_tracks_Callback()
