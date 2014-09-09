@@ -7,10 +7,7 @@ function voxToOpen (v,filename, thresh, reduce, smooth, isBackground)
 if isequal(filename,0), return; end;
 if exist(filename, 'file') == 0, fprintf('Unable to find %s\n',filename); return; end;
 if (reduce > 1) || (reduce <= 0), reduce = 1; end;
-Hdr = fileUtils.nifti.spm_vol_mimic(filename); %this call clones spm_vol without dependencies
-Vol = fileUtils.nifti.spm_read_vols_mimic(Hdr);%this call clones spm_read_vols without dependencies
-%Hdr = spm_vol(filename); % <- these are the actual SPM calls
-%Vol = spm_read_vols(Hdr); % <- these are the actual SPM calls
+[Hdr, Vol] = fileUtils.nifti.readNifti(filename);
 Vol(isnan(Vol)) = 0; 
 if (round(smooth) > 3) %blur image prior to edge extraction
     fprintf('Applying gaussian smooth with %d voxel diameter\n',round(smooth));
