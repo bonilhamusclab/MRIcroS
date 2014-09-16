@@ -15,6 +15,9 @@ function [nsph, spheres, labels]= readNode(filename)
 %-----------------------------------------------------------
 %
 
+    
+    scanCurrentNodeFile = utils.curry(@scanNodeFileSub, filename);
+    
     nsph = 0;
     function updateNsph(i, ~, ~)
         if(i > nsph)
@@ -22,7 +25,7 @@ function [nsph, spheres, labels]= readNode(filename)
         end
     end
 
-    scanNodeFileSub(@updateNsph, filename);
+    scanCurrentNodeFile(@updateNsph);
     
     
     spheres=zeros(nsph,5);
@@ -32,11 +35,11 @@ function [nsph, spheres, labels]= readNode(filename)
         labels{i} = label;
     end
 
-    scanNodeFileSub(@updateSpheresAndLabels, filename);
+    scanCurrentNodeFile(@updateSpheresAndLabels);
     
 end
 
-function scanNodeFileSub(lineOp, filename)
+function scanNodeFileSub(filename, lineOp)
     fid = fopen(filename);
     i=0;
     while ~feof(fid)
