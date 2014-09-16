@@ -1,6 +1,7 @@
-function [nsph sphere label]= readNode(filename)
-%function [nsph sphere label]= readNode(filename)
-%Original code was NI_Load function in BrainNet_LoadFiles.m in project BrainNetViewer
+function [nsph, spheres, labels]= readNode(filename)
+%function [nsph, spheres, labels]= readNode(filename)
+%Original code modified from NI_Load function in BrainNet_LoadFiles.m 
+%in project BrainNetViewer
 %BrainNet Viewer, a graph-based brain network mapping tool, by Mingrui Xia
 %Function to load files for graph drawing
 %-----------------------------------------------------------
@@ -14,27 +15,38 @@ function [nsph sphere label]= readNode(filename)
 %-----------------------------------------------------------
 %
 
-fid=fopen(filename);
-i=0;
-while ~feof(fid)
-    curr=fscanf(fid,'%f',5);
-    if ~isempty(curr)
-        i=i+1;
-        textscan(fid,'%s',1);
+    nsph = 0;
+    function updateNsph(i, ~, ~)
+        if(i > nsph)
+            nsph = i;
+        end
     end
-end
-nsph=i;
-fclose(fid);
-sphere=zeros(nsph,5);
-label=cell(nsph,1);
-fid=fopen(filename);
-i=0;
-while ~feof(fid)
-    curr=fscanf(fid,'%f',5);
-    if ~isempty(curr)
-        i=i+1;
-        sphere(i,1:5)=curr;
-        label{i}=textscan(fid,'%s',1);
+
+    scanNodeFileSub(@updateNsph, filename);
+    
+    
+    spheres=zeros(nsph,5);
+    labels=cell(nsph,1);
+    function updateSpheresAndLabels(i, sphere, label)
+        spheres(i,1:5)=sphere;
+        labels{i} = label;
     end
+
+    scanNodeFileSub(@updateSpheresAndLabels, filename);
+    
 end
-fclose(fid);
+
+function scanNodeFileSub(lineOp, filename)
+    fid = fopen(filename);
+    i=0;
+    while ~feof(fid)
+        sphere=fscanf(fid,'%f',5);
+        if ~isempty(sphere)
+            i=i+1;
+            labelCell = textscan(fid,'%s',1);
+            label = labelCell{1};
+            lineOp(i, sphere, label);
+        end
+    end
+    fclose(fid);
+end
