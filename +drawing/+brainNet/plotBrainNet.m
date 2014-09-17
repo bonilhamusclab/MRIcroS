@@ -21,8 +21,8 @@ end
 
 renderedEdges = zeros(numNodes);
 for r = 1:numNodes
-    lastColBeforeDiag = r - 1;
-    for c = 1:lastColBeforeDiag
+    firstColAfterDiag = numNodes - r + 1;
+    for c = firstColAfterDiag:numNodes
         hold on
         if(edges(r, c))
             x = [nodes(r, 1) nodes(c, 1)];

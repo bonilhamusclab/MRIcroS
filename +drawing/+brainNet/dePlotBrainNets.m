@@ -13,7 +13,7 @@ if(hasBrainNets)
         %renderedEdges is symmatric around the diagonal, but we don't want
         %to try to remove the same edge twice, invoking delete twice on 
         %same handle throws an error
-        edgesBelowDiag = renderedEdges & ~triu(renderedEdges);
+        edgesBelowDiag = renderedEdges & ~tril(renderedEdges);
         %only remove edges that exist (calling delete(0) will throw error)
         edgesToRemove = renderedEdges(edgesBelowDiag ~= 0);
         arrayfun(@(e)(delete(e)), edgesToRemove);
