@@ -1,5 +1,5 @@
 function [renderedNodes, renderedEdges] = plotBrainNet(nodes, edges)
-%function plotHandles = plotBrainNet(nodes, edges)
+%function [renderedNodes, renderedEdges] = plotBrainNet(nodes, edges)
 [xSph, ySph, zSph] = sphere(100);
 
 numNodes = size(nodes, 1);
