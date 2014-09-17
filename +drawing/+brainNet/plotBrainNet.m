@@ -21,7 +21,9 @@ end
 
 renderedEdges = zeros(numNodes);
 for r = 1:numNodes
-    firstColAfterDiag = numNodes - r + 1;
+    %edges specified b/w nodes in triu matrix
+    %assuming no edge b/w node and self
+    firstColAfterDiag = r + 1;
     for c = firstColAfterDiag:numNodes
         hold on
         if(edges(r, c))
