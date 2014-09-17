@@ -1,3 +1,5 @@
+%BrainNet Node And Edge Connectome Files
+%http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0068910
 function addBrainNet(v, node_filepath, edge_filepath)	
 %MATcro('addBrainNet','a.node', 'a.edge')
 %inputs: 
