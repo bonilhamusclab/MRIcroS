@@ -21,6 +21,8 @@ function varargout = MATcro(varargin)
 % MATcro('addTrack','myTrack.trk');
 % MATcro('addTrack','myTrack.trk',trackSpacing,minLength);
 % MATcro('closeTracks');
+% MATcro('addBrainNet', node_path, edge_path);
+% MATcro('closeBrainNets');
 mOutputArgs = {}; % Variable for storing output when GUI returns
 h = findall(0,'Tag','makeGui'); %run as singleton
 if (isempty(h)) % new instance
