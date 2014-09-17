@@ -1,5 +1,5 @@
-function closeBrainNets(v)
-%function closeBrainNet(v)
+function dePlotBrainNets(v)
+%function dePlotBrainNets(v)
 hasBrainNets = isfield(v, 'brainNets');
 if(hasBrainNets)
     numBrainNets = length(v.brainNets);
@@ -15,9 +15,7 @@ if(hasBrainNets)
         %same handle throws an error
         edgesBelowDiag = renderedEdges & ~triu(renderedEdges);
         %only remove edges that exist (calling delete(0) will throw error)
-        edgesToRemove = edgesBelowDiag(edgesBelowDiag ~= 0);
+        edgesToRemove = renderedEdges(edgesBelowDiag ~= 0);
         arrayfun(@(e)(delete(e)), edgesToRemove);
     end
-	v = rmfield(v, 'brainNets');
-	guidata(v.hMainFigure, v);
 end

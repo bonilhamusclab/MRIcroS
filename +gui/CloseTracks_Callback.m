@@ -1,2 +1,2 @@
-function CloseTracks_Callback(h, eventdata)
-	drawing.trk.closeTracks(guidata(h));
+function CloseTracks_Callback(h, ~)
+	commands.closeTracks(guidata(h));

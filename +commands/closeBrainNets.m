@@ -1,3 +1,7 @@
 function closeBrainNets(v, ~)
 %MATcro('closeBrainNets');
-	drawing.brainNet.closeBrainNets(v);
+if isfield(v, 'brainNets')
+	drawing.brainNet.dePlotBrainNets(v);
+    v = rmfield(v, 'brainNets');
+	guidata(v.hMainFigure, v);
+end

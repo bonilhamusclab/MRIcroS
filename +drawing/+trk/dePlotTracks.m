@@ -1,9 +1,7 @@
-function closeTracks(v)
-%function closeTracks(v, eventdata)
+function dePlotTracks(v, ~)
+%function dePlotTracks(v)
 hasTracks = isfield(v, 'tracks');
 if(hasTracks)
 	tracks = v.tracks;
 	arrayfun(@(t)(delete(t.fibers)), tracks);
-	v = rmfield(v, 'tracks');
-	guidata(v.hMainFigure, v);
 end
