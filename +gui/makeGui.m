@@ -14,10 +14,13 @@ v.hFileMenu = uimenu('Parent',v.hMainFigure,'HandleVisibility','callback','Label
 v.hAddMenu = uimenu('Parent',v.hFileMenu,'Label','Add image','HandleVisibility','callback', 'Callback', @gui.AddMenu_Callback);
 v.hAddAdvMenu = uimenu('Parent',v.hFileMenu,'Label','Add image with options','HandleVisibility','callback', 'Callback', @gui.AddAdvMenu_Callback);
 v.hCloseOverlaysMenu = uimenu('Parent',v.hFileMenu,'Label','Close image(s)','HandleVisibility','callback', 'Callback', @gui.CloseOverlaysMenu_Callback);
-v.hSaveBmpMenu = uimenu('Parent',v.hFileMenu,'Label','Save bitmap','HandleVisibility','callback', 'Callback', @gui.SaveBmpMenu_Callback);
-v.hSaveMeshesMenu = uimenu('Parent',v.hFileMenu,'Label','Save mesh(es)','HandleVisibility','callback', 'Callback', @gui.SaveMeshesMenu_Callback);
 v.hAddTracksMenu = uimenu('Parent',v.hFileMenu,'Label','Add tracks','HandleVisibility','callback','Callback', @gui.AddTracks_Callback);
 v.hCloseTracksMenu = uimenu('Parent',v.hFileMenu, 'Label','Close tracks', 'HandleVisibility', 'callback','Callback', @gui.CloseTracks_Callback);
+v.hAddBrainNetMenu = uimenu('Parent',v.hFileMenu, 'Label','Add Brain Net', 'HandleVisibility', 'callback','Callback', @gui.AddBrainNet_Callback);
+v.hCloseBrainNetMenu = uimenu('Parent',v.hFileMenu, 'Label','Close Brain Nets', 'HandleVisibility', 'callback','Callback', @gui.CloseBrainNets_Callback);
+v.hSaveBmpMenu = uimenu('Parent',v.hFileMenu,'Label','Save bitmap','HandleVisibility','callback', 'Callback', @gui.SaveBmpMenu_Callback);
+v.hSaveMeshesMenu = uimenu('Parent',v.hFileMenu,'Label','Save mesh(es)','HandleVisibility','callback', 'Callback', @gui.SaveMeshesMenu_Callback);
+
 v.hEditMenu = uimenu('Parent',v.hMainFigure,'HandleVisibility','callback','Label','Edit');
 v.hCopyMenu = uimenu('Parent',v.hEditMenu,'Label','Copy','HandleVisibility','callback','Callback', @gui.CopyMenu_Callback);
 v.hFunctionMenu = uimenu('Parent',v.hMainFigure,'HandleVisibility','callback','Label','Functions');
