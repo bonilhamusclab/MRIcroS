@@ -2,7 +2,6 @@
 %http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0068910
 function [renderedNodes, renderedEdges] = plotBrainNet(nodes, edges)
 %function [renderedNodes, renderedEdges] = plotBrainNet(nodes, edges)
-    tic
 [xSph, ySph, zSph] = sphere(20);
 
 
@@ -25,6 +24,7 @@ end
 
 edgesBinary = edges ~= 0 & ~tril(edges);
 
+%several times faster than double for loop
 xStarts = bsxfun(@times, edgesBinary, xCs);
 xStops = bsxfun(@times, edgesBinary, xCs');
 yStarts = bsxfun(@times, edgesBinary, yCs);
@@ -44,5 +44,4 @@ for i = 1:numEdges
     z = [zStarts(edgeIdx) zStops(edgeIdx)];
     renderedEdges(edgeIdx) = plot3(x,y,z);
 end
-    toc
 end
