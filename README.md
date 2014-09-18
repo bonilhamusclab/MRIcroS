@@ -67,8 +67,24 @@ After starting Matlab
 	
 or
 
+	%only render nodes with radius greater than 2
+	%will also remove edges not connected to a node after filtering
+	nodeRadiusThreshold = 2; 
+	%only render edges with weights greater than 2
+	edgeWeightThreshold = 2;
+	MATcro('addBrainNet', node_path, edge_path, nodeRadiusThreshold, edgeWeightThreshold)
+	
+	%to filter by edgeWeight but not node radius
+	%set node radius threshold to -inf
+	MATcro('addBrainNet', node_path, edge_path, -inf, edgeWeightThreshold)
+	
+or
+
 	% open in GUI, File => Add BrainNet
 	% will prompt for node and edge files
+	% or
+	% open GUI, File => Add BrainNet with options 
+	% for filtering based on specified node radius and edge weight thresholds
 	MATcro 
 	
 To close all open BrainNet Connectomes  
