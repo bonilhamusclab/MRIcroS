@@ -1,13 +1,34 @@
-%BrainNet Node And Edge Connectome Files
-%http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0068910
-function addBrainNet(v, node_filepath, edge_filepath)	
+function addBrainNet(v, node_filepath, edge_filepath, varargin)	
 %MATcro('addBrainNet','a.node', 'a.edge')
+%MATcro('addBrainNet','a.node', 'a.edge', 2)
+%MATcro('addBrainNet','a.node', 'a.edge', 2, 2)
 %inputs: 
 % 1) node_filepath
 % 2) edge_filepath
+% Inputs below are optional
+% 3) nodeRadiusThreshold: filter for nodes with radius above threshold
+%   any edges connected to a filtered node will be removed as well
+% 4) edgeWeightThreshold: filter for edges above specified threshold
+%BrainNet Node And Edge Connectome Files
+%http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0068910
+    
+	optionalInputs = cell2mat(varargin);
+    nodeRadiusThreshold = -inf;
+    edgeWeightThreshold = -inf;
+    if(length(optionalInputs) == 1)
+        nodeRadiusThreshold = optionalInputs(1);
+	elseif(length(optionalInputs) == 2)
+        nodeRadiusThreshold = optionalInputs(1);
+        edgeWeightThreshold = optionalInputs(2);
+    end
     
     [ ~, nodes, ~] = fileUtils.brainNet.readNode(node_filepath);
     edges = fileUtils.brainNet.readEdge(edge_filepath);
+    
+    if (nodeRadiusThreshold > -inf || edgeWeightThreshold > -inf)
+        [nodes, edges] = utils.brainNet.filterNodesAndEdges(nodes, edges,...
+            nodeRadiusThreshold, edgeWeightThreshold);
+    end
     
     [renderedNodes, renderedEdges] = drawing.brainNet.plotBrainNet(nodes, edges);
 
