@@ -1,9 +1,9 @@
-% --- convert voxel image to triangle surface mesh
 function voxToOpen (v,filename, thresh, reduce, smooth, isBackground)
 % filename: image to open
 % thresh : isosurface threshold, e.g. if 1 then voxels less than 1 are transparent
 %          "Inf" or "-Inf" for automatic thresholds
 % reduce : reduction factor 0..1, e.g. 0.05 will simplify mesh to 5% of original size 
+% --- convert voxel image to triangle surface mesh
 if isequal(filename,0), return; end;
 if exist(filename, 'file') == 0, fprintf('Unable to find %s\n',filename); return; end;
 if (reduce > 1) || (reduce <= 0), reduce = 1; end;

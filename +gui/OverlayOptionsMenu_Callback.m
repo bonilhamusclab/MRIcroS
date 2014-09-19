@@ -1,5 +1,5 @@
-% --- let user select layer, then set RGBA for that layer 
 function OverlayOptionsMenu_Callback(obj, eventdata)
+% --- let user select layer, then set RGBA for that layer 
 v=guidata(obj);
 nlayer = length(v.surface);
 if nlayer > 1

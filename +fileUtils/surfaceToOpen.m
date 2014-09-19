@@ -1,7 +1,7 @@
-% --- open pial or nv surface image
 function surfaceToOpen (readFileFn, v, filename, reduce, isBackground)
 %function surfaceToOpen (readFileFn, v, filename, reduce, isBackground)
 % filename: pial or nv image to open
+% --- open pial or nv surface image
 if isequal(filename,0), return; end;
 if exist(filename, 'file') == 0, fprintf('Unable to find %s\n',filename); return; end;
 

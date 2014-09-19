@@ -1,5 +1,5 @@
-% --- read NIfTI header, Copyright (c) 2009, Jimmy Shen, 2-clause FreeBSD License
 function [ hk ] = header_key(fid)
+% --- read NIfTI header, Copyright (c) 2009, Jimmy Shen, 2-clause FreeBSD License
 fseek(fid,0,'bof');
 v6 = version;
 if str2num(v6(1))<6

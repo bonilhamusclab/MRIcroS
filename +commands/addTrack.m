@@ -1,4 +1,3 @@
-% --- Load trackvis fibers http://www.trackvis.org/docs/?subsect=fileformat
 function addTrack(v, filename, varargin)	
 %MATcro('addTrack','dti.trk')
 %MATcro('addTrack','dti.trk', 100)
@@ -7,6 +6,7 @@ function addTrack(v, filename, varargin)
 % 1) filename
 % 2) fiber sampling space -1/x tracks will be sampled (default 1)
 % 3) minimun fiber length (default 5)
+% --- Load trackvis fibers http://www.trackvis.org/docs/?subsect=fileformat
 	if (nargin < 2), return; end;
 	inputs = cell2mat(varargin);
     if(length(inputs) == 1)

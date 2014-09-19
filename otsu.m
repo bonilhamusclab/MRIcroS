@@ -1,7 +1,7 @@
-% --- threshold for converting continuous brightness to binary image using Otsu's method.
 function [thresh] = otsu(I)
 % BSD license: http://www.mathworks.com/matlabcentral/fileexchange/26532-image-segmentation-using-otsu-thresholding
 % Damien Garcia 2010/03 http://www.biomecardio.com/matlab/otsu.html
+% --- threshold for converting continuous brightness to binary image using Otsu's method.
 nbins = 256;
 if (min(I(:)) == max(I(:)) ), disp('otu error: no intensity variability'); thresh =min(I(:)); return; end; 
 intercept = min(I(:)); %we will translate min-val to be zero

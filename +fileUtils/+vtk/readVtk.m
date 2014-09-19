@@ -1,10 +1,10 @@
-% --- read VTK format mesh
 function [vertex,face] = readVtk(filename)
 %   [vertex,face] = read_vtk(filename);
 %   'vertex' is a 'nb.vert x 3' array specifying the position of the vertices.
 %   'face' is a 'nb.face x 3' array specifying the connectivity of the mesh.
 %   Copyright (c) Mario Richtsfeld, distributed under BSD license
 % http://www.mathworks.com/matlabcentral/fileexchange/5355-toolbox-graph/content/toolbox_graph/read_vtk.m
+% --- read VTK format mesh
 fid = fopen(filename,'r');
 if( fid==-1 )
     error('Can''t open the file.');

@@ -1,9 +1,9 @@
-% --- open a mesh or voxel image
 function SelectFileToOpen(v, filename, thresh, reduce,smooth)
 % filename: mesh (GIFTI,VTK,PLY) or NIFTI voxel image to open
 % thresh : (NIFTI only) isosurface threshold Inf for automatic, -Inf for dialog input
 % reduce : (NIFTI only) path reduction ratio, e.g. 0.2 makes mesh 20% original size
 % smooth : (NIFTI only) radius of smoothing, 0 = no smoothing
+% --- open a mesh or voxel image
 if length(filename) < 1
 
 	supportedFileExts = '*.nii;*.hdr;*.nii.gz;*.vtk;*.nv;*.pial';

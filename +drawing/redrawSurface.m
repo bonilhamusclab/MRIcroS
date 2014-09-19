@@ -1,5 +1,5 @@
-% --- creates renderings
 function redrawSurface(v)
+% --- creates renderings
 drawing.removeSurfaces(v);
 %delete(allchild(v.hAxes));%
 set(v.hMainFigure,'CurrentAxes',v.hAxes)

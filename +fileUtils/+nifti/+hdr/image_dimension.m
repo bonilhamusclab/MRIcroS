@@ -1,5 +1,5 @@
-% --- read NIfTI header, Copyright (c) 2009, Jimmy Shen, 2-clause FreeBSD License
 function [ dime ] = image_dimension(fid)
+% --- read NIfTI header, Copyright (c) 2009, Jimmy Shen, 2-clause FreeBSD License
 dime.dim        = fread(fid,8,'int16')';
 dime.intent_p1  = fread(fid,1,'float32')';
 dime.intent_p2  = fread(fid,1,'float32')';

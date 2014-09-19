@@ -1,7 +1,7 @@
-%BrainNet Node And Edge Connectome Files
-%http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0068910
 function [nsph, spheres, labels]= readNode(filename)
 %function [nsph, spheres, labels]= readNode(filename)
+%BrainNet Node And Edge Connectome Files
+%http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0068910
 %Original code modified from NI_Load function in BrainNet_LoadFiles.m 
 %in project BrainNetViewer
 %BrainNet Viewer, a graph-based brain network mapping tool, by Mingrui Xia

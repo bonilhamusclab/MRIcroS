@@ -1,5 +1,5 @@
-% --- save mesh(es) as PLY, VTK or (if SPM is installed) GIfTI format file
 function saveMesh(v, filename)
+% --- save mesh(es) as PLY, VTK or (if SPM is installed) GIfTI format file
 [path,file,ext] = fileparts(filename);
 for i=1:length(v.surface)
     if (i > 1) 

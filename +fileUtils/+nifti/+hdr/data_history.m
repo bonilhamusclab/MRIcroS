@@ -1,5 +1,5 @@
-% --- read NIfTI header, Copyright (c) 2009, Jimmy Shen, 2-clause FreeBSD License
 function [ hist ] = data_history(fid)
+% --- read NIfTI header, Copyright (c) 2009, Jimmy Shen, 2-clause FreeBSD License
 v6 = version;
 if str2double(v6(1))<6
    directchar = '*char';

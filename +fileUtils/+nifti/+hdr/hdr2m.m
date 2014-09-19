@@ -1,6 +1,6 @@
-% --- guess orientation: only use when neither sform or qform is available
 function M = hdr2m(dim, pixdim)
 %from SPM decode_qform0 Copyright (C) 2008 Wellcome Trust Centre for Neuroimaging, GPL
+% --- guess orientation: only use when neither sform or qform is available
 n      = min(dim(1),3);
 vox    = [pixdim(2:(n+1)) ones(1,3-n)];
 x = (dim(2:4)+1)/2;

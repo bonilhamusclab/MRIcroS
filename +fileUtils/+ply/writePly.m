@@ -1,6 +1,6 @@
-% --- creates binary format ply file, e.g. for meshlab
 function writePly(vertex,face,filename)
 %for format details, see http://paulbourke.net/dataformats/ply/
+% --- creates binary format ply file, e.g. for meshlab
 [fid,Msg] = fopen(filename,'Wt');
 if fid == -1, error(Msg); end;
 [~,~,endian] = computer;

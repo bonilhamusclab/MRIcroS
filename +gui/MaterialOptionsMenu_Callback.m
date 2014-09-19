@@ -1,5 +1,5 @@
-% --- allow user to select appearance of surfaces
 function MaterialOptionsMenu_Callback(obj, eventdata)
+% --- allow user to select appearance of surfaces
 v=guidata(obj);
 prompt = {'Ambient strength (0..1):','Diffuse strength(0..1):'...
     'Specular strength (0..1)', 'Specular exponent (0..100)','Mode [0=hide edges,1=show edges]:'...

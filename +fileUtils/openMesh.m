@@ -1,5 +1,6 @@
-% --- open pre-generated mesh
 function openMesh(v,filename, isBackground)
+%function openMesh(v,filename, isBackground)
+% --- open pre-generated mesh
 if isequal(filename,0), return; end;
 if exist(filename, 'file') == 0, fprintf('Unable to find %s\n',filename); return; end;
 [~, ~, ext] = fileparts(filename);

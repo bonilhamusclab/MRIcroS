@@ -1,7 +1,7 @@
-%BrainNet Node And Edge Connectome Files
-%http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0068910
 function dePlotBrainNets(v)
 %function dePlotBrainNets(v)
+%BrainNet Node And Edge Connectome Files
+%http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0068910
 hasBrainNets = isfield(v, 'brainNets');
 if(hasBrainNets)
     numBrainNets = length(v.brainNets);

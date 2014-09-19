@@ -1,6 +1,6 @@
-% --- load NIfTI header
 function [hdr, filetype, fileprefix, machine] = load_nii_hdr(fileprefix)
 % Copyright (c) 2009, Jimmy Shen, 2-clause FreeBSD License
+% --- load NIfTI header
 if ~exist('fileprefix','var'),
   error('Usage: [hdr, filetype, fileprefix, machine] = load_nii_hdr(filename)');
 end

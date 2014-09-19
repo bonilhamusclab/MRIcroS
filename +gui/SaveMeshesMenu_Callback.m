@@ -1,5 +1,5 @@
-% --- allow user to specify file name to export meshes
 function SaveMeshesMenu_Callback(obj, eventdata)
+% --- allow user to specify file name to export meshes
 if (exist('gifti.m', 'file') == 2)
     [file,path] = uiputfile({'*.gii','GIfTI (e.g. SPM8)';'*.vtk','VTK (e.g. FSLview)';'*.ply','PLY (e.g. MeshLab)'},'Save mesh');
 else

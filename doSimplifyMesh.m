@@ -1,5 +1,5 @@
-% --- reduce mesh complexity
 function doSimplifyMesh(v,reduce)
+% --- reduce mesh complexity
 if (reduce >= 1) || (reduce <= 0), disp('simplify ratio must be between 0..1');  return; end;
 for i=1:length(v.surface)
     FVr = reducepatch(v.surface(i),reduce);

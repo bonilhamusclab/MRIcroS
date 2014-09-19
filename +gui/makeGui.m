@@ -1,5 +1,5 @@
-% --- Declare and create all the user interface objects
 function [vFig] = makeGui()
+% --- Declare and create all the user interface objects
 sz = [980 680]; % figure width, height in pixels
 screensize = get(0,'ScreenSize');
 margin = [ceil((screensize(3)-sz(1))/2) ceil((screensize(4)-sz(2))/2)];

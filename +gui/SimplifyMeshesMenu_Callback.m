@@ -1,5 +1,5 @@
-% --- allow user to specify parameters for reducing mesh complexity
 function SimplifyMeshesMenu_Callback(obj, eventdata)
+% --- allow user to specify parameters for reducing mesh complexity
 v=guidata(obj);
 reduce = 0.25;
 prompt = {'Reduce Path, e.g. 0.5 means half resolution (0..1):'};

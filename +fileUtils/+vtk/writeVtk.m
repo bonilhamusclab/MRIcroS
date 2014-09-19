@@ -1,5 +1,6 @@
-% --- save Face/Vertex data as VTK format file
 function writeVtk(vertex,face,filename)
+%function writeVtk(vertex,face,filename)
+% --- save Face/Vertex data as VTK format file
 [nF nFd] =size(face);
 [nV nVd] =size(vertex);
 if (nF <1) || (nV <3 || (nFd ~=3) || (nVd ~=3)), warning('Problem with writeVtk'); return; end; 

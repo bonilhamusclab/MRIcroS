@@ -1,5 +1,5 @@
-% --- reposition light after camera is moved, store new camera azimuth/elevation
 function myPost_Callback(obj,evd)
+% --- reposition light after camera is moved, store new camera azimuth/elevation
 v=guidata(obj);
 camlight(v.vprefs.camLight, v.vprefs.azLight,v.vprefs.elLight);
 newView = round(get(evd.Axes,'View'));

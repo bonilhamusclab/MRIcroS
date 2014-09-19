@@ -1,5 +1,6 @@
-% --- read NIfTI header, Copyright (c) 2009, Jimmy Shen, 2-clause FreeBSD License
 function [ dsr ] = read_header(fid)
+% --- read NIfTI header, Copyright (c) 2009, Jimmy Shen, 2-clause FreeBSD License
+sp ./+fileUtils/+nifti/+hdr/read_header.m 
 dsr.hk   = fileUtils.nifti.hdr.header_key(fid);
 dsr.dime = fileUtils.nifti.hdr.image_dimension(fid);
 dsr.hist = fileUtils.nifti.hdr.data_history(fid);
