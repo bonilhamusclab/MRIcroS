@@ -113,10 +113,11 @@ _All MATcro commands available from the prompt are scripts in the MATcro command
 2.  Set Matlab path to include the matcroUpdates project folder
 
 ###Special Thanks
-1. [Chris Rorden's Neuropsychology Lab](http://www.mccauslandcenter.sc.edu/CRNL/tools/surface-rendering-with-matlab) for writing the freely available [MATcro code](http://www.mccauslandcenter.sc.edu/CRNL/sw/surface/MATcro.m.txt)   
+1. [Dr. Chris Rorden's Neuropsychology Lab](http://www.mccauslandcenter.sc.edu/CRNL/tools/surface-rendering-with-matlab) for writing the freely available [MATcro code](http://www.mccauslandcenter.sc.edu/CRNL/sw/surface/MATcro.m.txt) which is extended here   
 2. John Colby for making the [trk_read.m](https://github.com/johncolby/along-tract-stats/blob/master/trk_read.m) freely available. Used for track header parsing.
 3. NiBabel for [code](https://github.com/nipy/nibabel/blob/master/nibabel/orientations.py) that shows how to determine which voxel space the track file's header's "vox to ras matrix" is expecting when transforming tracks to RAS space.
 4. Mingrui Xia of Beijing University for [BrainNet Viewer](http://www.nitrc.org/projects/bnv/). Code for parsing Node files derived from NI_Load function in BrainNew viewer's main file, BrainNet.m
+5. [Dr. Bonilha of MUSC](http://academicdepartments.musc.edu/neurosciences/neurology/research/bonilha/our_team/current.html), and [Dr. Chris Rorden of USC Columbia](http://www.mccauslandcenter.sc.edu/CRNL/team), for providing guidance and sample code.
 
 ###Note About Development
 Still in beta development, please report bugs to (email coming soon)
