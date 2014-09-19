@@ -93,6 +93,7 @@ _note: functionality not yet available for closing single BrainNet Connectome_
 	MATcro('closeBrainNets');
 	
 ####Support for Viewing Weighted Edges Will be Part of Future Release
+####Support for specifying Node Color in file will be part of Future Release
 
 
 ###More Information
