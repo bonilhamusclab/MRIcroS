@@ -50,5 +50,6 @@ v.vprefs.az = 45; %camera azimuth
 v.vprefs.el = 10; %camera elevation
 guidata(v.hMainFigure,v);%store settings
 vFig = v.hMainFigure;
+set(vFig,'name','MRIcroS');
 drawing.redrawSurface(v);
 %end makeGUI()
