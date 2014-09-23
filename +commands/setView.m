@@ -1,6 +1,6 @@
 function setView(v,varargin)
 % --- set view by moving camera position
-%MATcro('setView', 15, 25);
+%MRIcroS('setView', 15, 25);
 % inputs: azimuth(0..360), elevation(=90..90)
 if (nargin < 1), return; end;
 vIn = cell2mat(varargin);

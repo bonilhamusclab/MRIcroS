@@ -1,5 +1,5 @@
 function closeTracks(v)
-%MATcro('closeTracks');
+%MRIcroS('closeTracks');
 if isfield(v, 'tracks')
 	drawing.trk.dePlotTracks(v);
     v = rmfield(v, 'tracks');

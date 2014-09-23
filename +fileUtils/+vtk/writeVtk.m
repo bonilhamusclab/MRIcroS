@@ -6,7 +6,7 @@ function writeVtk(vertex,face,filename)
 if (nF <1) || (nV <3 || (nFd ~=3) || (nVd ~=3)), warning('Problem with writeVtk'); return; end; 
 fid = fopen(filename, 'wt');
 fprintf(fid, '# vtk DataFile Version 3.0\n');
-fprintf(fid, 'Comment: created with MATcro\n');
+fprintf(fid, 'Comment: created with MRIcroS\n');
 fprintf(fid, 'ASCII\n');
 fprintf(fid, 'DATASET POLYDATA\n');
 fprintf(fid, 'POINTS %d float\n',nV);

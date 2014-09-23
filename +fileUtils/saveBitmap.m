@@ -1,6 +1,6 @@
 function saveBitmap(v,varargin)
 % inputs: filename
-%MATcro('saveBitmap',{'myPicture.png'});
+%MRIcroS('saveBitmap',{'myPicture.png'});
 % --- Save screenshot as bitmap image
 if (length(varargin) < 1), return; end;
 filename = char(varargin{1});

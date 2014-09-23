@@ -1,7 +1,7 @@
 function addBrainNet(v, node_filepath, edge_filepath, varargin)	
-%MATcro('addBrainNet','a.node', 'a.edge')
-%MATcro('addBrainNet','a.node', 'a.edge', 2)
-%MATcro('addBrainNet','a.node', 'a.edge', 2, 2)
+%MRIcroS('addBrainNet','a.node', 'a.edge')
+%MRIcroS('addBrainNet','a.node', 'a.edge', 2)
+%MRIcroS('addBrainNet','a.node', 'a.edge', 2, 2)
 %inputs: 
 % 1) node_filepath
 % 2) edge_filepath

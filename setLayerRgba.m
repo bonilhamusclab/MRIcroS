@@ -1,6 +1,6 @@
 function setLayerRgba(v,varargin)
 % inputs: layerNumber, Red, Green, Blue, Alpha
-%MATcro('layerRGBA', 1, 0.9, 0, 0, 0.2) %set layer 1 to bright red (0.9) with 20% opacity
+%MRIcroS('layerRGBA', 1, 0.9, 0, 0, 0.2) %set layer 1 to bright red (0.9) with 20% opacity
 % --- set a Layer's color and transparency
 if (length(varargin) < 2), return; end;
 vIn = cell2mat(varargin);

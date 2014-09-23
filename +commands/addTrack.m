@@ -1,7 +1,7 @@
 function addTrack(v, filename, varargin)	
-%MATcro('addTrack','dti.trk')
-%MATcro('addTrack','dti.trk', 100)
-%MATcro('addTrack','dti.trk', 50, 10)
+%MRIcroS('addTrack','dti.trk')
+%MRIcroS('addTrack','dti.trk', 100)
+%MRIcroS('addTrack','dti.trk', 50, 10)
 %inputs: 
 % 1) filename
 % 2) fiber sampling space -1/x tracks will be sampled (default 1)

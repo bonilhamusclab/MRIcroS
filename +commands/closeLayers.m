@@ -1,5 +1,5 @@
 function closeLayers(v,varargin)
-%MATcro('closeLayers');
+%MRIcroS('closeLayers');
 % --- close all open layers 
 closeOverlays(v);
 %end closeLayers()

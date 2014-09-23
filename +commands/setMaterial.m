@@ -1,6 +1,6 @@
 function setMaterial(v,varargin)
 % inputs: ambient(0..1), diffuse(0..1), specular(0..1), specularExponent(0..inf), bgMode (0 or 1), backFaceLighting (0 or 1)
-%MATcro('setMaterial', 0.5, 0.5, 0.7, 100, 1, 1);
+%MRIcroS('setMaterial', 0.5, 0.5, 0.7, 100, 1, 1);
 % --- set surface appearance (shiny, matte, etc)
 if (length(varargin) < 1), return; end;
 vIn = cell2mat(varargin);
