@@ -1,4 +1,4 @@
-function closeLayers(v,varargin)
+function closeLayers(v, ~)
 %MRIcroS('closeLayers');
 % --- close all open layers 
 closeOverlays(v);

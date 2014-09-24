@@ -23,6 +23,7 @@ v.hAddBrainNetWithOptsMenu = uimenu('Parent',v.hFileMenu, 'Label','Add Brain Net
 v.hCloseBrainNetMenu = uimenu('Parent',v.hFileMenu, 'Label','Close Brain Nets', 'HandleVisibility', 'callback','Callback', @gui.CloseBrainNets_Callback);
 v.hSaveBmpMenu = uimenu('Parent',v.hFileMenu,'Label','Save bitmap','HandleVisibility','callback', 'Callback', @gui.SaveBmpMenu_Callback);
 v.hSaveMeshesMenu = uimenu('Parent',v.hFileMenu,'Label','Save mesh(es)','HandleVisibility','callback', 'Callback', @gui.SaveMeshesMenu_Callback);
+v.closeAllItemsMenu = uimenu('Parent',v.hFileMenu, 'Label','Close All Items', 'HandleVisibility', 'callback','Callback', @gui.CloseAllItems_Callback);
 
 v.hEditMenu = uimenu('Parent',v.hMainFigure,'HandleVisibility','callback','Label','Edit');
 v.hCopyMenu = uimenu('Parent',v.hEditMenu,'Label','Copy','HandleVisibility','callback','Callback', @gui.CopyMenu_Callback);
