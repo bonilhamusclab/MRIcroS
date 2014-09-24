@@ -4,7 +4,7 @@ function addNodes(v, node_filepath, edge_filepath, varargin)
 %MRIcroS('addNodes','a.node', 'a.edge', 2, 2)
 %inputs: 
 % 1) node_filepath
-% 2) edge_filepath
+% 2) edge_filepath: sepecify as '' if no edges to be loaded
 % Inputs below are optional
 % 3) nodeRadiusThreshold: filter for nodes with radius above threshold
 %   any edges connected to a filtered node will be removed as well
@@ -12,6 +12,8 @@ function addNodes(v, node_filepath, edge_filepath, varargin)
 %BrainNet Node And Edge Connectome Files
 %http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0068910
     
+    loadEdges = ~strcmp(edge_filepath,'');
+
 	optionalInputs = cell2mat(varargin);
     nodeRadiusThreshold = -inf;
     edgeWeightThreshold = -inf;
@@ -23,22 +25,34 @@ function addNodes(v, node_filepath, edge_filepath, varargin)
     end
     
     [ ~, nodes, ~] = fileUtils.brainNet.readNode(node_filepath);
-    edges = fileUtils.brainNet.readEdge(edge_filepath);
+    
+    edges = [];
+    if(loadEdges)
+        edges = fileUtils.brainNet.readEdge(edge_filepath);
+    end
     
     if (nodeRadiusThreshold > -inf || edgeWeightThreshold > -inf)
         [nodes, passingNodeIndexes] = ...
             utils.brainNet.filterNodes(nodes, nodeRadiusThreshold);
-        edges = ...
-            utils.brainNet.filterEdges(edges, edgeWeightThreshold, passingNodeIndexes);
+        if(loadEdges)
+            edges = ...
+                utils.brainNet.filterEdges(edges, edgeWeightThreshold, passingNodeIndexes);
+        end
     end
     
-    [renderedNodes, renderedEdges] = drawing.brainNet.plotBrainNet(nodes, edges);
+    if(loadEdges)
+        [renderedNodes, renderedEdges] = drawing.brainNet.plotBrainNet(nodes, edges);
+    else
+        renderedNodes = drawing.brainNet.plotBrainNet(nodes);
+    end
 
 	hasBrainNets = isfield(v,'brainNets');
 	brainNetsIndex = 1;
 	if(hasBrainNets) brainNetsIndex = brainNetsIndex + length(v.brainNets); end
 	v.brainNets(brainNetsIndex).renderedNodes = renderedNodes;
-    v.brainNets(brainNetsIndex).renderedEdges = renderedEdges;
+    if(loadEdges)
+        v.brainNets(brainNetsIndex).renderedEdges = renderedEdges;
+    end
 	guidata(v.hMainFigure, v);
 	
     v = drawing.removeDemoObjects(v);

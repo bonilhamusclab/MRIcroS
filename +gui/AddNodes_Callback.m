@@ -7,23 +7,43 @@ function AddNodes_Callback(promptForThresholds, obj, ~)
 	title = 'Select a BrainNet Node (node) file';
     node_filename = loadFileDlgSub(options, title, 'load node cancelled');
 	if (~node_filename), return; end;
+    
+    edge_filename = '';
+    loadEdges = questdlg('load associated Edge file As well?',...
+        'Edge File Question', ...
+        'Yes', 'No', 'Yes');
+    
+    loadEdges = strcmp('Yes',loadEdges);
+    
+    if(loadEdges)
 
-	options = ...
-	{'*.edge;', 'BrainNet Edge files'; ...
-	'*.*',					'All Files (*.*)'};
-	title = 'Select a BrainNet Edge (edge) file';
-    edge_filename = loadFileDlgSub(options, title, 'load edge cancelled');
-	if (~edge_filename), return; end;
+        options = ...
+        {'*.edge;', 'BrainNet Edge files'; ...
+        '*.*',					'All Files (*.*)'};
+        title = 'Select a BrainNet Edge (edge) file';
+        edge_filename = loadFileDlgSub(options, title, 'load edge cancelled');
+        if (~edge_filename), edge_filename = ''; end;
+    end
     
     v = guidata(obj);
     
     if(promptForThresholds)
-        prompt = {'Node radius threshold (specify -inf for no thresholding):',...
-            'Edge Weight threshold (specify -inf for no thresholding):'};
-        opts = inputdlg(prompt, 'Node and Edge Options', 1, {num2str(-inf), num2str(-inf)});
-        nodeRadiusT = str2double(opts(1));
-        edgeWeightT = str2double(opts(2));
-        commands.addNodes(v, node_filename, edge_filename, nodeRadiusT, edgeWeightT);
+        nodeRadThreshMsg = 'Node radius threshold (specify -inf for no thresholding):';
+        
+        prompt = {nodeRadThreshMsg};
+        
+        if(loadEdges)
+            edgeWightThreshMsg = 'Edge Weight threshold (specify -inf for no thresholding):';
+            prompt = { nodeRadThreshMsg, edgeWightThreshMsg };
+            opts = inputdlg(prompt, 'Thresholds', 1, {num2str(-inf), num2str(-inf)});
+            nodeRadiusT = str2double(opts(1));
+            edgeWeightT = str2double(opts(2));
+            commands.addNodes(v, node_filename, edge_filename, nodeRadiusT, edgeWeightT);
+        else
+            opts = inputdlg(prompt, 'Thresholds', 1, {num2str(-inf)});
+            nodeRadiusT = str2double(opts(1));
+            commands.addNodes(v, node_filename, edge_filename, nodeRadiusT);
+        end
     else
         commands.addNodes(v, node_filename, edge_filename);
     end
