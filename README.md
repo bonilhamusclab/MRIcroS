@@ -61,7 +61,7 @@ _Note: This admittedly is a hack used to interop with the GUI, it will be addres
 ###How to View BrainNet Edges and Nodes
 After starting Matlab
 
-	MRIcroS('addBrainNet', node_path, edge_path)
+	MRIcroS('addNodes', node_path, edge_path)
 	
 or
 
@@ -70,11 +70,11 @@ or
 	nodeRadiusThreshold = 2; 
 	%only render edges with weights greater than 2
 	edgeWeightThreshold = 2;
-	MRIcroS('addBrainNet', node_path, edge_path, nodeRadiusThreshold, edgeWeightThreshold)
+	MRIcroS('addNodes', node_path, edge_path, nodeRadiusThreshold, edgeWeightThreshold)
 	
 	%to filter by edgeWeight but not node radius
 	%set node radius threshold to -inf
-	MRIcroS('addBrainNet', node_path, edge_path, -inf, edgeWeightThreshold)
+	MRIcroS('addNodes', node_path, edge_path, -inf, edgeWeightThreshold)
 	
 or
 
@@ -88,7 +88,7 @@ or
 To close all open BrainNet Connectomes  
 _note: functionality not yet available for closing single BrainNet Connectome_
 
-	MRIcroS('closeBrainNets');
+	MRIcroS('closeNodes');
 	
 ####Support for Viewing Weighted Edges Will be Part of Future Release
 ####Support for specifying Node Color in file will be part of Future Release

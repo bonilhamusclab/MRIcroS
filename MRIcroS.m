@@ -21,8 +21,8 @@ function varargout = MRIcroS(varargin)
 % MRIcroS('addTrack','myTrack.trk');
 % MRIcroS('addTrack','myTrack.trk',trackSpacing,minLength);
 % MRIcroS('closeTracks');
-% MRIcroS('addBrainNet', node_path, edge_path);
-% MRIcroS('closeBrainNets');
+% MRIcroS('addNodes', node_path, edge_path);
+% MRIcroS('closeNodes');
 % MRIcroS('closeAllItems'); %close all rendered items
 mOutputArgs = {}; % Variable for storing output when GUI returns
 h = findall(0,'Tag','makeGui'); %run as singleton

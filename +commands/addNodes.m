@@ -1,7 +1,7 @@
-function addBrainNet(v, node_filepath, edge_filepath, varargin)	
-%MRIcroS('addBrainNet','a.node', 'a.edge')
-%MRIcroS('addBrainNet','a.node', 'a.edge', 2)
-%MRIcroS('addBrainNet','a.node', 'a.edge', 2, 2)
+function addNodes(v, node_filepath, edge_filepath, varargin)	
+%MRIcroS('addNodes','a.node', 'a.edge')
+%MRIcroS('addNodes','a.node', 'a.edge', 2)
+%MRIcroS('addNodes','a.node', 'a.edge', 2, 2)
 %inputs: 
 % 1) node_filepath
 % 2) edge_filepath

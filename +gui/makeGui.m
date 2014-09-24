@@ -16,11 +16,11 @@ v.hAddAdvMenu = uimenu('Parent',v.hFileMenu,'Label','Add image with options','Ha
 v.hCloseImagesMenu = uimenu('Parent',v.hFileMenu,'Label','Close image(s)','HandleVisibility','callback', 'Callback', @gui.CloseImagesMenu_Callback);
 v.hAddTracksMenu = uimenu('Parent',v.hFileMenu,'Label','Add tracks','HandleVisibility','callback','Callback', @gui.AddTracks_Callback);
 v.hCloseTracksMenu = uimenu('Parent',v.hFileMenu, 'Label','Close tracks', 'HandleVisibility', 'callback','Callback', @gui.CloseTracks_Callback);
-v.hAddBrainNetMenu = uimenu('Parent',v.hFileMenu, 'Label','Add Brain Net', 'HandleVisibility', 'callback', ...
-    'Callback', utils.curry(@gui.AddBrainNet_Callback, 0));
-v.hAddBrainNetWithOptsMenu = uimenu('Parent',v.hFileMenu, 'Label','Add Brain Net with options', 'HandleVisibility', 'callback',...
-    'Callback', utils.curry(@gui.AddBrainNet_Callback, 1));
-v.hCloseBrainNetMenu = uimenu('Parent',v.hFileMenu, 'Label','Close Brain Nets', 'HandleVisibility', 'callback','Callback', @gui.CloseBrainNets_Callback);
+v.hAddNodesMenu = uimenu('Parent',v.hFileMenu, 'Label','Add Nodes', 'HandleVisibility', 'callback', ...
+    'Callback', utils.curry(@gui.AddNodes_Callback, 0));
+v.hAddNodesWithOptsMenu = uimenu('Parent',v.hFileMenu, 'Label','Add Nodes with options', 'HandleVisibility', 'callback',...
+    'Callback', utils.curry(@gui.AddNodes_Callback, 1));
+v.hCloseNodesMenu = uimenu('Parent',v.hFileMenu, 'Label','Close Nodes', 'HandleVisibility', 'callback','Callback', @gui.CloseNodes_Callback);
 v.hSaveBmpMenu = uimenu('Parent',v.hFileMenu,'Label','Save bitmap','HandleVisibility','callback', 'Callback', @gui.SaveBmpMenu_Callback);
 v.hSaveMeshesMenu = uimenu('Parent',v.hFileMenu,'Label','Save mesh(es)','HandleVisibility','callback', 'Callback', @gui.SaveMeshesMenu_Callback);
 v.closeAllItemsMenu = uimenu('Parent',v.hFileMenu, 'Label','Close All Items', 'HandleVisibility', 'callback','Callback', @gui.CloseAllItems_Callback);

@@ -1,4 +1,4 @@
-function AddBrainNet_Callback(promptForThresholds, obj, ~)
+function AddNodes_Callback(promptForThresholds, obj, ~)
 %BrainNet Node And Edge Connectome Files
 %http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0068910
 	options =  ...
@@ -23,13 +23,13 @@ function AddBrainNet_Callback(promptForThresholds, obj, ~)
         opts = inputdlg(prompt, 'Node and Edge Options', 1, {num2str(-inf), num2str(-inf)});
         nodeRadiusT = str2double(opts(1));
         edgeWeightT = str2double(opts(2));
-        commands.addBrainNet(v, node_filename, edge_filename, nodeRadiusT, edgeWeightT);
+        commands.addNodes(v, node_filename, edge_filename, nodeRadiusT, edgeWeightT);
     else
-        commands.addBrainNet(v, node_filename, edge_filename);
+        commands.addNodes(v, node_filename, edge_filename);
     end
 	
 	
-%end AddBrainNet_Callback
+%end AddNodes_Callback
 
 function [filename, isCancelled] = loadFileDlgSub(dlgOptions, title, cancelMsg)
 	[filename, pathname] = uigetfile(dlgOptions, title);
