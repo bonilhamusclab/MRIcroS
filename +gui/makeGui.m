@@ -34,8 +34,8 @@ v.hSimplifyMeshesMenu = uimenu('Parent',v.hFunctionMenu,'Label','Simplify mesh(e
 v.hHelpMenu = uimenu('Parent',v.hMainFigure,'HandleVisibility','callback','Label','Help');
 v.hAboutMenu = uimenu('Parent',v.hHelpMenu,'Label','About','HandleVisibility','callback','Callback', @gui.AboutMenu_Callback);
 %load default simulated surfaces
-[heartFV, sphereFV] = createDemoObjects;
-v.surface(1) = heartFV;
+[cubeFV, sphereFV] = createDemoObjects;
+v.surface(1) = cubeFV;
 v.surface(2) = sphereFV;
 %viewing preferences - color, material, camera position, light position
 v.vprefs.demoObjects = true; %denote simulated objects
