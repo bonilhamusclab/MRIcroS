@@ -4,7 +4,7 @@ function varargout = MRIcroS(varargin)
 % MRIcroS %launch MRIcroS
 % MRIcroS('openLayer',{'avg152T1_brain.nii.gz'}); %open image
 % MRIcroS('simplifyLayers', 0.5); %reduce mesh to 50% complexity
-% MRIcroS('closeLayers'); %close all images
+% MRIcroS('closeLayers'); %close all volume images
 % MRIcroS('openLayer',{'cortex_20484.surf.gii'}); %open image
 % MRIcroS('openLayer',{'attention.nii.gz'}, 3.0); %add fMRI overlay, threshold t>3
 % MRIcroS('openLayer',{'saccades.nii.gz'}, 3.0); %add fMRI overlay threshold t>3
@@ -23,6 +23,7 @@ function varargout = MRIcroS(varargin)
 % MRIcroS('closeTracks');
 % MRIcroS('addBrainNet', node_path, edge_path);
 % MRIcroS('closeBrainNets');
+% MRIcroS('closeAllItems'); %close all rendered items
 mOutputArgs = {}; % Variable for storing output when GUI returns
 h = findall(0,'Tag','makeGui'); %run as singleton
 if (isempty(h)) % new instance
