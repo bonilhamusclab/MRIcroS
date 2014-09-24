@@ -3,7 +3,7 @@ function varargout = MRIcroS(varargin)
 %Examples:
 % MRIcroS %launch MRIcroS
 % MRIcroS('openLayer',{'avg152T1_brain.nii.gz'}); %open image
-% MRIcroS('simplifyLayers', 0.5); %reduce mesh to 50% complexity
+% MRIcroS('simplifyMeshes', 0.5); %reduce mesh to 50% complexity
 % MRIcroS('closeImages'); %close all volume images
 % MRIcroS('openLayer',{'cortex_20484.surf.gii'}); %open image
 % MRIcroS('openLayer',{'attention.nii.gz'}, 3.0); %add fMRI overlay, threshold t>3
