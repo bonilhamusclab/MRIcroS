@@ -26,8 +26,10 @@ function addNodes(v, node_filepath, edge_filepath, varargin)
     edges = fileUtils.brainNet.readEdge(edge_filepath);
     
     if (nodeRadiusThreshold > -inf || edgeWeightThreshold > -inf)
-        [nodes, edges] = utils.brainNet.filterNodesAndEdges(nodes, edges,...
-            nodeRadiusThreshold, edgeWeightThreshold);
+        [nodes, passingNodeIndexes] = ...
+            utils.brainNet.filterNodes(nodes, nodeRadiusThreshold);
+        edges = ...
+            utils.brainNet.filterEdges(edges, edgeWeightThreshold, passingNodeIndexes);
     end
     
     [renderedNodes, renderedEdges] = drawing.brainNet.plotBrainNet(nodes, edges);
