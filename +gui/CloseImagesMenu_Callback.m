@@ -1,5 +1,5 @@
-function CloseOverlaysMenu_Callback(obj, eventdata)
+function CloseImagesMenu_Callback(obj, eventdata)
 % --- close all open images
 v=guidata(obj);
-closeOverlays(v);
+commands.closeImages(v);
 %end CloseOverlaysMenu_Callback()
