@@ -46,7 +46,6 @@ v.vprefs.bgMode = 0; %background mode: wireframe, faces, faces+edges
 v.vprefs.backFaceLighting = 1;
 v.vprefs.azLight = 0; %light azimuth relative to camera
 v.vprefs.elLight = 60; %light elevation relative to camera
-v.vprefs.camLight = [];
 v.vprefs.az = 45; %camera azimuth
 v.vprefs.el = 10; %camera elevation
 guidata(v.hMainFigure,v);%store settings
