@@ -46,7 +46,7 @@ function AddNodes_Callback(promptForThresholds, obj, ~)
             nodeRadiusT = str2double(opts(1));
         end
         
-        nodeColorMap = getNodeColorMapSub();
+        nodeColorMap = gui.brainNet.promptNodeColorMap();
         
     end
     
@@ -63,18 +63,3 @@ function [filename, isCancelled] = loadFileDlgSub(dlgOptions, title, cancelMsg)
 	filename=[pathname filename];
     
 %end loadFileDlgSub
-    
-
-function nodeColorMap = getNodeColorMapSub()
-    colorMapOpts = {'jet','hsv','hot','cool','spring','summer',...
-        'autumn', 'winter', 'gray','bone','copper','pink','lines'};
-    nodeColorMapIndex = listdlg('SelectionMode','Single',...
-        'ListString', colorMapOpts);
-    isCancelled = ~nodeColorMapIndex;
-    if(isCancelled), 
-        nodeColorMap = 'jet';
-    else
-        nodeColorMap = colorMapOpts{nodeColorMapIndex};
-    end
-
-%end getNodeColorMapSub
