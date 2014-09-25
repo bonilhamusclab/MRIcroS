@@ -63,7 +63,7 @@ After starting Matlab
 
 	MRIcroS('addNodes', node_path, edge_path)
 	
-or
+####Filtering Based on Node Radius or Edge Weight
 
 	%only render nodes with radius greater than 2
 	%will also remove edges not connected to a node after filtering
@@ -85,13 +85,34 @@ or
 	% for filtering based on specified node radius and edge weight thresholds
 	MRIcroS 
 	
-To close all open BrainNet Connectomes  
-_note: functionality not yet available for closing single BrainNet Connectome_
+####View Nodes without Edges
+	
+To view just the nodes without the edges
+
+	MRIcroS('addNodes', node_path, '');
+	
+	%view nodes with out edges, and filter for nodes greater than radius 3
+	MRIcroS('addNodes', node_path, '', 3); 
+	
+####Change Color Map for node Colors
+	
+
+	%just load the nodes with no edges or filtering and hsv color scheme
+	MRIcroS('addNodes', node_path, '', -inf, -inf, 'hsv');
+Available color maps can be found [here](http://www.mathworks.com/help/matlab/ref/colormap.html)
+
+	%Choose Load Nodes with Options
+	MRIcroS
+
+####Close all Nodes
+	
+To close all Nodes an edges 
+_note: functionality not yet available for closing single Node/Edge connectome_
 
 	MRIcroS('closeNodes');
 	
-####Support for Viewing Weighted Edges Will be Part of Future Release
-####Support for specifying Node Color in file will be part of Future Release
+	
+####Support for Viewing effects of Weighted Edges Will be Part of Future Release
 
 
 ###More Information
