@@ -1,4 +1,4 @@
-function MaterialOptionsMenu_Callback(obj, eventdata)
+function MaterialOptionsMenu_Callback(obj, ~)
 % --- allow user to select appearance of surfaces
 v=guidata(obj);
 prompt = {'Ambient strength (0..1):','Diffuse strength(0..1):'...
@@ -12,7 +12,7 @@ if isempty(answer), disp('options cancelled'); return; end;
  v.vprefs.materialKaKdKsn(1) = str2double(answer(1));
  v.vprefs.materialKaKdKsn(2) = str2double(answer(2));
  v.vprefs.materialKaKdKsn(3) = str2double(answer(3));
- v.vprefs.materialKaKdKsn(1:3) = boundArray( v.vprefs.materialKaKdKsn(1:3),0,1);
+ v.vprefs.materialKaKdKsn(1:3) = utils.boundArray( v.vprefs.materialKaKdKsn(1:3),0,1);
  v.vprefs.materialKaKdKsn(4) = str2double(answer(4));
  v.vprefs.bgMode = round(str2double(answer(5)));
  v.vprefs.backFaceLighting = round(str2double(answer(6)));
