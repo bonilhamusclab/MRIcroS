@@ -10,6 +10,10 @@ if nargin < 3, colorMap = 'jet'; end;
 colorMapFn = str2func(colorMap);
 
 alsoPlotEdges = ~isempty(edges);
+if(alsoPlotEdges && numel(edges) ~= numel(nodes)^2)
+    error('num edges (%d) must equal the square of num nodes (%d)',...
+        numel(edges), numel(nodes));
+end
 
 [xSph, ySph, zSph] = sphere(20);
 
