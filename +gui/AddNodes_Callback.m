@@ -27,6 +27,9 @@ function AddNodes_Callback(promptForThresholds, obj, ~)
     
     v = guidata(obj);
     
+    nodeRadiusT = -inf;
+    edgeWeightT = -inf;
+    nodeColorMap = 'jet';
     if(promptForThresholds)
         nodeRadThreshMsg = 'Node radius threshold (specify -inf for no thresholding):';
         
@@ -38,15 +41,17 @@ function AddNodes_Callback(promptForThresholds, obj, ~)
             opts = inputdlg(prompt, 'Thresholds', 1, {num2str(-inf), num2str(-inf)});
             nodeRadiusT = str2double(opts(1));
             edgeWeightT = str2double(opts(2));
-            commands.addNodes(v, node_filename, edge_filename, nodeRadiusT, edgeWeightT);
         else
             opts = inputdlg(prompt, 'Thresholds', 1, {num2str(-inf)});
             nodeRadiusT = str2double(opts(1));
-            commands.addNodes(v, node_filename, edge_filename, nodeRadiusT);
         end
-    else
-        commands.addNodes(v, node_filename, edge_filename);
+        
+        nodeColorMap = getNodeColorMapSub();
+        
     end
+    
+    commands.addNodes(v, node_filename, edge_filename, ...
+        nodeRadiusT, edgeWeightT, nodeColorMap); 
 	
 	
 %end AddNodes_Callback
@@ -56,3 +61,20 @@ function [filename, isCancelled] = loadFileDlgSub(dlgOptions, title, cancelMsg)
 	isCancelled = ~filename;
 	if (isCancelled), disp(cancelMsg); return; end
 	filename=[pathname filename];
+    
+%end loadFileDlgSub
+    
+
+function nodeColorMap = getNodeColorMapSub()
+    colorMapOpts = {'jet','hsv','hot','cool','spring','summer',...
+        'autumn', 'winter', 'gray','bone','copper','pink','lines'};
+    nodeColorMapIndex = listdlg('SelectionMode','Single',...
+        'ListString', colorMapOpts);
+    isCancelled = ~nodeColorMapIndex;
+    if(isCancelled), 
+        nodeColorMap = 'jet';
+    else
+        nodeColorMap = colorMapOpts{nodeColorMapIndex};
+    end
+
+%end getNodeColorMapSub
