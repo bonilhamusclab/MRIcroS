@@ -25,7 +25,7 @@ function varargout = MRIcroS(varargin)
 % MRIcroS('closeNodes');
 % MRIcroS('closeAllItems'); %close all rendered items
 mOutputArgs = {}; % Variable for storing output when GUI returns
-h = findall(0,'Tag','makeGui'); %run as singleton
+h = gui.getGuiHandle(); 
 if (isempty(h)) % new instance
    h = gui.makeGui(); %set up user interface
 else % instance already running
