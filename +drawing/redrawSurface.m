@@ -30,8 +30,10 @@ set(gca,'DataAspectRatio',[1 1 1])
 set(gcf,'Color',[1 1 1])
 axis vis3d off; %tight
 h = rotate3d; 
+set( h, 'ActionPostCallback', @gui.perspectiveChange_Callback); %called when user changes perspective
 set(h,'Enable','on');
 view( v.vprefs.az,  v.vprefs.el);
+v.vprefs.camLight = camlight( v.vprefs.azLight, v.vprefs.elLight);
 material( v.vprefs.materialKaKdKsn);
 %light;
 guidata(v.hMainFigure,v);%store settings
