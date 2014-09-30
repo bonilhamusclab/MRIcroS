@@ -1,4 +1,4 @@
-function OverlayOptionsMenu_Callback(obj, ~)
+function LayerRgba_Callback(obj, ~)
 % --- let user select layer, then set RGBA for that layer 
 v=guidata(obj);
 nlayer = length(v.surface);
@@ -10,11 +10,12 @@ if nlayer > 1
 else
     layer = 1;
 end; 
-v.vprefs.colors(layer,1:3) = uisetcolor( v.vprefs.colors(layer,1:3),'select color');
+rgb = uisetcolor( v.vprefs.colors(layer,1:3),'select color');
+v.vprefs.colors(layer,1:3) = utils.boundArray(rgb, 0, 1);
+
 answer = inputdlg({'Alpha (0[transparent]..1[opaque])'},'Set opacity',1,{num2str( v.vprefs.colors(layer,4))} );
 if isempty(answer), disp('options cancelled'); return; end;
-v.vprefs.colors(layer,4) = str2double(answer(1));
-v.vprefs.colors(layer,:) = utils.boundArray( v.vprefs.colors(layer,:), 0,1);
-guidata(v.hMainFigure,v);%store settings
-drawing.redrawSurface(v); %display new settings
-%end OverlayOptionsMenu_Callback()
+alpha = str2double(answer(1));
+
+commands.layerRgba(v, layer, rgb(1), rgb(2), rgb(3), alpha);
+%end LayerRgba_Callback()
