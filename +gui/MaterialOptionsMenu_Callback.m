@@ -9,13 +9,16 @@ a =  v.vprefs.materialKaKdKsn;
 def = {num2str(a(1)),num2str(a(2)), num2str(a(3)),num2str(a(4)), num2str( v.vprefs.bgMode),num2str( v.vprefs.backFaceLighting)};
 answer = inputdlg(prompt,dlg_title,1,def);
 if isempty(answer), disp('options cancelled'); return; end;
- v.vprefs.materialKaKdKsn(1) = str2double(answer(1));
- v.vprefs.materialKaKdKsn(2) = str2double(answer(2));
- v.vprefs.materialKaKdKsn(3) = str2double(answer(3));
- v.vprefs.materialKaKdKsn(1:3) = utils.boundArray( v.vprefs.materialKaKdKsn(1:3),0,1);
- v.vprefs.materialKaKdKsn(4) = str2double(answer(4));
- v.vprefs.bgMode = round(str2double(answer(5)));
- v.vprefs.backFaceLighting = round(str2double(answer(6)));
- guidata(v.hMainFigure,v);%store settings
-drawing.redrawSurface(v);
+
+bindToZeroOrOne = @(x)(utils.boundArray(str2double(x), 0, 1));
+ambience = bindToZeroOrOne(answer(1));
+diffuse = bindToZeroOrOne(answer(2));
+specularStrength = bindToZeroOrOne(answer(3));
+specularExponent = str2double(answer(4));
+bgMode = round(str2double(answer(5)));
+backFaceLighting = round(str2double(answer(6)));
+
+commands.setMaterial(v, ambience, diffuse, specularStrength, ...
+    specularExponent, bgMode, backFaceLighting);
+
 %end MaterialOptionsMenu_Callback()
