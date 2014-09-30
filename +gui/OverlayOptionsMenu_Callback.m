@@ -1,9 +1,9 @@
-function OverlayOptionsMenu_Callback(obj, eventdata)
+function OverlayOptionsMenu_Callback(obj, ~)
 % --- let user select layer, then set RGBA for that layer 
 v=guidata(obj);
 nlayer = length(v.surface);
 if nlayer > 1
-    answer = inputdlg({['Layer [1= background] (1..' num2str(nlayer) ')']}, 'Enter layer to modify', 1,{'1'});
+    answer = inputdlg({['Layer (1..' num2str(nlayer) ')']}, 'Enter layer to modify', 1,{'1'});
     if isempty(answer), disp('options cancelled'); return; end;
     layer = round(str2double(answer));
     layer = utils.boundArray(layer,1,nlayer);
