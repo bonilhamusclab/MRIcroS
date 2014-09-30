@@ -8,7 +8,7 @@ if length(filename) < 1
 
 	supportedFileExts = '*.nii;*.hdr;*.nii.gz;*.vtk;*.nv;*.pial';
 	supportedFileDescs = 'NIfTI/VTK/NV/Pial';
-	if isGiftiInstalled()
+	if isGiftiInstalledSub()
 		supportedFileExts = [supportedFileExts ';*.gii'];
 		supportedFileDescs = [supportedFileDescs '/GIfTI'];
 	end
@@ -24,17 +24,17 @@ if exist(filename, 'file') == 0, fprintf('Unable to find "%s"\n',filename); retu
 
 isBackground = v.vprefs.demoObjects;
 [pathstr, name, ext] = fileparts(filename);
-if isVtkExt(ext) || (isGiftiInstalled() && isGiftiExt(ext))
+if isVtkExtSub(ext) || (isGiftiInstalledSub() && isGiftiExtSub(ext))
 	fileUtils.openMesh(v,filename, isBackground);
 	return;
-elseif isNvExt(ext) || isPialExt(ext)
+elseif isNvExtSub(ext) || isPialExtSub(ext)
     if isnan(thresh)
-        [reduce, cancelled] = promptNvPialDialog(reduce);
+        [reduce, cancelled] = promptNvPialDialogSub(reduce);
         if(cancelled), disp('load cancelled'); return; end;
     end
     
     fileReadFn = @fileUtils.nv.readNv;
-    if isPialExt(ext)
+    if isPialExtSub(ext)
         fileReadFn = @fileUtils.pial.readPial;
     end
     
@@ -44,13 +44,13 @@ end;
 
 if isnan(thresh)
     thresh = Inf;%infinity means auto-select
-    [thresh, reduce, smooth, cancelled] = promptOptionsDialog(num2str(thresh),num2str(reduce),num2str(smooth));
+    [thresh, reduce, smooth, cancelled] = promptOptionsDialogSub(num2str(thresh),num2str(reduce),num2str(smooth));
     if(cancelled), disp('load cancelled'); return; end;
 end
 
 %detect and unpack .nii.gz to .nii
 isTmpUnpackedGz = false;
-if isGzExt(ext) 
+if isGzExtSub(ext) 
     ungzname = fullfile(pathstr, name);
     if exist(ungzname, 'file') ~= 0
         fprintf('Warning: File exists named %s; will open in place of %s\n',ungzname, filename);
@@ -62,9 +62,14 @@ if isGzExt(ext)
 end;
 fileUtils.voxToOpen(v,filename, thresh, reduce,smooth, isBackground); %load voxel image
 if (isTmpUnpackedGz), delete(filename); end; %remove temporary uncompressed image
+
+
+
 %end SelectFileToOpen() 
 
-function [thresh, reduce, smooth, cancelled] = promptOptionsDialog(defThresh, defReduce, defSmooth)
+
+
+function [thresh, reduce, smooth, cancelled] = promptOptionsDialogSub(defThresh, defReduce, defSmooth)
     prompt = {'Surface intensity threshold (Inf=midrange, -Inf=Otsu):','Reduce Path, e.g. 0.5 means half resolution (0..1):','Smoothing radius in voxels (0=none):'};
     dlg_title = 'Select options for loading image';
     def = {num2str(defThresh),num2str(defReduce),num2str(defSmooth)};
@@ -75,7 +80,7 @@ function [thresh, reduce, smooth, cancelled] = promptOptionsDialog(defThresh, de
     reduce = str2double(answer(2));
     smooth = round(str2double(answer(3)))*2+1; %e.g. +1 for 3x3x3, +2 for 5x5x5
     
-function [reduce, cancelled] = promptNvPialDialog(defReduce)
+function [reduce, cancelled] = promptNvPialDialogSub(defReduce)
     prompt = {'Reduce Path, e.g. 0.5 means half resolution (0..1):'};
     dlg_title = 'Select options for loading Nv/Pial';
     def = {num2str(defReduce)};
@@ -84,20 +89,20 @@ function [reduce, cancelled] = promptNvPialDialog(defReduce)
     if cancelled; return; end;
     reduce = str2double(answer(1));
 
-function installed = isGiftiInstalled()
+function installed = isGiftiInstalledSub()
 	installed = (exist('gifti.m', 'file') == 2);
 
-function isVtk = isVtkExt(fileExt)
+function isVtk = isVtkExtSub(fileExt)
 	isVtk = strcmpi(fileExt, '.vtk');
 
-function isGifti = isGiftiExt(fileExt)
+function isGifti = isGiftiExtSub(fileExt)
 	isGifti = strcmpi(fileExt, '.gii');
 
-function isGz = isGzExt(fileExt)
+function isGz = isGzExtSub(fileExt)
 	isGz = length(fileExt)==3  && min((fileExt=='.gz')==1);
 
-function isNv = isNvExt(fileExt)
+function isNv = isNvExtSub(fileExt)
 	isNv = strcmpi(fileExt, '.nv');
 
-function isPial = isPialExt(fileExt)
+function isPial = isPialExtSub(fileExt)
 	isPial = strcmpi(fileExt, '.pial');

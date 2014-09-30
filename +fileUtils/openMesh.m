@@ -16,7 +16,7 @@ if (length(ext) == 4) && strcmpi(ext,'.gii')
      v.surface(layer).faces = double(gii.faces); %convert to double or reducepatch fails
      v.surface(layer).vertices = double(gii.vertices); %convert to double or reducepatch fails
 else
-    [gii.vertices gii.faces] = fileUtils.vtk.readVtk(filename);
+    [gii.vertices, gii.faces] = fileUtils.vtk.readVtk(filename);
      v.surface(layer).faces = gii.faces'; 
      v.surface(layer).vertices = gii.vertices'; 
 end;

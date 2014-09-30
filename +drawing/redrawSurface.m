@@ -16,8 +16,8 @@ end
 v.surfacePatches = zeros(surfaceCount, 1);
 for i=1:surfaceCount
     clr =  v.vprefs.colors ( (mod(i-1,length( v.vprefs.colors))+1) ,1:3);
-    if ( v.vprefs.showEdges == 1) && ( i == 1)
-        ec = 'black';
+    if ( v.vprefs.showEdges(i) == 1) && ( i == 1)
+        ec = v.vprefs.edgeColors(i,:);
     else
         ec = 'none';
     end;
