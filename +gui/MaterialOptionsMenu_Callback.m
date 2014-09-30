@@ -6,7 +6,7 @@ prompt = {'Ambient strength (0..1):','Diffuse strength(0..1):'...
     'Back face reverse lit (1=true)'};
 dlg_title = 'Select options for surface material';
 a =  v.vprefs.materialKaKdKsn;
-def = {num2str(a(1)),num2str(a(2)), num2str(a(3)),num2str(a(4)), num2str( v.vprefs.bgMode),num2str( v.vprefs.backFaceLighting)};
+def = {num2str(a(1)),num2str(a(2)), num2str(a(3)),num2str(a(4)), num2str( v.vprefs.showEdges),num2str( v.vprefs.backFaceLighting)};
 answer = inputdlg(prompt,dlg_title,1,def);
 if isempty(answer), disp('options cancelled'); return; end;
 
@@ -15,10 +15,10 @@ ambience = bindToZeroOrOne(answer(1));
 diffuse = bindToZeroOrOne(answer(2));
 specularStrength = bindToZeroOrOne(answer(3));
 specularExponent = str2double(answer(4));
-bgMode = round(str2double(answer(5)));
+showEdges = round(str2double(answer(5)));
 backFaceLighting = round(str2double(answer(6)));
 
 commands.setMaterial(v, ambience, diffuse, specularStrength, ...
-    specularExponent, bgMode, backFaceLighting);
+    specularExponent, showEdges, backFaceLighting);
 
 %end MaterialOptionsMenu_Callback()
