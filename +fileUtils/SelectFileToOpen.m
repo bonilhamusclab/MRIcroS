@@ -23,51 +23,38 @@ end;
 if exist(filename, 'file') == 0, fprintf('Unable to find "%s"\n',filename); return; end;
 
 isBackground = v.vprefs.demoObjects;
-[pathstr, name, ext] = fileparts(filename);
+
+[~, ~, ext] = fileparts(filename);
 if isVtkExtSub(ext) || (isGiftiInstalledSub() && isGiftiExtSub(ext))
     if (isBackground) 
         v = drawing.removeDemoObjects(v);
     end;
-    fileReadFn = @(filename, ~)fileUtils.readMesh(filename);
+    fileReadFn = @(filename, ~, ~, ~)fileUtils.readMesh(filename);
     
-    fileUtils.surfaceToOpen(fileReadFn, v, filename, reduce, isBackground);
-    
-	return;
 elseif isNvExtSub(ext) || isPialExtSub(ext)
     if isnan(thresh)
         [reduce, cancelled] = promptNvPialDialogSub(reduce);
         if(cancelled), disp('load cancelled'); return; end;
     end
     
-    fileReadFn = @fileUtils.nv.readNv;
+    fileReadFn = @(f, r, ~, ~) fileUtils.nv.readNv(f, r);
     if isPialExtSub(ext)
-        fileReadFn = @fileUtils.pial.readPial;
+        fileReadFn = @(f, r, ~, ~) fileUtils.pial.readPial(f, r);
+    end
+
+else
+
+    if isnan(thresh)
+        thresh = Inf;%infinity means auto-select
+        [thresh, reduce, smooth, cancelled] = promptOptionsDialogSub(num2str(thresh),num2str(reduce),num2str(smooth));
+        if(cancelled), disp('load cancelled'); return; end;
     end
     
-    fileUtils.surfaceToOpen(fileReadFn, v, filename, reduce, isBackground);
-	return;
-end;
-
-if isnan(thresh)
-    thresh = Inf;%infinity means auto-select
-    [thresh, reduce, smooth, cancelled] = promptOptionsDialogSub(num2str(thresh),num2str(reduce),num2str(smooth));
-    if(cancelled), disp('load cancelled'); return; end;
+    fileReadFn = @fileUtils.readVox;
 end
 
-%detect and unpack .nii.gz to .nii
-isTmpUnpackedGz = false;
-if isGzExtSub(ext) 
-    ungzname = fullfile(pathstr, name);
-    if exist(ungzname, 'file') ~= 0
-        fprintf('Warning: File exists named %s; will open in place of %s\n',ungzname, filename);
-        filename = ungzname;
-    else
-        filename = char(gunzip(filename));
-        isTmpUnpackedGz = true;
-    end;
-end;
-fileUtils.voxToOpen(v,filename, thresh, reduce,smooth, isBackground); %load voxel image
-if (isTmpUnpackedGz), delete(filename); end; %remove temporary uncompressed image
+fileUtils.surfaceToOpen(v, isBackground, fileReadFn, ...
+        filename, reduce, smooth, thresh);
 
 
 
@@ -103,9 +90,6 @@ function isVtk = isVtkExtSub(fileExt)
 
 function isGifti = isGiftiExtSub(fileExt)
 	isGifti = strcmpi(fileExt, '.gii');
-
-function isGz = isGzExtSub(fileExt)
-	isGz = length(fileExt)==3  && min((fileExt=='.gz')==1);
 
 function isNv = isNvExtSub(fileExt)
 	isNv = strcmpi(fileExt, '.nv');

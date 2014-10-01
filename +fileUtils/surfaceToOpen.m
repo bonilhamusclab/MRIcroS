@@ -1,4 +1,4 @@
-function surfaceToOpen (readFileFn, v, filename, reduce, isBackground)
+function surfaceToOpen (v, isBackground, readFileFn, filename, reduce, smooth, thresh)
 %function surfaceToOpen (readFileFn, v, filename, reduce, isBackground)
 % filename: pial or nv image to open
 % --- open pial or nv surface image
@@ -9,7 +9,7 @@ if (isBackground)
     v = drawing.removeDemoObjects(v);
 end;
 
-[faces, vertices] = readFileFn(filename, reduce);
+[faces, vertices] = readFileFn(filename, reduce, smooth, thresh);
 
 layer = utils.fieldIndex(v, 'surface');
 v.surface(layer).faces = faces;
