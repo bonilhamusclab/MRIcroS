@@ -25,7 +25,13 @@ if exist(filename, 'file') == 0, fprintf('Unable to find "%s"\n',filename); retu
 isBackground = v.vprefs.demoObjects;
 [pathstr, name, ext] = fileparts(filename);
 if isVtkExtSub(ext) || (isGiftiInstalledSub() && isGiftiExtSub(ext))
-	fileUtils.openMesh(v,filename, isBackground);
+    if (isBackground) 
+        v = drawing.removeDemoObjects(v);
+    end;
+    fileReadFn = @(filename, ~)fileUtils.readMesh(filename);
+    
+    fileUtils.surfaceToOpen(fileReadFn, v, filename, reduce, isBackground);
+    
 	return;
 elseif isNvExtSub(ext) || isPialExtSub(ext)
     if isnan(thresh)
@@ -39,7 +45,7 @@ elseif isNvExtSub(ext) || isPialExtSub(ext)
     end
     
     fileUtils.surfaceToOpen(fileReadFn, v, filename, reduce, isBackground);
-	return
+	return;
 end;
 
 if isnan(thresh)
