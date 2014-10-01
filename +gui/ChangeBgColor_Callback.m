@@ -4,6 +4,6 @@ v=guidata(obj);
 
 newBgColor = uisetcolor;
 
-if(newBgColor)
+if(length(newBgColor) > 1)
 	commands.changeBgColor(v, newBgColor);
 end
