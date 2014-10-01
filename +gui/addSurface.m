@@ -1,6 +1,7 @@
-function surfaceToOpen (v, isBackground, readFileFn, filename, reduce, smooth, thresh)
-%function surfaceToOpen (readFileFn, v, filename, reduce, isBackground)
-% filename: pial or nv image to open
+function addSurface(v, isBackground, readFileFn, filename, reduce, smooth, thresh)
+%function addSurface(v, isBackground, readFileFn, filename, reduce, smooth, thresh)
+% filename: pial, nv, nii, nii.gz, vtk, gii image to open
+% reduce: 
 % --- open pial or nv surface image
 if isequal(filename,0), return; end;
 if exist(filename, 'file') == 0, fprintf('Unable to find %s\n',filename); return; end;

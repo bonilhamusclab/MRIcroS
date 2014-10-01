@@ -77,7 +77,7 @@ function openLayerSub(v, filename, thresh, reduce,smooth)
 		fileReadFn = @fileUtils.readVox;
 	end
 
-	fileUtils.surfaceToOpen(v, isBackground, fileReadFn, ...
+	gui.addSurface(v, isBackground, fileReadFn, ...
 			filename, reduce, smooth, thresh);
 
 end
