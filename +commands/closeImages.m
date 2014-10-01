@@ -4,7 +4,7 @@ function closeImages(v, ~)
 if(isfield(v, 'surface'))
     if (~isempty(v.surface)) 
         v = rmfield(v,'surface');
-        [cubeFV, sphereFV] = createDemoObjects;
+        [cubeFV, sphereFV] = drawing.createDemoObjects;
         v.surface(1) = cubeFV;
         v.surface(2) = sphereFV;
         v.vprefs.demoObjects = true;

@@ -14,7 +14,7 @@ if (round(smooth) > 3) %blur image prior to edge extraction
     Vol = smooth3(Vol,'gaussian',round(smooth));
 end;
 if (isinf(thresh) && (thresh < 0)) %if -Inf, use Otsu's method
-     thresh = otsu(Vol); %use Otsu's method to detect isosurface threshold
+     thresh = utils.otsu(Vol); %use Otsu's method to detect isosurface threshold
 elseif (isnan(thresh)) || (isinf(thresh)) %if +Inf, use midpoint
 	thresh = max(Vol(:)) /2; %use  max/min midpoint as isosurface threshold
     %thresh = mean(Vol(:)); %use mean to detect isosurface threshold - heavily influenced by proportion of dark air

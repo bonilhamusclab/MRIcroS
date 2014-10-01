@@ -43,7 +43,7 @@ v.hAboutMenu = uimenu('Parent',v.hHelpMenu,'Label','About','HandleVisibility','c
 
 
 %load default simulated surfaces
-[cubeFV, sphereFV] = createDemoObjects;
+[cubeFV, sphereFV] = drawing.createDemoObjects;
 v.surface(1) = cubeFV;
 v.surface(2) = sphereFV;
 %viewing preferences - color, material, camera position, light position
