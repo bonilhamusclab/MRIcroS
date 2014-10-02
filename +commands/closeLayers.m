@@ -1,5 +1,5 @@
-function closeImages(v, ~)
-%MRIcroS('closeImages');
+function closeLayers(v, ~)
+%MRIcroS('closeLayers');
 % --- close all open volume surfaces
 if(isfield(v, 'surface'))
     if (~isempty(v.surface)) 
@@ -12,4 +12,4 @@ if(isfield(v, 'surface'))
         drawing.redrawSurface(v);
     end;
 end
-%end closeImages()
+%end closeLayers()

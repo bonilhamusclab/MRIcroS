@@ -4,7 +4,7 @@ function varargout = MRIcroS(varargin)
 % MRIcroS %launch MRIcroS
 % MRIcroS('addLayer',{'avg152T1_brain.nii.gz'}); %open image
 % MRIcroS('simplifyMeshes', 0.5); %reduce mesh to 50% complexity
-% MRIcroS('closeImages'); %close all volume images
+% MRIcroS('closeLayers'); %close all volume images
 % MRIcroS('addLayer',{'cortex_20484.surf.gii'}); %open image
 % MRIcroS('addLayer',{'attention.nii.gz'}, 3.0); %add fMRI overlay, threshold t>3
 % MRIcroS('addLayer',{'saccades.nii.gz'}, 3.0); %add fMRI overlay threshold t>3
