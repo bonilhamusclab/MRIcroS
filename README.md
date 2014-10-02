@@ -26,11 +26,11 @@ or
 ###How to View Image Files (NiFTI, Pial, NV)
 After starting Matlab
 
-	MRIcroS('openLayer', pial_or_nifti_or_nv_file)
+	MRIcroS('addLayer', pial_or_nifti_or_nv_file)
 	
 or
 
-	MRIcroS('openLayer',file, threshold, reduce, smooth)
+	MRIcroS('addLayer',file, threshold, reduce, smooth)
 
 or
 
@@ -41,18 +41,18 @@ or
 For Pial and NV files, only the 'reduce' parameter is used during rendering.
 If the threshold param is NaN, a prompt will open to ask for the desired reduce value.   
 
-	MRIcroS('openLayer',pial_or_nv_file) % a prompt will open requesting reduce
+	MRIcroS('addLayer',pial_or_nv_file) % a prompt will open requesting reduce
 
 To pass in a value from the command line for reduce, specify reduce and threshold. Threshold can be any value but NaN (it won't be used anyway).
 
 	reduce = .3;
 	threshold = -1; %specific value not important, just can't be NaN
-	MRIcroS('openLayer', pial_or_nv_file, threshold, reduce);
+	MRIcroS('addLayer', pial_or_nv_file, threshold, reduce);
 
 
 If reduce is not specified but threshold is, the default value of .1 for reduce will be used.
 
-	MRIcroS('openLayer',pial_or_nv_file,-1); %same as specifying .1 for reduce
+	MRIcroS('addLayer',pial_or_nv_file,-1); %same as specifying .1 for reduce
 
 In other words, threshold acts as a flag to indicate if a prompt should come up for Pial/NV file loading. If it is NaN, it means show a prompt.
 

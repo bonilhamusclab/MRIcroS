@@ -1,14 +1,14 @@
-function openLayer(v,varargin)
+function addLayer(v,varargin)
 %  filename, threshold(optional), reduce(optional), smooth(optional)
 %  filename can be of type: .nii, .nii.gz, .vtk, .gii, .pial, .nv
 %  All Optional values influence NIfTI volumes
 %  No Optional Values have influence on meshes (VTK, GIfTI)
 %  Reduce Optional value has influence on surfaces (pial, nv)
 %  nb: threshold=Inf for midrange, threshold=-Inf for otsu, threshold=NaN for dialog box
-%MRIcroS('openLayer',{'cortex_5124.surf.gii'});
-%MRIcroS('openLayer',{'attention.nii.gz'}); %midrange threshold
-%MRIcroS('openLayer',{'attention.nii.gz',-Inf}); %Otsu's threshold
-%MRIcroS('openLayer',{'attention.nii.gz'},3,0.05,0); %threshold >3
+%MRIcroS('addLayer',{'cortex_5124.surf.gii'});
+%MRIcroS('addLayer',{'attention.nii.gz'}); %midrange threshold
+%MRIcroS('addLayer',{'attention.nii.gz',-Inf}); %Otsu's threshold
+%MRIcroS('addLayer',{'attention.nii.gz'},3,0.05,0); %threshold >3
 % --- add an image as a new layer on top of previously opened images
 	if (length(varargin) < 1), return; end;
 	thresh = Inf;
@@ -19,11 +19,11 @@ function openLayer(v,varargin)
 	if (length(varargin) > 2), reduce = cell2mat(varargin(3)); end;
 	if (length(varargin) > 3), smooth = cell2mat(varargin(4)); end;
 
-	openLayerSub(v,filename, thresh, reduce, smooth);
+	addLayerSub(v,filename, thresh, reduce, smooth);
 end
 
 
-function openLayerSub(v, filename, thresh, reduce,smooth)
+function addLayerSub(v, filename, thresh, reduce,smooth)
 % filename: mesh (GIFTI,VTK,PLY) or NIFTI voxel image to open
 % thresh : (NIFTI only) isosurface threshold Inf for automatic, -Inf for dialog input
 % reduce : (NIFTI only) path reduction ratio, e.g. 0.2 makes mesh 20% original size

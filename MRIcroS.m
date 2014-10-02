@@ -2,13 +2,13 @@ function varargout = MRIcroS(varargin)
 % surface rendering for NIfTI images, can be run from user interface or scripted
 %Examples:
 % MRIcroS %launch MRIcroS
-% MRIcroS('openLayer',{'avg152T1_brain.nii.gz'}); %open image
+% MRIcroS('addLayer',{'avg152T1_brain.nii.gz'}); %open image
 % MRIcroS('simplifyMeshes', 0.5); %reduce mesh to 50% complexity
 % MRIcroS('closeImages'); %close all volume images
-% MRIcroS('openLayer',{'cortex_20484.surf.gii'}); %open image
-% MRIcroS('openLayer',{'attention.nii.gz'}, 3.0); %add fMRI overlay, threshold t>3
-% MRIcroS('openLayer',{'saccades.nii.gz'}, 3.0); %add fMRI overlay threshold t>3
-% MRIcroS('openLayer',{'scalp_2562.surf.gii'}); %add scalp overlay
+% MRIcroS('addLayer',{'cortex_20484.surf.gii'}); %open image
+% MRIcroS('addLayer',{'attention.nii.gz'}, 3.0); %add fMRI overlay, threshold t>3
+% MRIcroS('addLayer',{'saccades.nii.gz'}, 3.0); %add fMRI overlay threshold t>3
+% MRIcroS('addLayer',{'scalp_2562.surf.gii'}); %add scalp overlay
 % MRIcroS('layerRGBA', 4, 0.9, 0.5, 0.5, 0.2); %make scalp reddish
 % MRIcroS('setMaterial', 0.1, 0.4, 0.9, 50, 0, 1); %make surfaces shiny
 % for i=-27:9
