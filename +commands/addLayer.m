@@ -1,14 +1,30 @@
 function addLayer(v,filename,varargin)
-%  filename, threshold(optional), reduce(optional), smooth(optional)
-%  filename can be of type: .nii, .nii.gz, .vtk, .gii, .pial, .nv
-%  All Optional values influence NIfTI volumes
-%  No Optional Values have influence on meshes (VTK, GIfTI)
-%  Reduce Optional value has influence on surfaces (pial, nv)
-%  nb: threshold=Inf for midrange, threshold=-Inf for otsu, threshold=NaN for dialog box
-%MRIcroS('addLayer','cortex_5124.surf.gii');
-%MRIcroS('addLayer','attention.nii.gz',-Inf); %Otsu's threshold
-%MRIcroS('addLayer','attention.nii.gz',0.05,0,3); %threshold >3
 % --- add an image as a new layer on top of previously opened images
+%  inputs:
+%   filename
+%       * can be .nii, .nii.gz, .vtk, .gii, .pial, .nv
+%   reduce (optional)
+%       * applies to surfaces (pial/NV) and volumes (NiFTI)
+%       * must be between 0 and 1
+%       * default value of .25
+%   smooth (optional)
+%       * applies only to volumes (NiFTI)
+%       * default value 1
+%   thresh (optional)
+%       * applies only to volumes (NiFTI)
+%       * Inf for midrange, -Inf for Otsu
+%       * defaults to Inf (midrange)
+%
+%   defaults are specified if empty string ('') is input for value, or if
+%   not specified
+%
+%  No Optional Values have influence on meshes (VTK, GIfTI)
+%  thresh=Inf for midrange, thresh=-Inf for otsu
+%
+%MRIcroS('addLayer','cortex_5124.surf.gii'); %use defaults
+%Otsu's threshold, defaults for reduce and smooth
+%MRIcroS('addLayer','attention.nii.gz','','',-Inf);
+%MRIcroS('addLayer','attention.nii.gz',0.05,0,3); %threshold >3
     
     [reduce, smooth, thresh] = parseInputsSub(varargin);
 
@@ -23,12 +39,17 @@ function addLayer(v,filename,varargin)
 end
 
 function [reduce, smooth, thresh] = parseInputsSub(args)
-    thresh = Inf;
-	reduce = 0.25;
-	smooth = 0;
-	if (length(args) > 1), reduce = cell2mat(args(2)); end;
-	if (length(args) > 2), smooth = cell2mat(args(3)); end;
-	if (length(args) > 3), thresh = cell2mat(args(4)); end;
+    defThresh = Inf;
+	defReduce = 0.25;
+	defSmooth = 0;
+    
+    reduce = ''; smooth = ''; thresh = '';
+	if (length(args) > 0), reduce = cell2mat(args(1)); end;
+	if (length(args) > 1), smooth = cell2mat(args(2)); end;
+	if (length(args) > 2), thresh = cell2mat(args(3)); end;
+    if isempty(reduce), reduce = defReduce; end;
+    if isempty(smooth), smooth = defSmooth; end;
+    if isempty(thresh), thresh = defThresh; end;
 end
 
 function fileReadFn = getFileReadFnSub(filename)

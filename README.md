@@ -23,40 +23,43 @@ or
 `trackSampling` is used to specify 1/x sampling of the tracks to view. Default is 100, greatly speeds processing  
 `minFiberLen` is used to specify the minimum fiber length that should be plotted. Default is 5.
 
-###How to View Image Files (NiFTI, Pial, NV)
+###How to View Layers (NiFTI, Gifti, VTK, Pial, NV)
 After starting Matlab
 
 	MRIcroS('addLayer', pial_or_nifti_or_nv_file)
 	
 or
 
-	MRIcroS('addLayer',file, threshold, reduce, smooth)
+	MRIcroS('addLayer',file, reduce, smooth, threshold)
+	
+or
+
+	%use defaults for reduce and smooth
+	MRIcroS('addLayer', file, '', '', threshold)
+
+more information can be found by: `help commands.addLayer`
 
 or
 
-	MRIcroS % open in GUI, File => Add Image/Add Image With Options
+	MRIcroS % open in GUI, File => Add Layer/Add Layer With Options
 	
 ####Pial/NV File Nuances
 	
 For Pial and NV files, only the 'reduce' parameter is used during rendering.
-If the threshold param is NaN, a prompt will open to ask for the desired reduce value.   
 
-	MRIcroS('addLayer',pial_or_nv_file) % a prompt will open requesting reduce
+	MRIcroS('addLayer',pial_or_nv_file)
 
-To pass in a value from the command line for reduce, specify reduce and threshold. Threshold can be any value but NaN (it won't be used anyway).
+To pass in a value from the command line for reduce, specify reduce. Smooth and Threshold are not used anyway.
 
 	reduce = .3;
-	threshold = -1; %specific value not important, just can't be NaN
-	MRIcroS('addLayer', pial_or_nv_file, threshold, reduce);
+	MRIcroS('addLayer', pial_or_nv_file, reduce);
 
+####VTK/Gifti Mesh files
 
-If reduce is not specified but threshold is, the default value of .1 for reduce will be used.
+For Mesh files, neither reduce, smooth, or threshold is utilized.
 
-	MRIcroS('addLayer',pial_or_nv_file,-1); %same as specifying .1 for reduce
+	MRIcroS('addLayer', mesh_file)
 
-In other words, threshold acts as a flag to indicate if a prompt should come up for Pial/NV file loading. If it is NaN, it means show a prompt.
-
-_Note: This admittedly is a hack used to interop with the GUI, it will be addressed shortly to be more intuitive_
 
 ###How to View BrainNet Edges and Nodes
 After starting Matlab

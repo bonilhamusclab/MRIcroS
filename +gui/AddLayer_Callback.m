@@ -18,9 +18,9 @@ end
 if isequal(brain_filename,0), return; end;
 filename=[brain_pathname brain_filename];
 
-reduce = .25;
-thresh = Inf;
-smooth = 0;
+reduce = '';
+thresh = '';
+smooth = '';
 
 if(promptForValues)
     
