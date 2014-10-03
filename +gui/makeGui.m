@@ -9,19 +9,21 @@ v.hMainFigure = figure('MenuBar','none','Toolbar','none','HandleVisibility','on'
  'Color', get(0, 'defaultuicontrolbackgroundcolor'));
 set(v.hMainFigure,'Renderer','OpenGL')
 v.hAxes = axes('Parent', v.hMainFigure,'HandleVisibility','on','Units', 'normalized','Position',[0.0 0.0 1 1]); %important: turn ON visibility
+
+showOpts = 1;
 %menus...
 v.hFileMenu = uimenu('Parent',v.hMainFigure,'HandleVisibility','callback','Label','File');
 v.hAddLayerMenu = uimenu('Parent',v.hFileMenu,'Label','Add layer','HandleVisibility','callback', ...
-    'Callback', utils.curry(@gui.AddLayer_Callback, 0));
+    'Callback', utils.curry(@gui.AddLayer_Callback, ~showOpts));
 v.hAddLayerWithOptsMenu = uimenu('Parent',v.hFileMenu,'Label','Add layer with options','HandleVisibility','callback', ...
-    'Callback', utils.curry(@gui.AddLayer_Callback, 1));
+    'Callback', utils.curry(@gui.AddLayer_Callback, showOpts));
 v.hCloseLayersMenu = uimenu('Parent',v.hFileMenu,'Label','Close layer(s)','HandleVisibility','callback', 'Callback', @gui.CloseLayers_Callback);
 v.hAddTracksMenu = uimenu('Parent',v.hFileMenu,'Label','Add tracks','HandleVisibility','callback','Callback', @gui.AddTracks_Callback);
 v.hCloseTracksMenu = uimenu('Parent',v.hFileMenu, 'Label','Close tracks', 'HandleVisibility', 'callback','Callback', @gui.CloseTracks_Callback);
 v.hAddNodesMenu = uimenu('Parent',v.hFileMenu, 'Label','Add Nodes', 'HandleVisibility', 'callback', ...
-    'Callback', utils.curry(@gui.AddNodes_Callback, 0));
+    'Callback', utils.curry(@gui.AddNodes_Callback, ~showOpts));
 v.hAddNodesWithOptsMenu = uimenu('Parent',v.hFileMenu, 'Label','Add Nodes with options', 'HandleVisibility', 'callback',...
-    'Callback', utils.curry(@gui.AddNodes_Callback, 1));
+    'Callback', utils.curry(@gui.AddNodes_Callback, showOpts));
 v.hCloseNodesMenu = uimenu('Parent',v.hFileMenu, 'Label','Close Nodes', 'HandleVisibility', 'callback','Callback', @gui.CloseNodes_Callback);
 v.hSaveBmpMenu = uimenu('Parent',v.hFileMenu,'Label','Save bitmap','HandleVisibility','callback', 'Callback', @gui.SaveBmpMenu_Callback);
 v.hSaveMeshesMenu = uimenu('Parent',v.hFileMenu,'Label','Save mesh(es)','HandleVisibility','callback', 'Callback', @gui.SaveMeshesMenu_Callback);
@@ -33,12 +35,15 @@ v.hCopyToClipboardMenu = uimenu('Parent',v.hEditMenu,'Label','Copy To Clipboard'
 v.hFunctionMenu = uimenu('Parent',v.hMainFigure,'HandleVisibility','callback','Label','Functions');
 v.hToolbarMenu = uimenu('Parent',v.hFunctionMenu,'Label','Show/hide toolbar','HandleVisibility','callback','Callback', @gui.ToolbarMenu_Callback);
 v.hLayerRgbaMenu = uimenu('Parent',v.hFunctionMenu,'Label','Color and transparency','HandleVisibility','callback','Callback', @gui.LayerRgba_Callback);
-v.hShowWireFrameMenu = uimenu('Parent',v.hFunctionMenu,'Label','Show Wireframe','HandleVisibility','callback','Callback', @gui.ShowWireframe_Callback);
+v.hShowWireFrameMenu = uimenu('Parent',v.hFunctionMenu,'Label','Show Wireframe','HandleVisibility',...
+    'callback','Callback', utils.curry(@gui.ShowWireframe_Callback, ~showOpts));
+v.hShowWireFrameWithOptsMenu = uimenu('Parent',v.hFunctionMenu,'Label','Show Wireframe with options','HandleVisibility',...
+    'callback','Callback', utils.curry(@gui.ShowWireframe_Callback, showOpts));
 v.hCloseWireFrameMenu = uimenu('Parent',v.hFunctionMenu,'Label','Hide Wireframe','HandleVisibility','callback','Callback',@gui.HideWireframe_Callback);
 v.hMaterialOptionsMenu = uimenu('Parent',v.hFunctionMenu,'Label','Surface material and lighting','HandleVisibility','callback','Callback', @gui.MaterialOptionsMenu_Callback);
 v.hSimplifyMeshesMenu = uimenu('Parent',v.hFunctionMenu,'Label','Simplify mesh(es)','HandleVisibility','callback','Callback', @gui.SimplifyMeshesMenu_Callback);
-v.hRotateToggleMenu = uimenu('Parent',v.hFunctionMenu,'Label','Rotate','HandleVisibility', 'callback', 'Callback', utils.curry(@gui.RotateToggle_Callback, 0));
-v.hRotateToggleWithOptionsMenu = uimenu('Parent',v.hFunctionMenu,'Label','Rotate With Options','HandleVisibility', 'callback', 'Callback', utils.curry(@gui.RotateToggle_Callback, 1));
+v.hRotateToggleMenu = uimenu('Parent',v.hFunctionMenu,'Label','Rotate','HandleVisibility', 'callback', 'Callback', utils.curry(@gui.RotateToggle_Callback, ~showOpts));
+v.hRotateToggleWithOptionsMenu = uimenu('Parent',v.hFunctionMenu,'Label','Rotate With Options','HandleVisibility', 'callback', 'Callback', utils.curry(@gui.RotateToggle_Callback, showOpts));
 v.hChangeBgColorMenu = uimenu('Parent',v.hFunctionMenu, 'Label', 'Change Background Color', 'HandleVisibility', 'callback', 'Callback', @gui.ChangeBgColor_Callback);
 
 v.hHelpMenu = uimenu('Parent',v.hMainFigure,'HandleVisibility','callback','Label','Help');
@@ -52,7 +57,7 @@ v.surface(2) = sphereFV;
 %viewing preferences - color, material, camera position, light position
 v.vprefs.demoObjects = true; %denote simulated objects
 v.vprefs.colors = [0.7 0.7 0.9 0.6; 1 0 0 0.7; 0 1 0 0.7; 0 0 1 0.7; 0.5 0.5 0 0.7; 0.5 0 0.5 0.7; 0 0.5 0.5 0.7]; %rgba for each layer
-v.vprefs.edgeColors = v.vprefs.colors(:,1:3);
+v.vprefs.edgeColors = v.vprefs.colors;
 v.vprefs.showEdges = zeros(size(v.vprefs.colors, 1));
 v.vprefs.materialKaKdKsn = [0.6 0.4 0.4 100.0];%ambient/diffuse/specular strength and specular exponent
 v.vprefs.backFaceLighting = 1;

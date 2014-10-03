@@ -16,15 +16,21 @@ end
 v.surfacePatches = zeros(surfaceCount, 1);
 for i=1:surfaceCount
     clr =  v.vprefs.colors ( (mod(i-1,length( v.vprefs.colors))+1) ,1:3);
+    alph =  v.vprefs.colors (mod(i,length( v.vprefs.colors)),4);
+    
     if ( v.vprefs.showEdges(i) == 1)
-        ec = v.vprefs.edgeColors(i,:);
+        ec = v.vprefs.edgeColors(i,1:3);
+        ea = v.vprefs.edgeColors(i,4);
     else
         ec = 'none';
+        ea = alph;
     end;
-    alph =  v.vprefs.colors (mod(i,length( v.vprefs.colors)),4);
-    v.surfacePatches(i) = patch('vertices', v.surface(i).vertices,'faces', v.surface(i).faces,...
-        'edgecolor',ec,'BackFaceLighting',bf,...
-        'facealpha',alph,'facecolor',clr,'facelighting','phong');
+    
+    v.surfacePatches(i) = patch('vertices', v.surface(i).vertices,...
+        'faces', v.surface(i).faces, 'facealpha',alph,...
+        'facecolor',clr,'facelighting','phong',...
+        'edgecolor',ec,'edgealpha', ea, ...
+        'BackFaceLighting',bf);
 end;
 set(gca,'DataAspectRatio',[1 1 1])
 set(gcf,'Color',[1 1 1])

@@ -1,4 +1,4 @@
-function ShowWireframe_Callback(obj, ~)
+function ShowWireframe_Callback(showOpts, obj, ~)
 v=guidata(obj);
 nlayer = length(v.surface);
 if nlayer > 1
@@ -10,9 +10,30 @@ else
     layer = 1;
 end; 
 
-rgb = uisetcolor( v.vprefs.edgeColors(layer,1:3),'select color');
-rgb = utils.boundArray(rgb, 0, 1);
+if(showOpts)
+    rgb = uisetcolor( v.vprefs.edgeColors(layer,1:3),'select color');
+    rgb = utils.boundArray(rgb, 0, 1);
 
-if length(rgb) == 1; disp('show wireframe cancelled'); return; end;
+    if length(rgb) == 1; 
+        dispCancelMsgSub;
+        return;
+    end;
+        
+    alpha = inputdlg('Set alpha between 0 and 1', '1');
+    alpha = str2double(alpha);
+    
+    if isempty(alpha)
+        dispCancelMsgSub;
+        return;
+    end;
+    
+    commands.showWireframe(v, layer, rgb, alpha);
 
-commands.showWireframe(v, layer, rgb);
+else
+    
+    commands.showWireframe(v, layer);
+    
+end
+
+function dispCancelMsgSub
+disp('show wireframe cancelled'); 

@@ -5,7 +5,6 @@ function hideWireframe(v, layer)
 %MRIcroS('layerRgba', 1:2, [1 0, 0]) %set layer 1 & 2 to red
 
 v.vprefs.showEdges(layer) = 0;
-%v.vprefs.edgeColors(layer, :) = v.vprefs.colors(layer, :);
 
 guidata(v.hMainFigure,v);%store settings
 drawing.redrawSurface(v);
