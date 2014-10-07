@@ -69,5 +69,6 @@ v.vprefs.el = 10; %camera elevation
 guidata(v.hMainFigure,v);%store settings
 vFig = v.hMainFigure;
 set(vFig,'name','MRIcroS');
+commands.changeBgColor(v,[1 1 1]);
 drawing.redrawSurface(v);
 %end makeGUI()

@@ -33,7 +33,6 @@ for i=1:surfaceCount
         'BackFaceLighting',bf);
 end;
 set(gca,'DataAspectRatio',[1 1 1])
-set(gcf,'Color',[1 1 1])
 axis vis3d off; %tight
 h = rotate3d; 
 set( h, 'ActionPostCallback', @gui.perspectiveChange_Callback); %called when user changes perspective
