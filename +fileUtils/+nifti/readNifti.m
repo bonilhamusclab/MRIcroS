@@ -2,7 +2,7 @@ function [Hdr, Vol] = readNifti(filename)
 %function [Hdr, Vol] = readNifti(filename)
 %file can be unzipped nifti (.gz) or nifti (.nii)
 
-[~, ~, ext] = fileparts(filename);
+[pathstr, name, ext] = fileparts(filename);
 
 isTmpUnpackedGz = false;
 if isGzExtSub(ext) 
