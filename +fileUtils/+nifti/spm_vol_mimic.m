@@ -1,4 +1,5 @@
 function [Hdr] = spm_vol_mimic(filename)
+%function [Hdr] = spm_vol_mimic(filename)
 % --- load NIfTI header: mimics spm_vol without requiring SPM
 [h, ~, fileprefix, machine] = fileUtils.nifti.hdr.load_nii_hdr(filename);
 Hdr.dim = [h.dime.dim(2) h.dime.dim(3) h.dime.dim(4)];
