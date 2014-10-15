@@ -1,12 +1,19 @@
 function closeProjections(v, surfaceIndex)
 %MRIcroS('closeProjections', surfaceIndex);
-%surface index defaults to 1 if not specified
+%MRIcroS('closeProjections');
+%if no surface index specified, closes projections on all surfaces
 
-if(nargin == 1)
-    surfaceIndex = 1;
+if(nargin < 2)
+    startIndex = 1;
+    endIndex = length(v.surface);
+else
+    startIndex = surfaceIndex;
+	endIndex = surfaceIndex;
 end
 
-v.surface(surfaceIndex).colorVertices = 0;
+for i = startIndex:endIndex
+	v.surface(i).colorVertices = 0;
+end
 
 drawing.redrawSurface(v);
 
