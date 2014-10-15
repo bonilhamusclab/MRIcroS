@@ -26,15 +26,15 @@ FV = isosurface(Vol,thresh);
 if (reduce ~= 1.0) %next: simplify mesh
     FV = reducepatch(FV,reduce);
 end;
-
 faces = FV.faces;
 vertices = FV.vertices;
-
 clear('FV');
+
 %next: isosurface swaps the X and Y dimensions! size(Vol)
 i = 1;
 j = 2;
 vertices =  vertices(:,[1:i-1,j,i+1:j-1,i,j+1:end]);
+
 %BELOW: SLOW for loop for converting from slice indices to mm
 %for vx = 1:size( vertices,1) %slow - must be a way to do this with bsxfun
 % wc = Hdr.mat * [ vertices(vx,:) 1]'; %convert voxel to world coordinates
@@ -48,5 +48,7 @@ vertices = vx(:,1:3);
 %fprintf('X=%f..%f Y=%f..%f Z=%f..%f \n',min(vx(:,1)),max(vx(:,1)),min(vx(:,2)),max(vx(:,2)),min(vx(:,3)),max(vx(:,3)) );
 
 %display results
-fprintf('Surface threshold %f and reduction ratio %f yields mesh  with %d vertices and %d faces from image %s\n', thresh, reduce,size( vertices,1),size( faces,1),filename);
+fprintf('Surface threshold %f and reduction ratio %f yields mesh with %d vertices and %d faces from image %s\n', thresh, reduce,size( vertices,1),size( faces,1),filename);
+
+
 %end voxToOpen()

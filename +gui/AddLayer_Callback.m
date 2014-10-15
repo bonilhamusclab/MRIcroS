@@ -21,7 +21,7 @@ filename=[brain_pathname brain_filename];
 reduce = '';
 thresh = '';
 smooth = '';
-
+projectVolume = '';%CRX
 if(promptForValues)
     
 	if fileUtils.isVtk(filename) || fileUtils.isGifti(filename)
@@ -32,28 +32,32 @@ if(promptForValues)
         if(cancelled), disp('load cancelled'); return; end;
 
     else
-        [thresh, reduce, smooth, cancelled] = promptOptionsDialogSub(num2str(thresh),num2str(reduce),num2str(smooth));
+        reduce = '0.05'; %CRX -> we need to supply reasonable default values
+        thresh = 'Inf';
+        smooth = '0';
+        projectVolume = '1';
+        [thresh, reduce, smooth, projectVolume, cancelled] = promptOptionsDialogSub(num2str(thresh),num2str(reduce),num2str(smooth),num2str(projectVolume));
         if(cancelled), disp('load cancelled'); return; end;
 		
     end
 end
-
-commands.addLayer(v,filename, reduce, smooth, thresh);
+commands.addLayer(v,filename, reduce, smooth, thresh, projectVolume);
 end
 
-function [thresh, reduce, smooth, cancelled] = promptOptionsDialogSub(defThresh, defReduce, defSmooth)
-    prompt = {'Surface intensity threshold (Inf=midrange, -Inf=Otsu):','Reduce Path, e.g. 0.5 means half resolution (0..1):','Smoothing radius in voxels (0=none):'};
+function [thresh, reduce, smooth, projectVolume, cancelled] = promptOptionsDialogSub(defThresh, defReduce, defSmooth, defProjectVolume)
+    prompt = {'Surface intensity threshold (Inf=midrange, -Inf=Otsu):','Reduce Path, e.g. 0.5 means half resolution (0..1):','Smoothing radius in voxels (0=none):','Project Volume (1=yes):'};
     dlg_title = 'Select options for loading image';
-    def = {num2str(defThresh),num2str(defReduce),num2str(defSmooth)};
+    def = {num2str(defThresh),num2str(defReduce),num2str(defSmooth),num2str(defProjectVolume)};
     answer = inputdlg(prompt,dlg_title,1,def);
     cancelled = isempty(answer);
     if cancelled
-        thresh = NaN; reduce = NaN; smooth = NaN;
+        thresh = NaN; reduce = NaN; smooth = NaN; projectVolume = NaN;
         return; 
     end;
     thresh = str2double(answer(1));
     reduce = str2double(answer(2));
     smooth = round(str2double(answer(3)))*2+1; %e.g. +1 for 3x3x3, +2 for 5x5x5
+    projectVolume = str2double(answer(4));
 end
     
 function [reduce, cancelled] = promptNvPialDialogSub(defReduce)

@@ -25,8 +25,10 @@ function addLayer(v,filename,varargin)
 %Otsu's threshold, defaults for reduce and smooth
 %MRIcroS('addLayer','attention.nii.gz','','',-Inf);
 %MRIcroS('addLayer','attention.nii.gz',0.05,0,3); %threshold >3
+
+%CRX projectVolume added
     
-    [reduce, smooth, thresh] = parseInputsSub(varargin);
+    [reduce, smooth, thresh, projectVolume] = parseInputsSub(varargin);
 
     if exist(filename, 'file') == 0, fprintf('Unable to find "%s"\n',filename); return; end;
     
@@ -35,39 +37,41 @@ function addLayer(v,filename,varargin)
     isBackground = v.vprefs.demoObjects;
     
     addLayerSub(v, isBackground, fileReadFn, ...
-			filename, reduce, smooth, thresh);
+			filename, reduce, smooth, thresh, projectVolume);
 end
 
-function [reduce, smooth, thresh] = parseInputsSub(args)
+function [reduce, smooth, thresh, projectVolume] = parseInputsSub(args)
     defThresh = Inf;
 	defReduce = 0.25;
 	defSmooth = 0;
-    
-    reduce = ''; smooth = ''; thresh = '';
+    defProjectVolume = 1; %CRX
+    reduce = ''; smooth = ''; thresh = ''; projectVolume = '';
 	if (length(args) > 0), reduce = cell2mat(args(1)); end;
 	if (length(args) > 1), smooth = cell2mat(args(2)); end;
 	if (length(args) > 2), thresh = cell2mat(args(3)); end;
+    if (length(args) > 3), projectVolume = cell2mat(args(4)); end;
     if isempty(reduce), reduce = defReduce; end;
     if isempty(smooth), smooth = defSmooth; end;
     if isempty(thresh), thresh = defThresh; end;
+    if isempty(projectVolume), projectVolume = defProjectVolume; end;
 end
 
 function fileReadFn = getFileReadFnSub(filename)
 
 	if fileUtils.isVtk(filename) || ...
             (utils.isGiftiInstalled() && fileUtils.isGifti(filename))
-		fileReadFn = @(filename, ~, ~, ~)fileUtils.readMesh(filename);
+		fileReadFn = @(filename, ~, ~, ~, ~)fileUtils.readMesh(filename);
 	elseif fileUtils.isNv(filename)
-		fileReadFn = @(f, r, ~, ~) fileUtils.nv.readNv(f, r);
+		fileReadFn = @(f, r, ~, ~, ~) fileUtils.nv.readNv(f, r);
     elseif fileUtils.isPial(filename)
-        fileReadFn = @(f, r, ~, ~) fileUtils.pial.readPial(f, r);
+        fileReadFn = @(f, r, ~, ~, ~) fileUtils.pial.readPial(f, r);
     else
 		fileReadFn = @fileUtils.readVox;
     end
 
 end
 
-function addLayerSub(v, isBackground, readFileFn, filename, reduce, smooth, thresh)
+function addLayerSub(v, isBackground, readFileFn, filename, reduce, smooth, thresh, projectVolume)
 %function addSurface(v, isBackground, readFileFn, filename, reduce, smooth, thresh)
 % filename: pial, nv, nii, nii.gz, vtk, gii image to open
 % reduce: 
@@ -78,12 +82,12 @@ function addLayerSub(v, isBackground, readFileFn, filename, reduce, smooth, thre
     if (isBackground) 
         v = drawing.removeDemoObjects(v);
     end;
-
-    [faces, vertices] = readFileFn(filename, reduce, smooth, thresh);
-
+    [faces, vertices] = readFileFn(filename, reduce, smooth, thresh, projectVolume);
     layer = utils.fieldIndex(v, 'surface');
     v.surface(layer).faces = faces;
+    
     v.surface(layer).vertices = vertices;
+
     v.vprefs.demoObjects = false;
 
     %display results
