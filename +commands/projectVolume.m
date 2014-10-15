@@ -54,5 +54,7 @@ end
 
 v.surface(surfaceIndex).vertexColors = clr';
 
+v.surface(surfaceIndex).colorVertices = 1;
+
 drawing.redrawSurface(v);
     
