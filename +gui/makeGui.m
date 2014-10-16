@@ -34,7 +34,7 @@ v.hCopyToClipboardMenu = uimenu('Parent',v.hEditMenu,'Label','Copy To Clipboard'
 
 v.hFunctionMenu = uimenu('Parent',v.hMainFigure,'HandleVisibility','callback','Label','Functions');
 v.hToolbarMenu = uimenu('Parent',v.hFunctionMenu,'Label','Show/hide toolbar','HandleVisibility','callback','Callback', @gui.ToolbarMenu_Callback);
-v.hLayerRgbaMenu = uimenu('Parent',v.hFunctionMenu,'Label','Color and transparency','HandleVisibility','callback','Callback', @gui.LayerRgba_Callback);
+v.hLayerRGBAMenu = uimenu('Parent',v.hFunctionMenu,'Label','Color and transparency','HandleVisibility','callback','Callback', @gui.LayerRGBA_Callback);
 v.hShowWireFrameMenu = uimenu('Parent',v.hFunctionMenu,'Label','Show Wireframe','HandleVisibility',...
     'callback','Callback', utils.curry(@gui.ShowWireframe_Callback, ~showOpts));
 v.hShowWireFrameWithOptsMenu = uimenu('Parent',v.hFunctionMenu,'Label','Show Wireframe with options','HandleVisibility',...
