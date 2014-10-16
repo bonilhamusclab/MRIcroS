@@ -1,6 +1,12 @@
-function writePly(vertex,face,filename)
+function writePly(vertex,vertexColors,face,filename)
 %for format details, see http://paulbourke.net/dataformats/ply/
+% see also http://www.okino.com/conv/imp_ply.htm http://www.mathworks.com/matlabcentral/fx_files/5459/1/content/ply.htm
+% vertex: Vx3 array with X,Y,Z coordinates of each vertex
+% vertexColors: Vx0 (empty), Vx1 (scalar) or Vx3 (RGB) colors for each vertex
+% face: Fx3 triangle list indexed from 1, e.g. 1,2,3 is triangle connecting first 3 vertices
+% filename: name to save object
 % --- creates binary format ply file, e.g. for meshlab
+ 
 [fid,Msg] = fopen(filename,'Wt');
 if fid == -1, error(Msg); end;
 [~,~,endian] = computer;
@@ -10,11 +16,17 @@ if endian == 'L'
 else
     fprintf(fid,'format binary_big_endian 1.0\n');    
 end
-fprintf(fid,'comment created by MATLAB writeply\n');
+fprintf(fid,'comment created by MATLAB writePly\n');
 fprintf(fid,'element vertex %d\n',length(vertex));
 fprintf(fid,'property float x\n');
 fprintf(fid,'property float y\n');
 fprintf(fid,'property float z\n');
+if size(vertex,1) == size(vertexColors,1)
+    fprintf(fid,'property uchar red\n');
+    fprintf(fid,'property uchar green\n');
+    fprintf(fid,'property uchar blue\n');
+    fprintf(fid,'property uchar alpha\n');
+end
 fprintf(fid,'element face %d\n',length(face));
 %nb: MeshLab does not support ushort, so we save as either short or uint
 if (length(vertex) < (2^15))
@@ -27,7 +39,29 @@ fclose(fid);
 %binary data 
 [fid,Msg] = fopen(filename,'Ab');
 if fid == -1, error(Msg); end;
-fwrite(fid, vertex', 'single');
+if size(vertex,1) == size(vertexColors,1) %Save vertex+color: xyzrgb
+    %the trick is vertices XYZ are saved as float32, and RGB as UINT8
+    %(1) convert XYZ vertices into byte array with float32 precision
+    vertex32 = single(vertex');
+    vertex32 = typecast(vertex32(:), 'uint8');
+    %vertex32 = reshape(vertex32,size(vertex,1), 12); %XYZ vertices, each 4 bytes
+    vertex32 = reshape(vertex32,12,size(vertex,1)); %XYZ vertices, each 4 bytes
+    %(2) convert colors into RGB colors into byte array with 8-bit precision
+    clr8 = uint8(vertexColors * 255); %scale 0..1 to 0..255
+    alpha = ones(size(clr8,1),1);
+    alpha = uint8(alpha * 128); %set each vector to mid transparency
+    if size(vertexColors,2) == 1 
+        clr8 = [clr8 clr8 clr8 alpha]; %convert scalar to RGB, add alpha
+    else
+        clr8 = [clr8 alpha]; %add alpha to RGB
+    end
+    clr8 = clr8';
+    %(3) combine vertex and color information
+    vertexClr = [vertex32; clr8]; %32-bits XYZ data, 8-bits RGBA    
+    fwrite(fid, vertexClr, 'uint8');
+else
+    fwrite(fid, vertex', 'single');
+end
 if (length(vertex) < (2^15))
     %slow code - optimization not important for small datasets
     for i = 1:length(face)

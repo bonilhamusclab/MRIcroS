@@ -15,7 +15,7 @@ function [layer, cancelled] = selectLayerSub(v)
     if nlayer > 1
         layersWithProjections = [];
         for i = 1:nlayer
-            if v.surface(i).colorVertices
+            if ~isempty(v.surface(i).vertexColors)
                 layersWithProjections = [layersWithProjections i];
             end
         end

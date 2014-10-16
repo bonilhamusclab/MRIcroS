@@ -6,7 +6,6 @@ cubeThresh = 1.5;
 F = abs(X)> cubeThresh | abs(Y)> cubeThresh | abs(Z) > cubeThresh;
 cubeFV = isosurface(X, Y, Z, F, 0.1);
 cubeFV.vertexColors = [];
-cubeFV.colorVertices = 0;
 
 [X,Y,Z]=ndgrid(linspace(-3,3,vox),linspace(-3,3,vox),linspace(-3,3,vox));
 F = sqrt(X.^2 + Y.^2 + Z.^2);
@@ -20,7 +19,6 @@ if range ~= 0 %normalize for range 0 (black) to 1 (white)
     sphereFV.vertexColors = [clr clr clr];
 end 
 
-sphereFV.colorVertices = 1;
 %sphereFV
 
 %end createDemoObjects()

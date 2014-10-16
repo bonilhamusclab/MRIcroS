@@ -26,7 +26,7 @@ for i=1:surfaceCount
         ea = alph;
     end;
     %v.surface(i)
-    if v.surface(i).colorVertices
+    if ~isempty(v.surface(i).vertexColors)
         v.surfacePatches(i) = patch('vertices', v.surface(i).vertices,...
         'faces', v.surface(i).faces, 'facealpha',alph,...
         'FaceVertexCData',v.surface(i).vertexColors,...
@@ -47,7 +47,12 @@ h = rotate3d;
 set( h, 'ActionPostCallback', @gui.perspectiveChange_Callback); %called when user changes perspective
 set(h,'Enable','on');
 view( v.vprefs.az,  v.vprefs.el);
+
+if ~isempty(v.vprefs.camLight)
+      delete(v.vprefs.camLight);
+end
 v.vprefs.camLight = camlight( v.vprefs.azLight, v.vprefs.elLight);
+
 material( v.vprefs.materialKaKdKsn);
 %light;
 guidata(v.hMainFigure,v);%store settings

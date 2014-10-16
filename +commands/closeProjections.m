@@ -12,7 +12,7 @@ else
 end
 
 for i = startIndex:endIndex
-	v.surface(i).colorVertices = 0;
+	v.surface(i).vertexColors = [];
 end
 
 drawing.redrawSurface(v);
