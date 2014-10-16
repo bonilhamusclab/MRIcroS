@@ -11,10 +11,10 @@ if(cancelled), return; end;
 if(~promptForValues)
     commands.projectVolume(v, layer, volume_filename);
 else
-    [averageIntensities, interpMethod, applyGauss, kernelSize, stdDev] = ...
+    [averageIntensities, interpMethod, colorMap, applyGauss, kernelSize, stdDev] = ...
         getOptionsSub();
     commands.projectVolume(v, layer, volume_filename, ...
-        averageIntensities, interpMethod, applyGauss, ...
+        averageIntensities, interpMethod, colorMap, applyGauss, ...
         kernelSize, stdDev);
 end
 
@@ -45,7 +45,7 @@ function [volume_filename, cancelled] = selectVolumeFileSub()
     volume_filename=[volume_pathname volume_filename];
 end
 
-function [averageIntensities, interpMethod, applyGauss, kernelSize, stdDev] = getOptionsSub()
+function [averageIntensities, interpMethod, colorMap, applyGauss, kernelSize, stdDev] = getOptionsSub()
     averageIntensities = ''; interpMethod =''; applyGauss = ''; kernelSize = ''; stdDev = '';
 
     defaults = {'0', '1', '0', '13', '2.53'};
@@ -62,6 +62,12 @@ function [averageIntensities, interpMethod, applyGauss, kernelSize, stdDev] = ge
     applyGauss = str2double(opts(3));
     kernelSize = str2double(opts(4));
     stdDev = str2double(opts(5));
+    
+    [colorMap, isCancelled] = gui.utils.promptColorMap();
+    if(isCancelled)
+        colorMap = 'jet'; 
+        disp(['color map selection cancelled, using ' colorMap]);
+    end
     
 end
 

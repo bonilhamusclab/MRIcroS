@@ -46,7 +46,7 @@ function AddNodes_Callback(promptForThresholds, obj, ~)
             nodeRadiusT = str2double(opts(1));
         end
         
-        nodeColorMap = gui.brainNet.promptNodeColorMap();
+        nodeColorMap = gui.utils.promptColorMap();
         
     end
     
