@@ -23,8 +23,8 @@ thresh = '';
 smooth = '';
 if(promptForValues)
     
-	if fileUtils.isVtk(filename) || fileUtils.isGifti(filename)
-        disp('no options for vtk or gifti');
+	if fileUtils.isVtk(filename) || fileUtils.isGifti(filename)  || fileUtils.isTrib(filename)
+        disp('no options for vtk, gifti, or trib');
 	elseif fileUtils.isNv(filename) || fileUtils.isPial(filename)
         
         [reduce, cancelled] = promptNvPialDialogSub(reduce);

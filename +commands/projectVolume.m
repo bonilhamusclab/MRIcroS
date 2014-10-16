@@ -1,4 +1,5 @@
 function projectVolume(v, surfaceIndex, volumeFile, varargin)
+%function projectVolume(v, surfaceIndex, volumeFile, varargin)
 % surfaceIndex: index of surface to project on
 % volumeFile: file name of nifti image to project onto surface
 % averageIntensities: set to 1 to average intensities
