@@ -1,22 +1,22 @@
 function vertexColors = volumeIntensitiesToVertexColors(vertices, faces, volumeFile, varargin)
-%function vertexColors = projectVolume(faces, vertices, volumeFile, varargin)
+%function vertexColors = volumeIntensitiesToVertexColors(vertices, faces, volumeFile, varargin)
 % vertices: vertices to obtain colors for
 % faces: faces associated with vertices
 % volumeFile: file name of nifti image to project onto surface
-% averageIntensities: set to 1 to average intensities
+% averageIntensities (optional): set to 1 to average intensities
 %   default 0 for performance
-% interpolationMethod: 'nearest', 'linear', 'spline', 'cubic', (same as function
+% interpolationMethod (optional): 'nearest', 'linear', 'spline', 'cubic', (same as function
 % interp3)
 %   default: linear
-% colorMap: can use any of Matlabs color map schemes
-%   default: jet
-% applyGaussian: set to 1 if you want to gaussian smooth voxels before
+% applyGaussian (optional): set to 1 if you want to gaussian smooth voxels before
 % projection
 %   default: 0
-%kernelSize: convolution kernel size for gaussian interpolation
+%kernelSize (optional): convolution kernel size for gaussian interpolation
 %   default: 13
-%standardDev:
+%   not applicable if not performing gaussian smooth
+%standardDev (optional): convolution kernel std for gaussian interpolation
 %   default: 2.53
+%   not applicable if not performing gaussian smooth
 
 defaults = {0, 'linear', 'jet', 0, 13, 2.53};
 [averageIntensities, interpolationMethod, colorMap, applyGaussian, kernelSize, standardDev] = ...
