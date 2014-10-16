@@ -3,7 +3,7 @@ function AddLayer_Callback(promptForValues, obj, ~)
 v=guidata(obj);
 
 supportedFileExts = '*.nii;*.hdr;*.nii.gz;*.vtk;*.nv;*.pial;*.ply;*.trib';
-supportedFileDescs = 'NIfTI/VTK/NV/Pial/PLY/trib/trk';
+supportedFileDescs = 'NIfTI/VTK/NV/Pial/PLY/trib';
 
 if utils.isGiftiInstalled()
     supportedFileExts = [supportedFileExts ';*.gii'];
