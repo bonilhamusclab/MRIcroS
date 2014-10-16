@@ -44,7 +44,7 @@ function [reduce, smooth, thresh] = parseInputsSub(args)
 	defReduce = 0.25;
 	defSmooth = 0;
     reduce = ''; smooth = ''; thresh = '';
-	if (length(args) > 0), reduce = cell2mat(args(1)); end;
+	if ~isempty(args), reduce = cell2mat(args(1)); end;
 	if (length(args) > 1), smooth = cell2mat(args(2)); end;
 	if (length(args) > 2), thresh = cell2mat(args(3)); end;
     if isempty(reduce), reduce = defReduce; end;
@@ -53,16 +53,24 @@ function [reduce, smooth, thresh] = parseInputsSub(args)
 end
 
 function fileReadFn = getFileReadFnSub(filename)
+    
+    projectVolume = 0;
 
 	if fileUtils.isVtk(filename) || ...
             (utils.isGiftiInstalled() && fileUtils.isGifti(filename))
-		fileReadFn = @(filename, ~, ~, ~, ~)fileUtils.readMesh(filename);
+        projectVolume = 1;
+		fileReadFn = @(filename, ~, ~, ~)fileUtils.readMesh(filename);
 	elseif fileUtils.isNv(filename)
-		fileReadFn = @(f, r, ~, ~, ~) fileUtils.nv.readNv(f, r);
+		fileReadFn = @(f, r, ~, ~) fileUtils.nv.readNv(f, r);
     elseif fileUtils.isPial(filename)
-        fileReadFn = @(f, r, ~, ~, ~) fileUtils.pial.readPial(f, r);
+        fileReadFn = @(f, r, ~, ~) fileUtils.pial.readPial(f, r);
     else
-		fileReadFn = @fileUtils.readVox;
+		fileReadFn = @(f, r, s, t) fileUtils.readVox(f, r, s, t);
+    end
+    
+    if ~projectVolume
+        emptyVertexColors = [];
+        fileReadFn = utils.appendOutput(fileReadFn, emptyVertexColors);
     end
 
 end
@@ -78,13 +86,13 @@ function addLayerSub(v, isBackground, readFileFn, filename, reduce, smooth, thre
     if (isBackground) 
         v = drawing.removeDemoObjects(v);
     end;
-    [faces, vertices] = readFileFn(filename, reduce, smooth, thresh);
+    [faces, vertices, vertexColors] = readFileFn(filename, reduce, smooth, thresh);
     layer = utils.fieldIndex(v, 'surface');
     v.surface(layer).faces = faces;
     
     v.surface(layer).vertices = vertices;
     
-    v.surface(layer).colorVertices = 0;
+    v.surface(layer).vertexColors = vertexColors;
 
     v.vprefs.demoObjects = false;
 
