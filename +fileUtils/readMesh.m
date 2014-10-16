@@ -1,25 +1,47 @@
-function [faces, vertices, vertexColors] = readMesh(filename)
+function [faces, vertices, vertexColors] = readMesh(varargin)
 %function openMesh(filename)
 % --- open pre-generated vtk or gii mesh
 % --- gii processing requires spm
-
-vertexColors = [];
-[~, ~, ext] = fileparts(filename);
-
-if (length(ext) == 4) && strcmpi(ext,'.gii') && (~exist('gifti.m', 'file') == 2)
+%Examples
+%readMesh('myImg.vtk');
+%readMesh('myImg.vtk',0.5); % 50% reduction
+vertexColors = []; %CRX - add vertexColors
+if (nargin) && (ischar(varargin{1})) 
+ filename = varargin{1};
+else
+	error('readMesh expects filename');
+end
+if fileUtils.isGifti(filename) && (~exist('gifti.m', 'file') == 2)
     fprintf('Unable to open GIfTI files: this feature requires SPM to be installed');
 end;
+reduce = 1;
+if (nargin > 1) && isnumeric(varargin{2}) %16 Oct 2014
+    reduce = varargin{2};
+end
 
-if (length(ext) == 4) && strcmpi(ext,'.ply')
+if fileUtils.isPly(filename)
     [faces, vertices, vertexColors] = fileUtils.ply.readPly(filename);
-elseif (length(ext) == 5) && strcmpi(ext,'.trib')
+elseif fileUtils.isNv(filename)
+    [faces, vertices] = fileUtils.nv.readNv(filename);
+elseif fileUtils.isPial(filename)
+    [faces, vertices] = fileUtils.pial.readPial(filename);
+elseif fileUtils.isTrib(filename)
     [faces, vertices, vertexColors] = fileUtils.trib.readTrib(filename);
-elseif (length(ext) == 4) && strcmpi(ext,'.gii')
+elseif fileUtils.isGifti(filename)
     gii = gifti(filename);
-     faces = double(gii.faces); %convert to double or reducepatch fails
-     vertices = double(gii.vertices); %convert to double or reducepatch fails
+    faces = double(gii.faces); %convert to double or reducepatch fails
+    vertices = double(gii.vertices); %convert to double or reducepatch fails
 else
     [gii.vertices, gii.faces] = fileUtils.vtk.readVtk(filename);
      faces = gii.faces'; 
      vertices = gii.vertices'; 
 end;
+if isempty(vertexColors) && (reduce < 1) && (reduce > 0)
+    fv.faces = faces;
+    fv.vertices = vertices;
+    fv = reducepatch(fv,reduce);
+    fprintf('Mesh reduced %d->%d vertices and %d->%d faces\n',size(vertices,1),size(fv.vertices,1),size(faces,1),size(fv.faces,1) );
+    faces = fv.faces;
+    vertices = fv.vertices;
+end
+%end readMesh()

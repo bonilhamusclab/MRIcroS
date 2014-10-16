@@ -7,6 +7,15 @@ function addTrack(v, filename, varargin)
 % 2) fiber sampling space: 1/x tracks will be sampled (default 1)
 % 3) minimun fiber length (default 5)
 % --- Load trackvis fibers http://www.trackvis.org/docs/?subsect=fileformat
+
+if exist(filename, 'file') == 0
+    tmp = fullfile ([fileparts(which('MRIcroS')) filesep '+examples'], filename);
+    if exist(tmp, 'file') == 0
+        fprintf('Unable to find "%s"\n',filename); 
+        return; 
+    end
+    filename = tmp; %file exists is 'examples' directory
+end;
 	if (nargin < 2), return; end;
 	inputs = cell2mat(varargin);
     if(length(inputs) == 1)

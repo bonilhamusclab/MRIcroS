@@ -7,8 +7,7 @@ function [vertex,face] = readVtk(filename)
 % --- read VTK format mesh
 fid = fopen(filename,'r');
 if( fid==-1 )
-    error('Can''t open the file.');
-    return;
+    error('Can''t open the VTK file %s',filename);
 end
 str = fgets(fid);   % -1 if eof
 if ~strcmp(str(3:5), 'vtk')

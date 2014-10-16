@@ -2,28 +2,23 @@ function varargout = MRIcroS(varargin)
 % surface rendering for NIfTI images, can be run from user interface or scripted
 %Examples:
 % MRIcroS %launch MRIcroS
-% MRIcroS('addLayer',{'avg152T1_brain.nii.gz'}); %open image
+% MRIcroS('addLayer','lh.pial'); %open image
 % MRIcroS('simplifyMeshes', 0.5); %reduce mesh to 50% complexity
 % MRIcroS('closeLayers'); %close all volume images
-% MRIcroS('addLayer',{'cortex_20484.surf.gii'}); %open image
-% MRIcroS('addLayer',{'attention.nii.gz'}, 3.0); %add fMRI overlay, threshold t>3
-% MRIcroS('addLayer',{'saccades.nii.gz'}, 3.0); %add fMRI overlay threshold t>3
-% MRIcroS('addLayer',{'scalp_2562.surf.gii'}); %add scalp overlay
-% MRIcroS('layerRGBA', 4, 0.9, 0.5, 0.5, 0.2); %make scalp reddish
-% MRIcroS('setMaterial', 0.1, 0.4, 0.9, 50, 0, 1); %make surfaces shiny
+% MRIcroS('addLayer','BrainMesh_ICBM152.nv'); %open image
+% MRIcroS('addLayer','motor.nii.gz',1,0, 3.0); %add fMRI overlay, threshold t>3
+% MRIcroS('addLayer','invMotor.ply'); %add another fMRI (already a mesh)
 % for i=-27:9
 % 	MRIcroS('setView', i*10, 35); %rotate azimuth, constant elevation
 % 	pause(0.1);
 % end;
 % MRIcroS('copyBitmap'); %copy screenshot to clipboard
-% MRIcroS('saveBitmap',{'myPicture.png'}); %save screenshot
-% MRIcroS('saveMesh',{'myMesh.ply'}); %export mesh to PLY format
-% MRIcroS('addTrack','myTrack.trk');
-% MRIcroS('addTrack','myTrack.trk',trackSpacing,minLength);
-% MRIcroS('closeTracks');
-% MRIcroS('addNodes', node_path, edge_path);
-% MRIcroS('closeNodes');
-% MRIcroS('closeAllItems'); %close all rendered items
+% MRIcroS('saveBitmap','myPicture.png'); %save screenshot
+% MRIcroS('saveMesh','myMesh.ply'); %export mesh to PLY format
+% MRIcroS('closeLayers');
+% MRIcroS('addLayer','stroke.trib');
+% MRIcroS('addTrack','stroke.trk',10,10);
+
 mOutputArgs = {}; % Variable for storing output when GUI returns
 h = gui.getGuiHandle(); 
 if (isempty(h)) % new instance

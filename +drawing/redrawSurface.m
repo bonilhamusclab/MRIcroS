@@ -25,8 +25,8 @@ for i=1:surfaceCount
         ec = 'none';
         ea = alph;
     end;
-    %v.surface(i)
-    if ~isempty(v.surface(i).vertexColors)
+    if size(v.surface(i).vertices,1) == size(v.surface(i).vertexColors,1) %CRV - if provided edge color information
+        %size(v.surface(i).vertexColors)
         if size(v.surface(i).vertexColors,2) == 3 %CRV vertexColors has 3 components Red/Green/Blue
             v.surfacePatches(i) = patch('vertices', v.surface(i).vertices,...
             'faces', v.surface(i).faces, 'facealpha',alph,...
@@ -58,13 +58,11 @@ h = rotate3d;
 set( h, 'ActionPostCallback', @gui.perspectiveChange_Callback); %called when user changes perspective
 set(h,'Enable','on');
 view( v.vprefs.az,  v.vprefs.el);
-
+%v.vprefs.camLight = camlight( v.vprefs.azLight, v.vprefs.elLight);
 if ~isempty(v.vprefs.camLight)
-      delete(v.vprefs.camLight);
+    delete(v.vprefs.camLight); %CRV - delete previous lights!
 end
 v.vprefs.camLight = camlight( v.vprefs.azLight, v.vprefs.elLight);
-
 material( v.vprefs.materialKaKdKsn);
-%light;
 guidata(v.hMainFigure,v);%store settings
 %end redrawSurface()

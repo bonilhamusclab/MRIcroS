@@ -5,9 +5,9 @@ function showWireframe(v, layer, rgb, alpha)
 %   alpha - optional, defaults to 1
 % note: rgb can not be a string such as 'blue', must be an array
 % note 2: use '' or [] to specify default for input
-%MRIcroS('layerRGBA', 1, [1 0 0]) %set layer 1 to red
-%MRIcroS('layerRGBA', 1:2, [1 0 0]) %set layer 1 & 2 to red
-%MRIcroS('layerRGBA', 1, '', .1) %set layer 1 to black with .1 alpha
+%MRIcroS('layerRgba', 1, [1 0 0]) %set layer 1 to red
+%MRIcroS('layerRgba', 1:2, [1 0 0]) %set layer 1 & 2 to red
+%MRIcroS('layerRgba', 1, '', .1) %set layer 1 to black with .1 alpha
 if(nargin < 3)
     rgb = [0 0 0];
 end

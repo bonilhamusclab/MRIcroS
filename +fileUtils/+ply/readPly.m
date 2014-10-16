@@ -22,7 +22,7 @@ function [faces, vertices, vertexColors] = readPly(filename)
 %     modified 2014 by Chris Rorden to import vertex colors
 
 vertexColors = [];
-[d,~] = plyreadSub(filename);
+[d,c] = plyread(filename);
 
 vi = d.face.vertex_indices;
 nf = length(vi);
@@ -36,7 +36,7 @@ if isfield(d.vertex,'green')
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function [Elements,varargout] = plyreadSub(Path,Str)
+function [Elements,varargout] = plyread(Path,Str)
 %PLYREAD   Read a PLY 3D data file.
 %   [DATA,COMMENTS] = PLYREAD(FILENAME) reads a version 1.0 PLY file
 %   FILENAME and returns a structure DATA.  The fields in this structure

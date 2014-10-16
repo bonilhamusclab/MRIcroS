@@ -9,7 +9,7 @@ function addLayer(v,filename,varargin)
 %       * default value of .25
 %   smooth (optional)
 %       * applies only to volumes (NiFTI)
-%       * default value 1
+%       * default vaMRIlue 1
 %   thresh (optional)
 %       * applies only to volumes (NiFTI)
 %       * Inf for midrange, -Inf for Otsu
@@ -25,76 +25,54 @@ function addLayer(v,filename,varargin)
 %Otsu's threshold, defaults for reduce and smooth
 %MRIcroS('addLayer','attention.nii.gz','','',-Inf);
 %MRIcroS('addLayer','attention.nii.gz',0.05,0,3); %threshold >3
+reduce = 0.25;
+reduceMesh = 1.0;
+thresh = Inf;
+smooth = 0;
+vertexColor = 0;
+if (nargin > 2)
+    reduce = varargin{1};
+    reduceMesh = reduce;
+end;
+if (nargin > 3), smooth = varargin{2}; end;
+if (nargin > 4), thresh = varargin{3}; end;
+if (nargin > 5), vertexColor = varargin{4}; end;
 
-    
-    [reduce, smooth, thresh] = parseInputsSub(varargin);
-
-    if exist(filename, 'file') == 0, fprintf('Unable to find "%s"\n',filename); return; end;
-    
-    fileReadFn = getFileReadFnSub(filename);
-    
-    isBackground = v.vprefs.demoObjects;
-    
-    addLayerSub(v, isBackground, fileReadFn, ...
-			filename, reduce, smooth, thresh);
-end
-
-function [reduce, smooth, thresh] = parseInputsSub(args)
-    defThresh = Inf;
-	defReduce = 0.25;
-	defSmooth = 0;
-    reduce = ''; smooth = ''; thresh = '';
-	if ~isempty(args), reduce = cell2mat(args(1)); end;
-	if (length(args) > 1), smooth = cell2mat(args(2)); end;
-	if (length(args) > 2), thresh = cell2mat(args(3)); end;
-    if isempty(reduce), reduce = defReduce; end;
-    if isempty(smooth), smooth = defSmooth; end;
-    if isempty(thresh), thresh = defThresh; end;
-end
-
-function fileReadFn = getFileReadFnSub(filename)
-    
-    projectVolume = 0;
-
-	if fileUtils.isPly(filename) || fileUtils.isTrib(filename) || fileUtils.isVtk(filename) || ...
-            (utils.isGiftiInstalled() && fileUtils.isGifti(filename))
-        projectVolume = 1;
-		fileReadFn = @(filename, ~, ~, ~)fileUtils.readMesh(filename);
-	elseif fileUtils.isNv(filename)
-		fileReadFn = @(f, r, ~, ~) fileUtils.nv.readNv(f, r);
-    elseif fileUtils.isPial(filename)
-        fileReadFn = @(f, r, ~, ~) fileUtils.pial.readPial(f, r);
-    else
-		fileReadFn = @(f, r, s, t) fileUtils.readVox(f, r, s, t);
+if exist(filename, 'file') == 0
+    tmp = fullfile ([fileparts(which('MRIcroS')) filesep '+examples'], filename);
+    if exist(tmp, 'file') == 0
+        fprintf('Unable to find "%s"\n',filename); 
+        return; 
     end
-    
-    if ~projectVolume
-        emptyVertexColors = [];
-        fileReadFn = utils.appendOutput(fileReadFn, emptyVertexColors);
-    end
-
+    filename = tmp; %file exists is 'examples' directory
+end;
+if fileUtils.isTrk(filename);
+    commands.addTrack(v,filename);
+    return;
 end
+isBackground = v.vprefs.demoObjects;
+addLayerSub(v, isBackground, filename, reduce, reduceMesh, smooth, thresh, vertexColor);
+%end addLayer()
 
-function addLayerSub(v, isBackground, readFileFn, filename, reduce, smooth, thresh)
+function addLayerSub(v, isBackground,  filename, reduce, reduceMesh, smooth, thresh, vertexColor)
 %function addSurface(v, isBackground, readFileFn, filename, reduce, smooth, thresh)
 % filename: pial, nv, nii, nii.gz, vtk, gii image to open
 % reduce: 
 % --- open pial or nv surface image
-    if isequal(filename,0), return; end;
-    if exist(filename, 'file') == 0, fprintf('Unable to find %s\n',filename); return; end;
+if isequal(filename,0), return; end;
+if exist(filename, 'file') == 0, fprintf('Unable to find %s\n',filename); return; end;
 
-    if (isBackground) 
-        v = drawing.removeDemoObjects(v);
-    end;
-    [faces, vertices, vertexColors] = readFileFn(filename, reduce, smooth, thresh);
-    layer = utils.fieldIndex(v, 'surface');
-    v.surface(layer).faces = faces;
-    
-    v.surface(layer).vertices = vertices;
-    
-    v.surface(layer).vertexColors = vertexColors;
-
-    v.vprefs.demoObjects = false;
-
-    drawing.redrawSurface(v);
+if (isBackground) 
+    v = drawing.removeDemoObjects(v);
+end;
+layer = utils.fieldIndex(v, 'surface');
+if fileUtils.isMesh(filename)
+    [v.surface(layer).faces, v.surface(layer).vertices, v.surface(layer).vertexColors] = fileUtils.readMesh(filename, reduceMesh);
+else    
+    [v.surface(layer).faces, v.surface(layer).vertices, v.surface(layer).vertexColors] = fileUtils.readVox (filename, reduce, smooth, thresh, vertexColor);
 end
+v.vprefs.demoObjects = false;
+%display results
+guidata(v.hMainFigure,v);%store settings
+drawing.redrawSurface(v);
+%end addLayerSub()

@@ -11,5 +11,6 @@ if(isfield(v, 'surface'))
         guidata(v.hMainFigure,v);%store settings
         drawing.redrawSurface(v);
     end;
+    
 end
 %end closeLayers()
