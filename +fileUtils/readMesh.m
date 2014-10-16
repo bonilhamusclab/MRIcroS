@@ -1,23 +1,22 @@
-function [faces, vertices, vertexColors] = readMesh(varargin)
-%function openMesh(filename)
-% --- open pre-generated vtk or gii mesh
+function [faces, vertices, vertexColors] = readMesh(filename, varargin)
+%function readMesh(filename)
+% --- open pre-generated vtk, gii mesh, pial, ply, trib, or NV
 % --- gii processing requires spm
+%inputs:
+%   filename
+%   reduction factor (optional)
+%       default 1
+%       only for file types without vertex colors
 %Examples
 %readMesh('myImg.vtk');
 %readMesh('myImg.vtk',0.5); % 50% reduction
-vertexColors = []; %CRX - add vertexColors
-if (nargin) && (ischar(varargin{1})) 
- filename = varargin{1};
-else
-	error('readMesh expects filename');
-end
+vertexColors = [];
+
 if fileUtils.isGifti(filename) && (~exist('gifti.m', 'file') == 2)
     fprintf('Unable to open GIfTI files: this feature requires SPM to be installed');
 end;
-reduce = 1;
-if (nargin > 1) && isnumeric(varargin{2}) %16 Oct 2014
-    reduce = varargin{2};
-end
+
+reduce = utils.parseInputs(varargin, {1});
 
 if fileUtils.isPly(filename)
     [faces, vertices, vertexColors] = fileUtils.ply.readPly(filename);
@@ -36,6 +35,7 @@ else
      faces = gii.faces'; 
      vertices = gii.vertices'; 
 end;
+
 if isempty(vertexColors) && (reduce < 1) && (reduce > 0)
     fv.faces = faces;
     fv.vertices = vertices;

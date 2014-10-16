@@ -13,7 +13,8 @@ function addLayer(v,filename,varargin)
 %   thresh (optional)
 %       * applies only to volumes (NiFTI)
 %       * Inf for midrange, -Inf for Otsu
-%       * defaults to Inf (midrange)
+%       * defaults to Inf (midrange
+%   vertexColor (optional)
 %
 %   defaults are specified if empty string ('') is input for value, or if
 %   not specified
@@ -25,18 +26,15 @@ function addLayer(v,filename,varargin)
 %Otsu's threshold, defaults for reduce and smooth
 %MRIcroS('addLayer','attention.nii.gz','','',-Inf);
 %MRIcroS('addLayer','attention.nii.gz',0.05,0,3); %threshold >3
-reduce = 0.25;
-reduceMesh = 1.0;
-thresh = Inf;
-smooth = 0;
-vertexColor = 0;
+
+defaults = {.25, Inf, 0, 0};
+[reduce, thresh, smooth, vertexColor] = ...
+    utils.parseInputs(varargin, defaults);
+
+reduceMesh = 1;
 if (nargin > 2)
-    reduce = varargin{1};
-    reduceMesh = reduce;
+	reduceMesh = reduce;
 end;
-if (nargin > 3), smooth = varargin{2}; end;
-if (nargin > 4), thresh = varargin{3}; end;
-if (nargin > 5), vertexColor = varargin{4}; end;
 
 if exist(filename, 'file') == 0
     tmp = fullfile ([fileparts(which('MRIcroS')) filesep '+examples'], filename);
@@ -46,10 +44,7 @@ if exist(filename, 'file') == 0
     end
     filename = tmp; %file exists is 'examples' directory
 end;
-if fileUtils.isTrk(filename);
-    commands.addTrack(v,filename);
-    return;
-end
+
 isBackground = v.vprefs.demoObjects;
 addLayerSub(v, isBackground, filename, reduce, reduceMesh, smooth, thresh, vertexColor);
 %end addLayer()
