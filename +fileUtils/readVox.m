@@ -22,6 +22,7 @@ elseif (isnan(thresh)) || (isinf(thresh)) %if +Inf, use midpoint
     %thresh = mean(Vol(:)); %use mean to detect isosurface threshold - heavily influenced by proportion of dark air
 end;
 
+Vol = clipEdgesSub(Vol,thresh);
 FV = isosurface(Vol,thresh);
 if (reduce ~= 1.0) %next: simplify mesh
     FV = reducepatch(FV,reduce);
@@ -50,5 +51,13 @@ vertices = vx(:,1:3);
 %display results
 fprintf('Surface threshold %f and reduction ratio %f yields mesh with %d vertices and %d faces from image %s\n', thresh, reduce,size( vertices,1),size( faces,1),filename);
 
-
 %end voxToOpen()
+
+
+function Vol = clipEdgesSub(Vol,thresh)
+%we will have holes on edges that exceed the threshold, we artificially set
+%voxels on faces to have values less than the threshold
+v = Vol;
+v(2:end-1, 2:end-1, 2:end-1) = min(Vol(:));
+Vol(v > thresh) = (thresh-eps-eps);
+%end clipEdgesSub()
