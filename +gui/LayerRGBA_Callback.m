@@ -1,4 +1,4 @@
-function LayerRgba_Callback(obj, ~)
+function LayerRGBA_Callback(obj, ~)
 % --- let user select layer, then set RGBA for that layer 
 v=guidata(obj);
 nlayer = length(v.surface);
@@ -31,5 +31,5 @@ end
 alpha = str2double(answer(1));
 
 
-commands.layerRgba(v, layer, rgb(1), rgb(2), rgb(3), alpha);
-%end LayerRgba_Callback()
+commands.layerRGBA(v, layer, rgb(1), rgb(2), rgb(3), alpha);
+%end LayerRGBA_Callback()
