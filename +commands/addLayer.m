@@ -35,8 +35,8 @@ function addLayer(v,filename,varargin)
 %MRIcroS('addLayer','attention.nii.gz','','',-Inf);
 %MRIcroS('addLayer','attention.nii.gz',0.05,0,3); %threshold >3
 
-defaults = {.25, Inf, 0, 'jet'};
-[reduce, thresh, smooth, projectVolumeColorMap] = ...
+defaults = {.25, 1, Inf, 'jet'};
+[reduce, smooth, thresh, projectVolumeColorMap] = ...
     utils.parseInputs(varargin, defaults);
 
 reduceMesh = 1;
