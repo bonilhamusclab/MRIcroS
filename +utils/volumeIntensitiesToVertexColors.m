@@ -60,17 +60,5 @@ if range ~= 0 %normalize for range 0 (black) to 1 (white)
         mdn = median(surfaceIntensities(:));
         pow = log(0.5)/log(mdn);
         surfaceIntensities = power(surfaceIntensities, pow);
-        vertexColors = intensityToColorSub(surfaceIntensities, colorMap);
+        vertexColors = utils.magnitudesToColors(surfaceIntensities, colorMap);
 end
-
-
-function colors = intensityToColorSub(intensities, clrMap)
-%convert scalar Mx1 image into RGB Mx3 image using desired colormap
-resolution = 64;
-
-clrMap = str2func(clrMap);
-clr = clrMap(resolution);
-
-colors = ind2rgb(round(intensities(:) * 63)+1 ,clr);
-colors= reshape(colors,numel(intensities),3);
-%end intensityToColorSub()
