@@ -14,7 +14,6 @@ function addLayer(v,filename,varargin)
 %       * applies only to volumes (NiFTI)
 %       * Inf for midrange, -Inf for Otsu
 %       * defaults to Inf (midrange
-%   vertexColor (optional)
 %
 %   defaults are specified if empty string ('') is input for value, or if
 %   not specified
@@ -28,7 +27,7 @@ function addLayer(v,filename,varargin)
 %MRIcroS('addLayer','attention.nii.gz',0.05,0,3); %threshold >3
 
 defaults = {.25, Inf, 0, 0};
-[reduce, thresh, smooth, vertexColor] = ...
+[reduce, thresh, smooth] = ...
     utils.parseInputs(varargin, defaults);
 
 reduceMesh = 1;
@@ -45,10 +44,10 @@ if exist(filename, 'file') == 0
 end;
 
 isBackground = v.vprefs.demoObjects;
-addLayerSub(v, isBackground, filename, reduce, reduceMesh, smooth, thresh, vertexColor);
+addLayerSub(v, isBackground, filename, reduce, reduceMesh, smooth, thresh);
 %end addLayer()
 
-function addLayerSub(v, isBackground,  filename, reduce, reduceMesh, smooth, thresh, vertexColor)
+function addLayerSub(v, isBackground,  filename, reduce, reduceMesh, smooth, thresh)
 %function addSurface(v, isBackground, readFileFn, filename, reduce, smooth, thresh)
 % filename: pial, nv, nii, nii.gz, vtk, gii image to open
 % reduce: 
@@ -64,7 +63,8 @@ layer = utils.fieldIndex(v, 'surface');
 if fileUtils.isMesh(filename)
     [v.surface(layer).faces, v.surface(layer).vertices, v.surface(layer).vertexColors] = fileUtils.readMesh(filename, reduceMesh);
 else    
-    [v.surface(layer).faces, v.surface(layer).vertices, v.surface(layer).vertexColors] = fileUtils.readVox (filename, reduce, smooth, thresh, vertexColor);
+    [v.surface(layer).faces, v.surface(layer).vertices] = fileUtils.readVox (filename, reduce, smooth, thresh);
+    v.surface(layer).vertexColors = [];
 end
 
 v.vprefs.demoObjects = false;
