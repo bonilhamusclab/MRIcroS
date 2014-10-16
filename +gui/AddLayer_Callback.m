@@ -2,7 +2,7 @@ function AddLayer_Callback(promptForValues, obj, ~)
 % --- add a new voxel image or mesh as a layer with default options
 v=guidata(obj);
 
-supportedFileExts = '*.nii;*.hdr;*.nii.gz;*.vtk;*.nv;*.pial;*.ply;*.trib;*.trk';
+supportedFileExts = '*.nii;*.hdr;*.nii.gz;*.vtk;*.nv;*.pial;*.ply;*.trib';
 supportedFileDescs = 'NIfTI/VTK/NV/Pial/PLY/trib/trk';
 
 if utils.isGiftiInstalled()
@@ -17,20 +17,7 @@ end
 
 if isequal(brain_filename,0), return; end;
 filename=[brain_pathname brain_filename];
-if fileUtils.isTrk(filename)
-    if ~promptForValues
-        commands.addTrack(v,filename);
-    else
-        %from AddTracks_Callback
-        prompt = {'Track Sampling (1/ts tracks will be loaded, large values increase speed but decreases information):','Minimum fiber length (only sampled tracks with this minimum fiber length will be rendered, increases speed but decreases information):'};
-        opts = inputdlg(prompt, 'Track Options', 1, {num2str(100), num2str(5)});
-        if isempty(opts), disp('load cancelled'); return; end;
-        trackSpacing = str2double(opts(1));
-        fiberLen = str2double(opts(2));
-        commands.addTrack(v, filename, trackSpacing, fiberLen); 
-    end
-    return;
-end
+
 reduce = '';
 thresh = '';
 smooth = '';
@@ -45,7 +32,7 @@ if(promptForValues)
             return; 
         end;
     else
-        reduce = '0.05'; %CRX -> we need to supply reasonable default values
+        reduce = '0.05';
         thresh = 'Inf';
         smooth = '0';
         vertexColor = '0';
