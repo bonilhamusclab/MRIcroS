@@ -39,7 +39,7 @@ if(promptForValues)
 		
     end
 end
-commands.addLayer(v,filename, reduce, smooth, thresh, projectVolume);
+commands.addLayer(v,filename, reduce, smooth, thresh);
 end
 
 function [thresh, reduce, smooth, cancelled] = promptOptionsDialogSub(defThresh, defReduce, defSmooth)
