@@ -37,12 +37,11 @@ if (nargin > 2)
 end;
 
 if exist(filename, 'file') == 0
-    tmp = fullfile ([fileparts(which('MRIcroS')) filesep '+examples'], filename);
-    if exist(tmp, 'file') == 0
+    [filename, isFound] = fileUtils.getExampleFile(v.hMainFigure, filename);
+    if ~isFound
         fprintf('Unable to find "%s"\n',filename); 
         return; 
     end
-    filename = tmp; %file exists is 'examples' directory
 end;
 
 isBackground = v.vprefs.demoObjects;
@@ -60,12 +59,14 @@ if exist(filename, 'file') == 0, fprintf('Unable to find %s\n',filename); return
 if (isBackground) 
     v = drawing.removeDemoObjects(v);
 end;
+
 layer = utils.fieldIndex(v, 'surface');
 if fileUtils.isMesh(filename)
     [v.surface(layer).faces, v.surface(layer).vertices, v.surface(layer).vertexColors] = fileUtils.readMesh(filename, reduceMesh);
 else    
     [v.surface(layer).faces, v.surface(layer).vertices, v.surface(layer).vertexColors] = fileUtils.readVox (filename, reduce, smooth, thresh, vertexColor);
 end
+
 v.vprefs.demoObjects = false;
 %display results
 guidata(v.hMainFigure,v);%store settings
