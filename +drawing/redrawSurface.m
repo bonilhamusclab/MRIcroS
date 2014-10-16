@@ -15,8 +15,8 @@ if(isfield(v, 'surface'))
 end
 v.surfacePatches = zeros(surfaceCount, 1);
 for i=1:surfaceCount
-    clr =  v.vprefs.colors ( (mod(i-1,length( v.vprefs.colors))+1) ,1:3);
-    alph =  v.vprefs.colors (mod(i,length( v.vprefs.colors)),4);
+    [clr, alph] = drawing.utils.defaultLayerColorAndAlpha(i, v.vprefs.colors);
+    
     
     if ( v.vprefs.showEdges(i) == 1)
         ec = v.vprefs.edgeColors(i,1:3);

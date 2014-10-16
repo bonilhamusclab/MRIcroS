@@ -66,6 +66,7 @@ if exist(filename, 'file') == 0, fprintf('Unable to find %s\n',filename); return
 
 if (isBackground) 
     v = drawing.removeDemoObjects(v);
+    v.vprefs.demoObjects = false;
 end;
 
 layer = utils.fieldIndex(v, 'surface');
@@ -75,14 +76,13 @@ else
     [v.surface(layer).faces, v.surface(layer).vertices] = fileUtils.readVox (filename, reduce, smooth, thresh);
     vertexColors = [];
     if projectVolumeColorMap
-        vertices = v.surface(layer).vertices;
-        faces = v.surface(layer).faces;
-        vertexColors = utils.volumeIntensitiesToVertexColors(vertices, faces, filename,'','', projectVolumeColorMap);
+        commands.projectVolume(v, layer, filename, 'colorMap', projectVolumeColorMap);
+        v = guidata(v.hMainFigure);
+    else
+        v.surface(layer).vertexColors = vertexColors;
     end
-    v.surface(layer).vertexColors = vertexColors;
 end
 
-v.vprefs.demoObjects = false;
 %display results
 guidata(v.hMainFigure,v);%store settings
 drawing.redrawSurface(v);
