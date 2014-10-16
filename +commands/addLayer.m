@@ -56,7 +56,7 @@ function fileReadFn = getFileReadFnSub(filename)
     
     projectVolume = 0;
 
-	if fileUtils.isVtk(filename) || ...
+	if fileUtils.isPly(filename) || fileUtils.isTrib(filename) || fileUtils.isVtk(filename) || ...
             (utils.isGiftiInstalled() && fileUtils.isGifti(filename))
         projectVolume = 1;
 		fileReadFn = @(filename, ~, ~, ~)fileUtils.readMesh(filename);
