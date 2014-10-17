@@ -1,15 +1,33 @@
 function setMaterial(v,varargin)
 % inputs: ambient(0..1), diffuse(0..1), specular(0..1), specularExponent(0..inf), backFaceLighting (0 or 1)
-%MRIcroS('setMaterial', 0.5, 0.5, 0.7, 100, 1);
+% if not specified, will use current values
+%MRIcroS('setMaterial', 'ambient', 0.5);
 % --- set surface appearance (shiny, matte, etc)
 if (length(varargin) < 1), return; end;
-vIn = cell2mat(varargin);
-v.vprefs.materialKaKdKsn(1) = vIn(1);
-if (length(varargin) > 1), v.vprefs.materialKaKdKsn(2) = vIn(2); end;
-if (length(varargin) > 2), v.vprefs.materialKaKdKsn(3) = vIn(3); end;
-v.vprefs.materialKaKdKsn(1:3) = utils.boundArray(v.vprefs.materialKaKdKsn(1:3),0,1);
-if (length(varargin) > 3), v.vprefs.materialKaKdKsn(4) = vIn(4); end;
-if (length(varargin) > 4), v.vprefs.backFaceLighting = vIn(5); end;
+
+p = createParserSub(v);
+parse(p, varargin{:});
+
+v.vprefs.materialKaKdKsn(1) = p.Results.ambient;
+v.vprefs.materialKaKdKsn(2) = p.Results.diffuse;
+v.vprefs.materialKaKdKsn(3) = p.Results.specular;
+v.vprefs.materialKaKdKsn(4) = p.Results.specularExponent;
+v.vprefs.backFaceLighting = p.Results.backFaceLighting;
+
 v = drawing.redrawSurface(v);
 guidata(v.hMainFigure,v);%store settings
 %end setMaterial()
+
+function p = createParserSub(v)
+materialKaKdKsn = v.vprefs.materialKaKdKsn;
+a = materialKaKdKsn(1);
+d = materialKaKdKsn(2);
+s = materialKaKdKsn(3);
+n = materialKaKdKsn(4);
+
+p = inputParser;
+p.addParameter('ambient',a, @(x) validateattributes(x, {'numeric'}, {'>=', 0, '<=' 1}));
+p.addParameter('diffuse',d, @(x) validateattributes(x, {'numeric'}, {'>=', 0, '<=', 1}));
+p.addParameter('specular',s, @(x) validateattributes(x, {'numeric'}, {'>=', 0, '<=', 1}));
+p.addParameter('specularExponent', n, @(x) validateattributes(x, {'numeric'}, {'nonnegative'}));
+p.addParameter('backFaceLighting', n, @(x) validateattributes(x, {'numeric'}, {'binary'}));

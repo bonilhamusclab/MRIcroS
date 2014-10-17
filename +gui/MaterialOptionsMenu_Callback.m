@@ -17,7 +17,7 @@ specularStrength = bindToZeroOrOne(answer(3));
 specularExponent = str2double(answer(4));
 backFaceLighting = round(str2double(answer(5)));
 
-commands.setMaterial(v, ambience, diffuse, specularStrength, ...
-    specularExponent, backFaceLighting);
+commands.setMaterial(v, 'ambient', ambience, 'diffuse', diffuse, 'specular', specularStrength, ...
+    'specularExponent', specularExponent, 'backFaceLighting', backFaceLighting);
 
 %end MaterialOptionsMenu_Callback()
