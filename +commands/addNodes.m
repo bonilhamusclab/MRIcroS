@@ -1,10 +1,9 @@
-function addNodes(v, node_filepath, edge_filepath, ...
-    nodeRadiusThreshold, edgeWeightThreshold, colorMap)	
-%MRIcroS('addNodes','a.node', 'a.edge')
-%MRIcroS('addNodes','a.node', 'a.edge', 2)
-%MRIcroS('addNodes','a.node', 'a.edge', 2, 2)
-%MRIcroS('addNodes','a.node', '', 2) % no edges
-%MRIcroS('addNodes','a.node', 'a.edge', 2, 2, 'hsv') %plot nodes with 'hsv'
+function addNodes(v, node_file, varargin)	
+%MRIcroS('addNodes','a.node', 'edge_file', 'a.edge')
+%MRIcroS('addNodes','a.node', 'edge_file', 'a.edge', 'edgeThreshold', 2)
+%MRIcroS('addNodes','a.node', 'edge_file', 'a.edge', 'nodeThreshold', 2)
+%MRIcroS('addNodes','a.node', 'nodeThreshold', 2) % no edges
+%MRIcroS('addNodes','a.node', 'colorMap', 'hsv') %plot nodes with 'hsv'
 %colormap
 %inputs: 
 % 1) node_filepath
@@ -16,51 +15,55 @@ function addNodes(v, node_filepath, edge_filepath, ...
 %BrainNet Node And Edge Connectome Files
 %http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0068910
 
-if(nargin < 3)
-    edge_filepath = '';
-end
+p = createInputParserSub();
+parse(p, varargin{:});
 
-loadEdges = ~strcmp(edge_filepath,'');
+edge_file = p.Results.edge_file;
+nodeThreshold = p.Results.nodeThreshold;
+edgeThreshold = p.Results.edgeThreshold;
+colorMap = p.Results.colorMap;
+
+loadEdges = ~strcmp(edge_file,'');
     
-if exist(node_filepath, 'file') == 0
-    [node_filepath, isFound] = fileUtils.getExampleFile(v.hMainFigure, node_filepath);
+if exist(node_file, 'file') == 0
+    [node_file, isFound] = fileUtils.getExampleFile(v.hMainFigure, node_file);
     if ~isFound
-        fprintf('Unable to find "%s"\n',node_filepath); 
+        fprintf('Unable to find "%s"\n',node_file); 
         return; 
     end
 end;
-if loadEdges && exist(edge_filepath, 'file') == 0
-    [edge_filepath, isFound] = fileUtils.getExampleFile(v.hMainFigure, edge_filepath);
+if loadEdges && exist(edge_file, 'file') == 0
+    [edge_file, isFound] = fileUtils.getExampleFile(v.hMainFigure, edge_file);
     if ~isFound
-        fprintf('Unable to find "%s"\n',edge_filepath); 
+        fprintf('Unable to find "%s"\n',edge_file); 
         return; 
     end
 end;
 
     if(nargin < 4)
-        nodeRadiusThreshold = -inf;
+        nodeThreshold = -inf;
     end
     if(nargin < 5)
-        edgeWeightThreshold = -inf;
+        edgeThreshold = -inf;
     end
     
 	if(nargin < 6)
         colorMap = 'jet';
     end
     
-    [ ~, nodes, ~] = fileUtils.brainNet.readNode(node_filepath);
+    [ ~, nodes, ~] = fileUtils.brainNet.readNode(node_file);
     
     edges = [];
     if(loadEdges)
-        edges = fileUtils.brainNet.readEdge(edge_filepath);
+        edges = fileUtils.brainNet.readEdge(edge_file);
     end
     
-    if (nodeRadiusThreshold > -inf || edgeWeightThreshold > -inf)
+    if (nodeThreshold > -inf || edgeThreshold > -inf)
         [nodes, passingNodeIndexes] = ...
-            utils.brainNet.filterNodes(nodes, nodeRadiusThreshold);
+            utils.brainNet.filterNodes(nodes, nodeThreshold);
         if(loadEdges)
             edges = ...
-                utils.brainNet.filterEdges(edges, edgeWeightThreshold, passingNodeIndexes);
+                utils.brainNet.filterEdges(edges, edgeThreshold, passingNodeIndexes);
         end
     end
     
@@ -77,3 +80,12 @@ end;
 	
     v = drawing.removeDemoObjects(v);
     guidata(v.hMainFigure, v);
+    
+%endfunction addNodes()
+    
+function p = createInputParserSub()
+p = inputParser;
+p.addParameter('edge_file', '');
+p.addParameter('nodeThreshold',0, @(x) validateattributes(x, {'numeric'}, {'nonnegative'}));
+p.addParameter('edgeThreshold',0, @(x) validateattributes(x, {'numeric'}, {'nonnegative'}));
+p.addParameter('colorMap', 'jet');
