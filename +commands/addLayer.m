@@ -33,9 +33,10 @@ function addLayer(v,filename,varargin)
 %MRIcroS('addLayer','cortex_5124.surf.gii'); %use defaults
 %Otsu's threshold, defaults for reduce and smooth
 %MRIcroS('addLayer','attention.nii.gz','thresh',-Inf);
-%MRIcroS('addLayer','attention.nii.gz','reduce',0.05,'smooth', 0,3); %threshold >3
+%MRIcroS('addLayer','attention.nii.gz','reduce',0.05,'smooth', 0, 'thresh', 3); %threshold >3
 
 p = createParserSub();
+parse(p, varargin{:});
 
 inputParams = p.Results;
 
