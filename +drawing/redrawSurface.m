@@ -1,6 +1,6 @@
-function redrawSurface(v)
+function v = redrawSurface(v)
 % --- creates renderings
-drawing.removeSurfaces(v);
+v = drawing.removeSurfaces(v);
 %delete(allchild(v.hAxes));%
 set(v.hMainFigure,'CurrentAxes',v.hAxes)
 set(0, 'CurrentFigure', v.hMainFigure);  %# for figures
@@ -64,5 +64,4 @@ if ~isempty(v.vprefs.camLight)
 end
 v.vprefs.camLight = camlight( v.vprefs.azLight, v.vprefs.elLight);
 material( v.vprefs.materialKaKdKsn);
-guidata(v.hMainFigure,v);%store settings
 %end redrawSurface()

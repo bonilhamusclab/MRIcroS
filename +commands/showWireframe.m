@@ -20,5 +20,5 @@ v.vprefs.edgeColors(layer, 1:3) = rgb;
 v.vprefs.edgeColors(layer, 4) = alpha;
 v.vprefs.showEdges(layer) = 1;
 
+v = drawing.redrawSurface(v);
 guidata(v.hMainFigure,v);%store settings
-drawing.redrawSurface(v);

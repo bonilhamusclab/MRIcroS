@@ -52,7 +52,8 @@ vertexColors = volumeIntensitiesToVertexColorsSub(vertices, faces, volumeFile, p
 
 v.surface(surfaceIndex).vertexColors = vertexColors;
 
-drawing.redrawSurface(v);
+v = drawing.redrawSurface(v);
+guidata(v.hMainFigure,v);%store settings
 
 
 function p = createParserSub()
@@ -60,7 +61,7 @@ p = inputParser;
 p.addParameter('averageIntensities',0);
 p.addParameter('interpolationMethod','linear');
 p.addParameter('colorMap', 'jet');
-p.addParameter('threshold', .5, @(x) validateattributes(x, {'numeric'}, {'positive'}));
+p.addParameter('threshold', .5, @(x) validateattributes(x, {'numeric'}, {'nonnegative'}));
 p.addParameter('belowThresholdColor', '', @(x) validateattributes(x, {'numeric'}, {'nonnegative', 'numel',3}));
 p.addParameter('applyGaussian', 0, @(x) validateattributes(x, {'numeric'}, {'binary'}));
 p.addParameter('kernelSize', 13, @(x) validateattributes(x, {'numeric'}, {'nonnegative'}));
@@ -126,7 +127,7 @@ if ~isempty(paramsStruct.threshold)
         belowThresholdColor = [belowThresholdColor belowThresholdColor belowThresholdColor];
     end
     
-    belowThresholdColors = repmat(belowThresholdColor, sum(surfaceIntensities < threshold) ,1);
+    belowThresholdColors = repmat(belowThresholdColor, sum(surfaceIntensities < threshold), 1);
     vertexColors(surfaceIntensities < threshold,:) = belowThresholdColors;
     
 end

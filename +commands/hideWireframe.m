@@ -6,5 +6,5 @@ function hideWireframe(v, layer)
 
 v.vprefs.showEdges(layer) = 0;
 
+v = drawing.redrawSurface(v);
 guidata(v.hMainFigure,v);%store settings
-drawing.redrawSurface(v);

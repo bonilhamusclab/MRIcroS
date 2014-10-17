@@ -6,7 +6,7 @@ v=guidata(obj);
 if(cancelled), return; end;
 
 [volume_filename, cancelled] = selectVolumeFileSub();
-if(cancelled), return; end;
+if(cancelled), disp('projec volume cancelled'); return; end;
 
 if(~promptForValues)
     commands.projectVolume(v, layer, volume_filename);
@@ -26,7 +26,7 @@ function [layer, cancelled] = selectLayerSub(v)
     nlayer = length(v.surface);
     if nlayer > 1
         answer = inputdlg({['Layer (1..' num2str(nlayer) ')']}, 'Enter layer to project to', 1,{'1'});
-        if isempty(answer), disp('options cancelled'); return; end;
+        if isempty(answer), cancelled = 1; end;
         layer = round(str2double(answer));
         layer = utils.boundArray(layer,1,nlayer);
     elseif nlayer == 1

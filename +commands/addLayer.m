@@ -84,6 +84,6 @@ else
 end
 
 %display results
+v = drawing.redrawSurface(v);
 guidata(v.hMainFigure,v);%store settings
-drawing.redrawSurface(v);
 %end addLayerSub()
