@@ -12,7 +12,7 @@ colorMapFn = str2func(colorMap);
 alsoPlotEdges = ~isempty(edges);
 if(alsoPlotEdges && numel(edges) ~= length(nodes)^2)
     error('num edges (%d) must equal the square of num nodes (%d)',...
-        numel(edges), numel(nodes));
+        numel(edges), length(nodes));
 end
 
 [xSph, ySph, zSph] = sphere(20);
