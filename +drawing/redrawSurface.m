@@ -58,9 +58,9 @@ h = rotate3d;
 set( h, 'ActionPostCallback', @gui.perspectiveChange_Callback); %called when user changes perspective
 set(h,'Enable','on');
 view( v.vprefs.az,  v.vprefs.el);
-%v.vprefs.camLight = camlight( v.vprefs.azLight, v.vprefs.elLight);
+
 if ~isempty(v.vprefs.camLight)
-    delete(v.vprefs.camLight); %CRV - delete previous lights!
+    delete(v.vprefs.camLight); %delete previous lights
 end
 v.vprefs.camLight = camlight( v.vprefs.azLight, v.vprefs.elLight);
 material( v.vprefs.materialKaKdKsn);

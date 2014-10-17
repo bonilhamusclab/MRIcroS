@@ -11,7 +11,7 @@ else
     layer = 1;
 end;
 
-if numel(v.surface(layer).vertexColors) < 1 %CRV: objects with vertex colors ignore surface color
+if numel(v.surface(layer).vertexColors) < 1 %objects with vertex colors ignore surface color
 	rgb = uisetcolor( v.vprefs.colors(layer,1:3),'select color');
 	v.vprefs.colors(layer,1:3) = utils.boundArray(rgb, 0, 1);
 	answer = inputdlg({'Alpha (0[transparent]..1[opaque])'},'Set opacity',1,{num2str( v.vprefs.colors(layer,4))} );
