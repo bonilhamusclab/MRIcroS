@@ -32,6 +32,6 @@ for i=startIndx:endIndx
     clear('FVr');    
 end;
 
+v = drawing.redrawSurface(v);
 guidata(v.hMainFigure,v);%store settings
-drawing.redrawSurface(v);
 %end doSimplifyMeshSub()

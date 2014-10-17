@@ -70,9 +70,11 @@ v.vprefs.elLight = 60; %light elevation relative to camera
 v.vprefs.camLight = [];
 v.vprefs.az = 45; %camera azimuth
 v.vprefs.el = 10; %camera elevation
-guidata(v.hMainFigure,v);%store settings
 vFig = v.hMainFigure;
 set(vFig,'name','MRIcroS');
+
+guidata(v.hMainFigure,v);%store settings
 commands.setBackgroundColor(v,[1 1 1]);
-drawing.redrawSurface(v);
+v = drawing.redrawSurface(v);
+guidata(v.hMainFigure,v);%store settings
 %end makeGUI()

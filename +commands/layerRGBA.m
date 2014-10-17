@@ -5,6 +5,6 @@ function layerRGBA(v,varargin)
 if (length(varargin) < 2), return; end;
 vIn = cell2mat(varargin);
 v.vprefs.colors(vIn(1),1:(length(varargin)-1)) = vIn(2:length(varargin)); %change layer's red/green/blue/opacity 
+v = drawing.redrawSurface(v);
 guidata(v.hMainFigure,v);%store settings
-drawing.redrawSurface(v);
 %end layerRGBA()

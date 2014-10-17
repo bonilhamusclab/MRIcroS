@@ -10,6 +10,6 @@ if (length(varargin) > 2), v.vprefs.materialKaKdKsn(3) = vIn(3); end;
 v.vprefs.materialKaKdKsn(1:3) = utils.boundArray(v.vprefs.materialKaKdKsn(1:3),0,1);
 if (length(varargin) > 3), v.vprefs.materialKaKdKsn(4) = vIn(4); end;
 if (length(varargin) > 4), v.vprefs.backFaceLighting = vIn(5); end;
+v = drawing.redrawSurface(v);
 guidata(v.hMainFigure,v);%store settings
-drawing.redrawSurface(v);
 %end setMaterial()

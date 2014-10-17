@@ -11,8 +11,8 @@ if(isfield(v, 'surface'))
         v.surface(1) = cubeFV;
         v.surface(2) = sphereFV;
         v.vprefs.demoObjects = true;
+        v = drawing.redrawSurface(v);
         guidata(v.hMainFigure,v);%store settings
-        drawing.redrawSurface(v);
     end;
     
 end
