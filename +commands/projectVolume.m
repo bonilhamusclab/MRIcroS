@@ -1,5 +1,9 @@
 function projectVolume(v, surfaceIndex, volumeFile, varargin)
 %function projectVolume(v, surfaceIndex, volumeFile, varargin)
+% Due to the large number of options, this function expects name-value
+% pairs for varargin, for example:
+%   %Use defualts for all options except interpolationMethod
+%   MRIcroS('projectVolume', 1, nii_flie, 'interpolationMethod', 'spline');
 % surfaceIndex: surface to be project to
 % volumeFile: file name of nifti volume image to project onto surface
 % averageIntensities (optional): set to 1 to average intensities
