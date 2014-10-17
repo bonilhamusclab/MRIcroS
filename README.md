@@ -30,12 +30,12 @@ After starting Matlab
 	
 or
 
-	MRIcroS('addLayer',file, reduce, smooth, threshold)
+	MRIcroS('addLayer',file, 'reduce', reduce, 'smooth', smooth, 'thresh', threshold)
 	
 or
 
 	%use defaults for reduce and smooth
-	MRIcroS('addLayer', file, '', '', threshold)
+	MRIcroS('addLayer', file, 'thresh', threshold)
 
 more information can be found by: `help commands.addLayer`
 
@@ -52,7 +52,7 @@ For Pial and NV files, only the 'reduce' parameter is used during rendering.
 To pass in a value from the command line for reduce, specify reduce. Smooth and Threshold are not used anyway.
 
 	reduce = .3;
-	MRIcroS('addLayer', pial_or_nv_file, reduce);
+	MRIcroS('addLayer', pial_or_nv_file, 'reduce', reduce);
 
 ####VTK/Gifti Mesh files
 
