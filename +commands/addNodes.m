@@ -15,6 +15,12 @@ function addNodes(v, node_filepath, edge_filepath, ...
 % 4) edgeWeightThreshold: filter for edges above specified threshold
 %BrainNet Node And Edge Connectome Files
 %http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0068910
+
+if(nargin < 3)
+    edge_filepath = '';
+end
+
+loadEdges = ~strcmp(edge_filepath,'');
     
 if exist(node_filepath, 'file') == 0
     [node_filepath, isFound] = fileUtils.getExampleFile(v.hMainFigure, node_filepath);
@@ -23,7 +29,7 @@ if exist(node_filepath, 'file') == 0
         return; 
     end
 end;
-if exist(edge_filepath, 'file') == 0
+if loadEdges && exist(edge_filepath, 'file') == 0
     [edge_filepath, isFound] = fileUtils.getExampleFile(v.hMainFigure, edge_filepath);
     if ~isFound
         fprintf('Unable to find "%s"\n',edge_filepath); 
@@ -37,11 +43,10 @@ end;
     if(nargin < 5)
         edgeWeightThreshold = -inf;
     end
+    
 	if(nargin < 6)
         colorMap = 'jet';
     end
-    
-    loadEdges = ~strcmp(edge_filepath,'');
     
     [ ~, nodes, ~] = fileUtils.brainNet.readNode(node_filepath);
     
