@@ -16,14 +16,28 @@ function addNodes(v, node_filepath, edge_filepath, ...
 %BrainNet Node And Edge Connectome Files
 %http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0068910
     
-    
-    if(nargin < 3)
+if exist(node_filepath, 'file') == 0
+    [node_filepath, isFound] = fileUtils.getExampleFile(v.hMainFigure, node_filepath);
+    if ~isFound
+        fprintf('Unable to find "%s"\n',node_filepath); 
+        return; 
+    end
+end;
+if exist(edge_filepath, 'file') == 0
+    [edge_filepath, isFound] = fileUtils.getExampleFile(v.hMainFigure, edge_filepath);
+    if ~isFound
+        fprintf('Unable to find "%s"\n',edge_filepath); 
+        return; 
+    end
+end;
+
+    if(nargin < 4)
         nodeRadiusThreshold = -inf;
     end
-    if(nargin < 4)
+    if(nargin < 5)
         edgeWeightThreshold = -inf;
     end
-	if(nargin < 5)
+	if(nargin < 6)
         colorMap = 'jet';
     end
     

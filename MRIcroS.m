@@ -18,6 +18,9 @@ function varargout = MRIcroS(varargin)
 % MRIcroS('closeLayers');
 % MRIcroS('addLayer','stroke.trib');
 % MRIcroS('addTrack','stroke.trk',10,10);
+% MRIcroS('closeAllItems'); %close all rendered items
+% MRIcroS('addLayer','BrainMesh_ICBM152.nv'); %open image
+% MRIcroS('addNodes', 'Node_Brodmann82.node', 'Edge_Brodmann82.edge');
 
 mOutputArgs = {}; % Variable for storing output when GUI returns
 h = gui.getGuiHandle(); 
