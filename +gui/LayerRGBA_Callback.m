@@ -23,5 +23,5 @@ else
 	contrast = str2double(answer(2));  
 end
 alpha = str2double(answer(1));
-commands.layerRGBA(v, layer, rgb(1), rgb(2), rgb(3), alpha, contrast);
+commands.layerRGBA(v, layer, 'r', rgb(1), 'g', rgb(2), 'b', rgb(3), 'a', alpha, 'contrast', contrast);
 %end LayerRGBA_Callback()
