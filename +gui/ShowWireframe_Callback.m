@@ -27,7 +27,7 @@ if(showOpts)
         return;
     end;
     
-    commands.showWireframe(v, layer, rgb, alpha);
+    commands.showWireframe(v, layer, [rgb alpha]);
 
 else
     
