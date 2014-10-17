@@ -94,5 +94,5 @@ function p = createParserSub()
 p = inputParser;
 p.addParameter('reduce',.25, @(x) validateattributes(x, {'numeric'}, {'<=',1,'>=',0}));
 p.addParameter('smooth',1, @(x) validateattributes(x, {'numeric'}, {'isOdd','positive'}));
-p.addParameter('thresh',Inf,@(x) validateattributes(x, {'numeric'}));
+p.addParameter('thresh',Inf,@(x) validateattributes(x, {'numeric'}, {'real'}));
 p.addParameter('projectVolumeColorMap', 'jet');
