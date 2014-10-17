@@ -18,10 +18,10 @@ end
 if isequal(brain_filename,0), return; end;
 filename=[brain_pathname brain_filename];
 
-reduce = '';
-thresh = '';
-smooth = '';
-vertexColor = '';%CRX
+reduce = .25;
+thresh = Inf;
+smooth = 1;
+vertexColor = '';
 if(promptForValues)  
     if fileUtils.isVtk(filename) || fileUtils.isGifti(filename) || fileUtils.isTrib(filename)
         disp('no options for vtk, gifti, or trib');
