@@ -15,9 +15,11 @@ function varargout = MRIcroS(varargin)
 % MRIcroS('copyBitmap'); %copy screenshot to clipboard
 % MRIcroS('saveBitmap','myPicture.png'); %save screenshot
 % MRIcroS('saveMesh','myMesh.ply'); %export mesh to PLY format
-% MRIcroS('closeLayers');
-% MRIcroS('addLayer','stroke.trib');
-% MRIcroS('addTrack','stroke.trk',10,10);
+% MRIcroS('closeAllItems') 
+% MRIcroS('addLayer','stroke.trib') 
+% MRIcroS('addTrack','stroke.trk',1,9) 
+% MRIcroS('clipMesh',1,[-inf -inf -inf], [inf inf 30]) 
+% MRIcroS('layerRGBA', 1, 0.9, 0, 0, 1.0, 0.35) %layer1 alpha=1.0, bias=0.35
 % MRIcroS('closeAllItems'); %close all rendered items
 % MRIcroS('addLayer','BrainMesh_ICBM152.nv'); %open image
 % MRIcroS('addNodes', 'Node_Brodmann82.node', 'Edge_Brodmann82.edge');

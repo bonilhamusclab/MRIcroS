@@ -7,7 +7,6 @@ function [filename, isFound] = getExampleFile(obj, filename)
     else
         examplesFilePath = [fileparts(which('MRIcroS')) filesep '+examples'];
     end
-    
     filename = fullfile(examplesFilePath, filename);
     
     isFound = exist(filename, 'file');
