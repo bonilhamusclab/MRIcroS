@@ -41,7 +41,7 @@ if(promptForValues)
 		
     end
 end
-commands.addLayer(v,filename, reduce, smooth, thresh, vertexColor);
+commands.addLayer(v,filename, 'reduce', reduce, 'smooth', smooth, 'thresh', thresh, 'projectVolumeColorMap', vertexColor);
 end
 
 function [thresh, reduce, smooth, vertexColor, cancelled] = promptOptionsDialogSub(defThresh, defReduce, defSmooth, defVertexColor)

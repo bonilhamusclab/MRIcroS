@@ -32,16 +32,16 @@ function addLayer(v,filename,varargin)
 %
 %MRIcroS('addLayer','cortex_5124.surf.gii'); %use defaults
 %Otsu's threshold, defaults for reduce and smooth
-%MRIcroS('addLayer','attention.nii.gz','','',-Inf);
-%MRIcroS('addLayer','attention.nii.gz',0.05,0,3); %threshold >3
+%MRIcroS('addLayer','attention.nii.gz','thresh',-Inf);
+%MRIcroS('addLayer','attention.nii.gz','reduce',0.05,'smooth', 0,3); %threshold >3
 
-defaults = {.25, 1, Inf, 'jet'};
-[reduce, smooth, thresh, projectVolumeColorMap] = ...
-    utils.parseInputs(varargin, defaults);
+p = createParserSub();
 
-reduceMesh = 1;
-if (nargin > 2)
-	reduceMesh = reduce;
+inputParams = p.Results;
+
+inputParams.reduceMesh = 1;
+if ~max(strcmp(p.UsingDefaults,'reduce'))
+	inputParams.reduceMesh = inputParams.reduce;
 end;
 
 if exist(filename, 'file') == 0
@@ -53,10 +53,10 @@ if exist(filename, 'file') == 0
 end;
 
 isBackground = v.vprefs.demoObjects;
-addLayerSub(v, isBackground, filename, reduce, reduceMesh, smooth, thresh, projectVolumeColorMap);
+addLayerSub(v, isBackground, filename, inputParams);
 %end addLayer()
 
-function addLayerSub(v, isBackground,  filename, reduce, reduceMesh, smooth, thresh, projectVolumeColorMap)
+function addLayerSub(v, isBackground,  filename, inputParams)
 %function addSurface(v, isBackground, readFileFn, filename, reduce, smooth, thresh)
 % filename: pial, nv, nii, nii.gz, vtk, gii image to open
 % reduce: 
@@ -71,12 +71,12 @@ end;
 
 layer = utils.fieldIndex(v, 'surface');
 if fileUtils.isMesh(filename)
-    [v.surface(layer).faces, v.surface(layer).vertices, v.surface(layer).vertexColors] = fileUtils.readMesh(filename, reduceMesh);
+    [v.surface(layer).faces, v.surface(layer).vertices, v.surface(layer).vertexColors] = fileUtils.readMesh(filename, inputParams.reduceMesh);
 else    
-    [v.surface(layer).faces, v.surface(layer).vertices] = fileUtils.readVox (filename, reduce, smooth, thresh);
+    [v.surface(layer).faces, v.surface(layer).vertices] = fileUtils.readVox (filename, inputParams.reduce, inputParams.smooth, inputParams.thresh);
     vertexColors = [];
-    if projectVolumeColorMap
-        commands.projectVolume(v, layer, filename, 'colorMap', projectVolumeColorMap);
+    if inputParams.projectVolumeColorMap
+        commands.projectVolume(v, layer, filename, 'colorMap', inputParams.projectVolumeColorMap);
         v = guidata(v.hMainFigure);
     else
         v.surface(layer).vertexColors = vertexColors;
@@ -87,3 +87,11 @@ end
 v = drawing.redrawSurface(v);
 guidata(v.hMainFigure,v);%store settings
 %end addLayerSub()
+
+
+function p = createParserSub()
+p = inputParser;
+p.addParameter('reduce',.25, @(x) validateattributes(x, {'numeric'}, {'<=',1,'>=',0}));
+p.addParameter('smooth',1, @(x) validateattributes(x, {'numeric'}, {'isOdd','positive'}));
+p.addParameter('thresh',Inf,@(x) validateattributes(x, {'numeric'}));
+p.addParameter('projectVolumeColorMap', 'jet');
