@@ -1,4 +1,4 @@
-function AddTracks_Callback(obj, eventdata)
+function AddTracks_Callback(obj, ~)
 % --- allow user to add deterministic tracks
 [track_filename, track_pathname] = uigetfile( ...
     {'*.trk;', 'trk files'; ...
@@ -12,5 +12,5 @@ function AddTracks_Callback(obj, eventdata)
 	trackSpacing = str2double(opts(1));
 	fiberLen = str2double(opts(2));
 	v = guidata(obj);
-    commands.addTrack(v, track_filename, trackSpacing, fiberLen);
+    commands.addTrack(v, track_filename, 'sampleSpacing', trackSpacing, 'fiberLengthThreshold', fiberLen);
 %end Add_tracks_Callback()

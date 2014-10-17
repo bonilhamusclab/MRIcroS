@@ -1,12 +1,17 @@
 function addTrack(v, filename, varargin)	
 %MRIcroS('addTrack','dti.trk')
-%MRIcroS('addTrack','dti.trk', 100)
-%MRIcroS('addTrack','dti.trk', 50, 10)
+%MRIcroS('addTrack','dti.trk', 'sampleSpacing', 100)
+%MRIcroS('addTrack','dti.trk', 'sampleSpacing', 50, 'fiberLengthThreshold', 10)
 %inputs: 
 % 1) filename
-% 2) fiber sampling space: 1/x tracks will be sampled (default 1)
-% 3) minimun fiber length (default 5)
+% 2) sampleSpacing: 1/x tracks will be sampled (default 1)
+% 3) fiberLengthThreshold: minimun fiber length before thresholding (default 5)
 % --- Load trackvis fibers http://www.trackvis.org/docs/?subsect=fileformat
+
+p = createInputParserSub();
+parse(p, varargin{:});
+sampleSpacing = p.Results.sampleSpacing;
+fiberLengthThreshold = p.Results.fiberLengthThreshold;
 
 if exist(filename, 'file') == 0
     tmp = fullfile ([fileparts(which('MRIcroS')) filesep '+examples'], filename);
@@ -16,21 +21,12 @@ if exist(filename, 'file') == 0
     end
     filename = tmp; %file exists is 'examples' directory
 end;
-	if (nargin < 2), return; end;
-	inputs = cell2mat(varargin);
-    if(length(inputs) == 1)
-	  addTrackSub(v, filename, inputs(1));
-	elseif(length(inputs) == 2)
-	  addTrackSub(v, filename, inputs(1), inputs(2));
-	else
-	  addTrackSub(v, filename);
-    end
+
+addTrackSub(v, filename, sampleSpacing, fiberLengthThreshold);
 %end addTrack()
 
 
 function addTrackSub(v,filename, trackSpacing, fiber_len)
-	if(nargin < 3), trackSpacing = 100; end
-	if(nargin < 4), fiber_len = 5; end
 tic
     hold on
     [header,data] = fileUtils.trk.readTrack(filename);
@@ -45,3 +41,8 @@ tic
     
 toc
 %end addTrackSub()
+
+function p = createInputParserSub()
+p = inputParser;
+p.addParameter('fiberLengthThreshold',5, @(x) validateattributes(x, {'numeric'},{'nonnegative', 'real'}));
+p.addParameter('sampleSpacing',1, @(x) validateattributes(x, {'numeric'},{'positive','real','integer'}));

@@ -15,7 +15,7 @@ After starting Matlab
 	
 or  
 	
-	MRIcroS('addTrack', trackFilePath, trackSampling, minFiberLen)
+	MRIcroS('addTrack', trackFilePath, 'sampleSpacing', trackSampling, 'fiberLengthThreshold', minFiberLen)
 or
 
 	MRIcroS % open in GUI File => Add Tracks/Add Tracks with Options
