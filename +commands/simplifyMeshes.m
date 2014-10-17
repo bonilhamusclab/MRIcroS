@@ -1,15 +1,18 @@
-function simplifyMeshes(v, varargin)
-%function simplifyMeshes(v, varargin)
+function simplifyMeshes(v, reduce, meshIndx)
+%function simplifyMeshes(v, reduce, meshIndx)
 % ---  reduce mesh complexity
 %MRIcroS('simplifyMeshes', 0.2); %reduce mesh to 20% complexity
-% inputs: reductionRatio
-if (length(varargin) < 1), return; end;
+% inputs: 
+%   reduce: 
+%       reduction ratio
+%   meshIndx (optional): 
+%       index of mesh to reduce
+%       defaults to every mesh if not specified
 
-reduce = cell2mat(varargin(1));
-meshIndx = 0;
-if (length(varargin) > 1)
-	meshIndx = cell2mat(varargin(2));
+if(nargin < 2)
+    meshIndx = 0;
 end
+
 doSimplifyMeshSub(v, reduce, meshIndx);
 
 %end simplifyMeshes()
