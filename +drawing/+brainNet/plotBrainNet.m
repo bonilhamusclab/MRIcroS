@@ -7,12 +7,11 @@ function [renderedNodes, renderedEdges] = plotBrainNet(nodes, edges, colorMap)
 %http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0068910
 
 if nargin < 3, colorMap = 'jet'; end;
-colorMapFn = str2func(colorMap);
 
 alsoPlotEdges = ~isempty(edges);
-if(alsoPlotEdges && numel(edges) ~= numel(nodes)^2)
+if(alsoPlotEdges && numel(edges) ~= length(nodes)^2)
     error('num edges (%d) must equal the square of num nodes (%d)',...
-        numel(edges), numel(nodes));
+        numel(edges), length(nodes));
 end
 
 [xSph, ySph, zSph] = sphere(20);
@@ -27,14 +26,14 @@ numNodes = size(nodes, 1);
 
 renderedNodes = zeros(1, numNodes);
 
-colorMap = colorMapFn(max(cols));
+nodeColors = utils.magnitudesToColors(cols./max(cols), colorMap);
 
 for i = 1:numNodes
     hold on
     x = xSph.*rads(i) + xCs(i);
     y = ySph.*rads(i) + yCs(i);
     z = zSph.*rads(i) + zCs(i);
-    nodeColor = colorMap(cols(i), :);
+    nodeColor = nodeColors(i,:);
     renderedNodes(i) = mesh(x,y,z,'EdgeColor', nodeColor, 'FaceColor', nodeColor);
 end
 
