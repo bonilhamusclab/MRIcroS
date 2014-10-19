@@ -61,7 +61,7 @@ end
 v.surface(layer).vertices(vertOK == 0,:) = [];
 fprintf('Reduced mesh from %d to %d vertices\n', numel(vertOK), size(v.surface(layer).vertices,1));
 %save settings and refresh view
-v = drawing.redrawSurface(v);
 guidata(v.hMainFigure,v);
+drawing.redrawSurface(v)
 %end clipMesh()
 

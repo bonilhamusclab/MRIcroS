@@ -12,4 +12,5 @@ if (isBackground)
     v = rmfield(v,'surface');
 	v = rmfield(v,'surfacePatches');
 	v.vprefs.demoObjects = false;
+	guidata(v.hMainFigure, v);
 end

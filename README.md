@@ -15,7 +15,7 @@ After starting Matlab
 	
 or  
 	
-	MRIcroS('addTrack', trackFilePath, 'sampleSpacing', trackSampling, 'fiberLengthThreshold', minFiberLen)
+	MRIcroS('addTrack', trackFilePath, trackSampling, minFiberLen)
 or
 
 	MRIcroS % open in GUI File => Add Tracks/Add Tracks with Options
@@ -30,12 +30,12 @@ After starting Matlab
 	
 or
 
-	MRIcroS('addLayer',file, 'reduce', reduce, 'smooth', smooth, 'thresh', threshold)
+	MRIcroS('addLayer',file, reduce, smooth, threshold)
 	
 or
 
 	%use defaults for reduce and smooth
-	MRIcroS('addLayer', file, 'thresh', threshold)
+	MRIcroS('addLayer', file, '', '', threshold)
 
 more information can be found by: `help commands.addLayer`
 
@@ -52,7 +52,7 @@ For Pial and NV files, only the 'reduce' parameter is used during rendering.
 To pass in a value from the command line for reduce, specify reduce. Smooth and Threshold are not used anyway.
 
 	reduce = .3;
-	MRIcroS('addLayer', pial_or_nv_file, 'reduce', reduce);
+	MRIcroS('addLayer', pial_or_nv_file, reduce);
 
 ####VTK/Gifti Mesh files
 
@@ -64,19 +64,20 @@ For Mesh files, neither reduce, smooth, or threshold is utilized.
 ###How to View BrainNet Edges and Nodes
 After starting Matlab
 
-	MRIcroS('addNodes', node_path, 'edge_path', edge_path)
+	MRIcroS('addNodes', node_path, edge_path)
 	
 ####Filtering Based on Node Radius or Edge Weight
 
 	%only render nodes with radius greater than 2
 	%will also remove edges not connected to a node after filtering
-	nodeThreshold = 2; 
+	nodeRadiusThreshold = 2; 
 	%only render edges with weights greater than 2
-	edgeThreshold = 2;
-	MRIcroS('addNodes', node_path, 'edge_path', edge_path, 'nodeThreshold', nodeThreshold, 'edgeThreshold', edgeThreshold)
+	edgeWeightThreshold = 2;
+	MRIcroS('addNodes', node_path, edge_path, nodeRadiusThreshold, edgeWeightThreshold)
 	
 	%to filter by edgeWeight but not node radius
-	MRIcroS('addNodes', node_path, 'edge_path', edge_path, 'edgeThreshold', edgeThreshold)
+	%set node radius threshold to -inf
+	MRIcroS('addNodes', node_path, edge_path, -inf, edgeWeightThreshold)
 	
 or
 
@@ -91,16 +92,16 @@ or
 	
 To view just the nodes without the edges
 
-	MRIcroS('addNodes', node_path);
+	MRIcroS('addNodes', node_path, '');
 	
 	%view nodes with out edges, and filter for nodes greater than radius 3
-	MRIcroS('addNodes', node_path,'nodeThreshold', 3); 
+	MRIcroS('addNodes', node_path, '', 3); 
 	
 ####Change Color Map for node Colors
 	
 
 	%just load the nodes with no edges or filtering and hsv color scheme
-	MRIcroS('addNodes', node_path, 'colorMap', 'hsv');
+	MRIcroS('addNodes', node_path, '', -inf, -inf, 'hsv');
 Available color maps can be found [here](http://www.mathworks.com/help/matlab/ref/colormap.html)
 
 	%Choose Load Nodes with Options

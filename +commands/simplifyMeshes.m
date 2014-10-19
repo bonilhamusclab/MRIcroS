@@ -9,15 +9,10 @@ function simplifyMeshes(v, reduce, meshIndx)
 %       index of mesh to reduce
 %       defaults to every mesh if not specified
 
-if(nargin < 2)
+if(nargin < 3)
     meshIndx = 0;
 end
 
-doSimplifyMeshSub(v, reduce, meshIndx);
-
-%end simplifyMeshes()
-
-function doSimplifyMeshSub(v,reduce, meshIndx)
 if (reduce >= 1) || (reduce <= 0), disp('simplify ratio must be between 0..1');  return; end;
 startIndx = 1;
 endIndx = length(v.surface);
@@ -34,7 +29,7 @@ for i=startIndx:endIndx
     v.surface(i).vertices = FVr.vertices;
     clear('FVr');    
 end;
-
-v = drawing.redrawSurface(v);
 guidata(v.hMainFigure,v);%store settings
-%end doSimplifyMeshSub()
+drawing.redrawSurface(v);
+
+%end doSimplifyMesh()

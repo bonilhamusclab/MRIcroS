@@ -34,7 +34,7 @@ v.hCopyToClipboardMenu = uimenu('Parent',v.hEditMenu,'Label','Copy To Clipboard'
 
 v.hFunctionMenu = uimenu('Parent',v.hMainFigure,'HandleVisibility','callback','Label','Functions');
 v.hToolbarMenu = uimenu('Parent',v.hFunctionMenu,'Label','Show/hide toolbar','HandleVisibility','callback','Callback', @gui.ToolbarMenu_Callback);
-v.hLayerRGBAMenu = uimenu('Parent',v.hFunctionMenu,'Label','Color and transparency','HandleVisibility','callback','Callback', @gui.LayerRGBA_Callback);
+v.hLayerRgbaMenu = uimenu('Parent',v.hFunctionMenu,'Label','Color and transparency','HandleVisibility','callback','Callback', @gui.LayerRGBA_Callback);
 v.hShowWireFrameMenu = uimenu('Parent',v.hFunctionMenu,'Label','Show Wireframe','HandleVisibility',...
     'callback','Callback', utils.curry(@gui.ShowWireframe_Callback, ~showOpts));
 v.hShowWireFrameWithOptsMenu = uimenu('Parent',v.hFunctionMenu,'Label','Show Wireframe with options','HandleVisibility',...
@@ -45,21 +45,20 @@ v.hSimplifyMeshesMenu = uimenu('Parent',v.hFunctionMenu,'Label','Simplify mesh(e
 v.hRotateToggleMenu = uimenu('Parent',v.hFunctionMenu,'Label','Rotate','HandleVisibility', 'callback', 'Callback', utils.curry(@gui.RotateToggle_Callback, ~showOpts));
 v.hRotateToggleWithOptionsMenu = uimenu('Parent',v.hFunctionMenu,'Label','Rotate With Options','HandleVisibility', 'callback', 'Callback', utils.curry(@gui.RotateToggle_Callback, showOpts));
 v.hChangeBgColorMenu = uimenu('Parent',v.hFunctionMenu, 'Label', 'Change Background Color', 'HandleVisibility', 'callback', 'Callback', @gui.ChangeBgColor_Callback);
-v.hProjectVolumeMenu = uimenu('Parent',v.hFunctionMenu, 'Label', 'Project Volume onto Surface', 'HandleVisibility', 'callback', 'Callback', utils.curry(@gui.ProjectVolume_Callback, ~showOpts));
-v.hProjectVolumeMenu = uimenu('Parent',v.hFunctionMenu, 'Label', 'Project Volume onto Surface With Options', 'HandleVisibility', 'callback', 'Callback', utils.curry(@gui.ProjectVolume_Callback, showOpts));
-v.hCloseProjectionsMenu = uimenu('Parent',v.hFunctionMenu, 'Label', 'Close Projected Volumes on Surface', 'HandleVisibility', 'callback', 'Callback', @gui.CloseProjections_Callback);
+v.hProjectVolumeMenu = uimenu('Parent',v.hFunctionMenu, 'Label', 'Project Volume onto Surface', 'HandleVisibility', 'callback', 'Callback', utils.curry(@gui.ProjectVolume_Callback));
 
 v.hHelpMenu = uimenu('Parent',v.hMainFigure,'HandleVisibility','callback','Label','Help');
 v.hAboutMenu = uimenu('Parent',v.hHelpMenu,'Label','About','HandleVisibility','callback','Callback', @gui.AboutMenu_Callback);
 
 
 %load default simulated surfaces
-[cubeFV, sphereFV] = drawing.createDemoObjects;
-v.surface(1) = cubeFV;
-v.surface(2) = sphereFV;
+v = drawing.createDemoObjects(v);
+%[cubeFV, sphereFV] = drawing.createDemoObjects;
+%v.surface(1) = cubeFV;
+%v.surface(2) = sphereFV;
 %viewing preferences - color, material, camera position, light position
-v.vprefs.demoObjects = true; %denote simulated objects
-v.vprefs.colors = [0.7 0.7 0.9 0.7; 1 0 0 1.0; 0 1 0 0.7; 0 0 1 0.7; 0.5 0.5 0 0.7; 0.5 0 0.5 0.7; 0 0.5 0.5 0.7]; %rgba for each layer
+%v.vprefs.demoObjects = true; %denote simulated objects
+v.vprefs.colors = [0.7 0.7 0.9 0.7; 1 0 0 1.0; 0 1 0 0.7; 0 0 1 0.7; 0.5 0.5 0 0.7; 0.5 0 0.5 0.7; 0 0.5 0.5 0.7]; %rgba for each layer CRZ
 v.vprefs.edgeColors = v.vprefs.colors;
 v.vprefs.showEdges = zeros(size(v.vprefs.colors, 1),1);
 
@@ -70,11 +69,9 @@ v.vprefs.elLight = 60; %light elevation relative to camera
 v.vprefs.camLight = [];
 v.vprefs.az = 45; %camera azimuth
 v.vprefs.el = 10; %camera elevation
+guidata(v.hMainFigure,v);%store settings
 vFig = v.hMainFigure;
 set(vFig,'name','MRIcroS');
-
-guidata(v.hMainFigure,v);%store settings
 commands.setBackgroundColor(v,[1 1 1]);
-v = drawing.redrawSurface(v);
-guidata(v.hMainFigure,v);%store settings
+drawing.redrawSurface(v);
 %end makeGUI()

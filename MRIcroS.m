@@ -19,8 +19,8 @@ function varargout = MRIcroS(varargin)
 % MRIcroS('addLayer','stroke.trib') 
 % MRIcroS('addTrack','stroke.trk',1,9) 
 % MRIcroS('clipMesh',1,[-inf -inf -inf], [inf inf 30]) 
-% MRIcroS('layerRGBA', 1, 0.9, 0, 0, 1.0, 0.35) %layer1 alpha=1.0, bias=0.35
-% MRIcroS('closeAllItems'); %close all rendered items
+% MRIcroS('vertexColorBrightness',1,0.5,1,3) %make layer 1 opaque (1.0), same brightness but blue color map
+% MRIcroS('closeAllItems'); 
 % MRIcroS('addLayer','BrainMesh_ICBM152.nv'); %open image
 % MRIcroS('addNodes', 'Node_Brodmann82.node', 'Edge_Brodmann82.edge');
 

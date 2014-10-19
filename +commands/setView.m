@@ -6,6 +6,6 @@ if (nargin < 1), return; end;
 vIn = cell2mat(varargin);
 v.vprefs.az = vIn(1);
 if (nargin > 1), v.vprefs.el = vIn(2); end;
-v = drawing.redrawSurface(v);
 guidata(v.hMainFigure,v);%store settings
+drawing.redrawSurface(v);
 %end setView()

@@ -10,18 +10,15 @@ if nlayer > 1
 else
     layer = 1;
 end;
-contrast = 0.5;
+
 if numel(v.surface(layer).vertexColors) < 1 %objects with vertex colors ignore surface color
 	rgb = uisetcolor( v.vprefs.colors(layer,1:3),'select color');
 	v.vprefs.colors(layer,1:3) = utils.boundArray(rgb, 0, 1);
 	answer = inputdlg({'Alpha (0[transparent]..1[opaque])'},'Set opacity',1,{num2str( v.vprefs.colors(layer,4))} );
 	if isempty(answer), disp('options cancelled'); return; end;
+    alpha = str2double(answer(1));
+    commands.layerRGBA(v, layer, rgb(1), rgb(2), rgb(3), alpha);
 else
-	rgb = v.vprefs.colors(layer,1:3);
-	answer = inputdlg({'Alpha (0[transparent]..1[opaque])','Contrast(0..1)'},'Set opacity',1,{num2str( v.vprefs.colors(layer,4)),num2str(contrast)} );
-	if isempty(answer), disp('options cancelled'); return; end;
-	contrast = str2double(answer(2));  
+    commands.vertexColorBrightness(v,layer);
 end
-alpha = str2double(answer(1));
-commands.layerRGBA(v, layer, 'r', rgb(1), 'g', rgb(2), 'b', rgb(3), 'a', alpha, 'contrast', contrast);
 %end LayerRGBA_Callback()

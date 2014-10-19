@@ -11,5 +11,6 @@ function v = removeSurfaces(v)
 if(isfield(v, 'surfacePatches'))
 	delete(v.surfacePatches);
     v = rmfield(v,'surfacePatches'); %bugfix 16-Oct-2014: remove handle
+	guidata(v.hMainFigure, v); %save changes
 end
 

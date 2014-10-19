@@ -1,4 +1,4 @@
-function [faces, vertices, vertexColors] = readTrib(fileName)
+function [faces, vertices, vertexColors, colorMap, colorMin] = readTrib(fileName)
 %Load a binary triangle format file, see writeTrib for format details
 %inputs:
 %	fileName: the trib file to open
@@ -7,7 +7,12 @@ function [faces, vertices, vertexColors] = readTrib(fileName)
 %	vertices: vertices matrix where cols are xyz and each row a vertix
 %   vertexColors: colors for each vertex
 
-vertexColors = []; %CRX - add vertexColors
+vertexColors = []; %add vertexColors
+info = dir(fileName);
+if (info.bytes < 92) 
+    error('File to small to be in trib format %s', fileName);
+end
+
 fid=fopen(fileName,'rb','l');
 SIG = fread(fid,1,'int32'); %file signature
 if (SIG ~= 169478669)
@@ -16,10 +21,13 @@ end
 NTRI = fread(fid,1,'int32'); %number of triangles
 NVERT = fread(fid,1,'int32'); %number of vertices
 NCOLOR = fread(fid,1,'int32'); %number of colors
-UNUSED1 = fread(fid,1,'int32'); %UNUSED1
-UNUSED2 = fread(fid,1,'int32'); %UNUSED2
-UNUSED3 = fread(fid,1,'float32'); %UNUSED3
-UNUSED4 = fread(fid,1,'float32'); %UNUSED4
+COLORTABLE = fread(fid,1,'int32'); %COLORTABLE
+colorMap = utils.colorTables(COLORTABLE);
+UNUSED1 = fread(fid,1,'int32'); %#ok<NASGU> %UNUSED1
+colorMin = fread(fid,1,'float32'); %COLORMIN
+if (colorMin >= 1), colorMin = 0; end;
+colorMin = utils.boundArray(colorMin,0,0.95);
+UNUSED1 = fread(fid,1,'float32'); %#ok<NASGU> %UNUSED3
 expectedBytes = 32 + (12 * NTRI) + (12 * NVERT) + (4 * NVERT * NCOLOR);   %header + tri + vert + color
 info = dir(fileName);
 if (info.bytes ~= expectedBytes) 
@@ -36,5 +44,6 @@ end
 if (NCOLOR > 0)
     vertexColors = fread(fid,[NVERT NCOLOR],'float32'); %read color of vertex    
 end
+
 fclose(fid);
 %end readTrib()

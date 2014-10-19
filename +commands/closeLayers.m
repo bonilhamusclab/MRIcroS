@@ -1,19 +1,13 @@
 function closeLayers(v, ~)
 %MRIcroS('closeLayers');
 % --- close all open volume surfaces
-
 v = guidata(v.hMainFigure);
-
 if(isfield(v, 'surface'))
     if (~isempty(v.surface)) 
         v = rmfield(v,'surface');
-        [cubeFV, sphereFV] = drawing.createDemoObjects;
-        v.surface(1) = cubeFV;
-        v.surface(2) = sphereFV;
-        v.vprefs.demoObjects = true;
-        v = drawing.redrawSurface(v);
+        v = drawing.createDemoObjects(v);
         guidata(v.hMainFigure,v);%store settings
-    end;
-    
+        drawing.redrawSurface(v);
+    end; 
 end
 %end closeLayers()

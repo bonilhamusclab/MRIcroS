@@ -1,25 +1,24 @@
-function showWireframe(v, layer, rgba)
-%function showWireframe(v, layer, rgba)
+function showWireframe(v, layer, rgb, alpha)
 % inputs: 
 %   layerNumber, 
-%   rgba array - optional, defaults to [0 0 0 1]
-%   alhpa set as 1 if not specified, [0 0 0] same as [0 0 0 1]
+%   rgb array - optional, defaults to [0 0 0]
+%   alpha - optional, defaults to 1
 % note: rgb can not be a string such as 'blue', must be an array
-%MRIcroS('layerRGBA', 1, [1 0 0]) %set layer 1 to red
-%MRIcroS('layerRGBA', 1:2, [1 0 0]) %set layer 1 & 2 to red
-%MRIcroS('layerRGBA', 1, [0 0 0 .1]) %set layer 1 to black with .1 alpha
+% note 2: use '' or [] to specify default for input
+%MRIcroS('showWireframe', 1, [1 0 0]) %set layer 1 to red
+%MRIcroS('showWireframe', 1:2, [1 0 0]) %set layer 1 & 2 to red
+%MRIcroS('showWireframe', 1, '', .1) %set layer 1 to black with .1 alpha
 if(nargin < 3)
-    rgba = [0 0 0 1];
+    rgb = [0 0 0];
 end
 
-if(length(rgba) == 3)
-    rgba(4) = 1;
+if(nargin < 4)
+    alpha = 1;
 end
 
-validateattributes(rgba, {'numeric'}, {'<=',1, '>=', 0, 'numel', 4});
-
-v.vprefs.edgeColors(layer, :) = rgba;
+v.vprefs.edgeColors(layer, 1:3) = rgb;
+v.vprefs.edgeColors(layer, 4) = alpha;
 v.vprefs.showEdges(layer) = 1;
 
-v = drawing.redrawSurface(v);
 guidata(v.hMainFigure,v);%store settings
+drawing.redrawSurface(v);

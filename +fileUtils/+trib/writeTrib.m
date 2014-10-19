@@ -1,10 +1,10 @@
-function writeTrib(vertex,vertexColors,face,filename)
+function writeTrib(vertex,vertexColors,face,filename, colorMap, colorMin)
 %Save mesh in trib format
 % vertex : M*3 array of vertex coordinates
 % vertexColors : empty (=[]), M*1 (scalar) or M*3 (RGB) colors for vertices
 % face : X*3 triangle list indexed from 1, e.g. 1,2,3 is a triangle of first 3 vertices
 % filename : output name, e.g. 'myFile.trib'
-%
+% colorMap : optional, name or index of colorMap: 'gray','cool'... or 3
 % TRIB format specifications:
 %   Vertices are indexed from 1, so a triangle of the first 3 vertices is 1,2,3
 %   Always LITTLE endian: endian can be determined by reading signature
@@ -15,10 +15,10 @@ function writeTrib(vertex,vertexColors,face,filename)
 %   8-11: INT32 : NVERT number of vertices
 %   12-15: INT32 : NCOLOR color elements per vertex
 %     NCOLOR is 0 (XYZ position, no color), 1 (XYZ+intensity) or 3 (XYZ+RGB)
-%   16-19: INT32 : UNUSED1 (not yet used)
-%   20-23: INT32 : UNUSED2 (not yet used)
-%   24-27: FLOAT32 : UNUSED3 (not yet used)
-%   28-31: FLOAT32 : UNUSED4 (not yet used)
+%   16-19: INT32 : COLORTABLE (1=gray, 2=autumn, etc. only required for scalar colors)
+%   20-23: INT32 : UNUSED1 (not yet used)
+%   24-27: FLOAT32 : COLORMIN (threshold for scalar colors)
+%   28-31: FLOAT32 : UNUSED2 (not yet used)
 %  TRIANGLE DATA: next 12*NTRI bytes 
 %   +0..3: INT32 : First vertex of first triangle
 %   +4..7: INT32 : Second vertex of first triangle
@@ -40,15 +40,23 @@ function writeTrib(vertex,vertexColors,face,filename)
 
 [fid,Msg] = fopen(filename,'Wb', 'l');
 if fid == -1, error(Msg); end;
-[~,~,endian] = computer;
+%[~,~,endian] = computer;
 fwrite(fid, 169478669, 'int32'); %SIG to catch ftp conversion errors http://en.wikipedia.org/wiki/Portable_Network_Graphics
 fwrite(fid, size(face,1), 'int32'); %NTRI
 fwrite(fid, size(vertex,1), 'int32'); %NVERT
 fwrite(fid, size(vertexColors,2), 'int32'); %NCOLOR  
-fwrite(fid,1,'int32'); %UNUSED1
+if nargin >= 5 
+    colorMap = utils.colorTables(colorMap,1);
+else
+    colorMap = 1;
+end
+fwrite(fid,colorMap,'int32'); %UNUSED1
 fwrite(fid,1,'int32'); %UNUSED2
-fwrite(fid,1,'float32'); %UNUSED3
-fwrite(fid,1,'float32'); %UNUSED4
+if nargin < 6 
+    colorMin = 0;
+end
+fwrite(fid,colorMin,'float32'); %colorMin
+fwrite(fid,1,'float32'); %UNUSED2
 fwrite(fid,face,'int32'); %triangle indices
 fwrite(fid,vertex,'float32'); %vertex coordinates
 if  size(vertexColors,1) == size(vertex,1)

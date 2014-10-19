@@ -1,21 +1,20 @@
-function [faces, vertices] = readVox (filename, reduce, smooth, thresh)
+function [faces, vertices, vertexColors] = readVox (filename, reduce, smooth, thresh, vertexColor)
 % filename: nii or nii.gz image to open
-% reduce : reduction factor 0..1, e.g. 0.05 will simplify mesh to 5% of original size 
-% smooth: dimater to gaussian smooth image with, must be >= 3 and odd
 % thresh : isosurface threshold, e.g. if 1 then voxels less than 1 are transparent
 %          "Inf" or "-Inf" for automatic thresholds
+% reduce : reduction factor 0..1, e.g. 0.05 will simplify mesh to 5% of original size 
 % --- convert voxel image to triangle surface mesh
 
+vertexColors = [];
 if (reduce > 1) || (reduce <= 0), reduce = 1; end;
 [Hdr, Vol] = fileUtils.nifti.readNifti(filename);
 Vol(isnan(Vol)) = 0; 
-
+rawVol = Vol;
 if (round(smooth) > 2.5) %blur image prior to edge extraction
     fprintf('Applying gaussian smooth with %d voxel diameter\n',round(smooth));
     if mod(round(smooth),2) == 0, error('Smooth diameter must be an odd number'); end;
     Vol = smooth3(Vol,'gaussian',round(smooth), round(smooth) * 0.2167);
 end;
-
 if (isinf(thresh) && (thresh < 0)) %if -Inf, use Otsu's method
      thresh = utils.otsu(Vol); %use Otsu's method to detect isosurface threshold
 elseif (isnan(thresh)) || (isinf(thresh)) %if +Inf, use midpoint
@@ -25,12 +24,16 @@ end;
 Vol = clipEdgesSub(Vol,thresh);
 FV = isosurface(Vol,thresh);
 if (reduce ~= 1.0) %next: simplify mesh
+    %orig = max(FV.faces(:));
     FV = reducepatch(FV,reduce);
+    %fprintf('reduced to %d -> %d vertices (%.2f)\n', orig, max(FV.faces(:)), reduce);
 end;
 faces = FV.faces;
 vertices = FV.vertices;
 clear('FV');
-
+if vertexColor %next compute vertex colors
+    vertexColors = computeVertexColors(rawVol, faces, vertices, thresh);
+end
 %next: isosurface swaps the X and Y dimensions! size(Vol)
 i = 1;
 j = 2;
@@ -48,7 +51,7 @@ vertices = vx(:,1:3);
 %fprintf('X=%f..%f Y=%f..%f Z=%f..%f \n',min(vx(:,1)),max(vx(:,1)),min(vx(:,2)),max(vx(:,2)),min(vx(:,3)),max(vx(:,3)) );
 %display results
 fprintf('Surface threshold %f and reduction ratio %f yields mesh with %d vertices and %d faces from image %s\n', thresh, reduce,size( vertices,1),size( faces,1),filename);
-%end voxToOpen()
+%end readVox()
 
 function Vol = clipEdgesSub(Vol,thresh)
 %we will have holes on edges that exceed the threshold, we artificially set
@@ -57,3 +60,35 @@ v = Vol;
 v(2:end-1, 2:end-1, 2:end-1) = min(Vol(:));
 Vol(v > thresh) = (thresh-eps-eps);
 %end clipEdgesSub()
+
+function vertexColors = computeVertexColors(Vol, faces, vertices, thresh)
+smoothVol = Vol;
+smoothVol(Vol(:) < thresh) = max(Vol(:));  %make air BRIGHT
+smoothVol = smooth3(smoothVol,'gaussian', 13, 2.53); %smooth with 3-voxel FWHM
+%else %linear interpolation
+clr = interp3(smoothVol, vertices(:,1), vertices(:,2), vertices(:,3)); %isosurface order
+%   clr = interp3(smoothVol, vertices(:,2), vertices(:,1), vertices(:,3)); %isosurface swap 2,1,3 and not 1,2,3
+%end
+fprintf('Averaging across %d vertices - this may be very slow\n', numel(clr));
+clrTmp = clr; %original estimates for each vertex color
+for i = 1:numel(clr)
+    [m,~] = find(faces == i);
+    u = unique(faces(m,:));
+    clr(i) = mean(clrTmp(u));
+end
+%next normalize
+range = max(clr) - min(clr);
+if range ~= 0 %normalize for range 0 (black) to 1 (white)
+    clr = (clr - min(clr)) / range;
+    %next- color balance, so typical voxels are mid-gray
+    %we could use a histogram
+    % http://angeljohnsy.blogspot.com/2011/04/matlab-code-histogram-equalization.html?m=1
+    %instead, since range is 0..1 we will use power function to make median = 0.5
+    % to determine power exponent, we compute Logarithm to an arbitrary base http://en.wikipedia.org/wiki/Logarithm 
+    mdn = median(clr(:));
+    pow = log(0.5)/log(mdn);
+    clr = power(clr, pow);
+    %vertexColors = colorSub(vertexColors, vertexColor);
+end
+vertexColors = clr; %note we save as scalar for precision (e.g. 'jet' has just 64 discrete values)
+%end computeVertexColors()
