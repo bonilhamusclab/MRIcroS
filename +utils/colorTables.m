@@ -10,7 +10,11 @@ function [opts, string] = colorTables(clrMap, returnMapNumber)
 opts = {'gray','autumn','bone','cool','copper','hot','hsv','jet','lines','pink','spring','summer','winter' };
 if nargin >= 1
     if isnumeric(clrMap) %user can specify number, e.g. 1=gray, 2=autumn, etc
-        clrNum = clrMap;
+        if isfinite(clrMap)
+            clrNum = clrMap;
+        else
+            clrNum = 1;
+        end
     else
         clrNum=find(ismember(opts,lower(deblank(clrMap))));
     end

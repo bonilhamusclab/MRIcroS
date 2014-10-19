@@ -71,7 +71,7 @@ clr = interp3(smoothVol, vertices(:,1), vertices(:,2), vertices(:,3)); %isosurfa
 %end
 fprintf('Averaging across %d vertices - this may be very slow\n', numel(clr));
 clrTmp = clr; %original estimates for each vertex color
-for i = 1:numel(clr)
+for i = 1:numel(clr) %from BrainNet Viewer http://www.nitrc.org/projects/bnv/
     [m,~] = find(faces == i);
     u = unique(faces(m,:));
     clr(i) = mean(clrTmp(u));

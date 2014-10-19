@@ -3,13 +3,11 @@ function setMaterial(v,varargin)
 %MRIcroS('setMaterial', 0.5, 0.5, 0.7, 100, 1);
 % --- set surface appearance (shiny, matte, etc)
 if (length(varargin) < 1), return; end;
-vIn = cell2mat(varargin);
-v.vprefs.materialKaKdKsn(1) = vIn(1);
-if (length(varargin) > 1), v.vprefs.materialKaKdKsn(2) = vIn(2); end;
-if (length(varargin) > 2), v.vprefs.materialKaKdKsn(3) = vIn(3); end;
-v.vprefs.materialKaKdKsn(1:3) = utils.boundArray(v.vprefs.materialKaKdKsn(1:3),0,1);
-if (length(varargin) > 3), v.vprefs.materialKaKdKsn(4) = vIn(4); end;
-if (length(varargin) > 4), v.vprefs.backFaceLighting = vIn(5); end;
+if (length(varargin) >= 1) && isnumeric(varargin{1}), v.vprefs.materialKaKdKsn(1) = varargin{1}; end;
+if (length(varargin) >= 2) && isnumeric(varargin{2}), v.vprefs.materialKaKdKsn(2) = varargin{2}; end;
+if (length(varargin) >= 3) && isnumeric(varargin{3}), v.vprefs.materialKaKdKsn(3) = varargin{3}; end;
+if (length(varargin) >= 4) && isnumeric(varargin{4}), v.vprefs.materialKaKdKsn(4) = varargin{4};end;
+if (length(varargin) >= 5) && isnumeric(varargin{5}), v.vprefs.backFaceLighting = varargin{5};end;
 guidata(v.hMainFigure,v);%store settings
 drawing.redrawSurface(v);
 %end setMaterial()

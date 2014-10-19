@@ -50,7 +50,7 @@ if(promptForValues)
         reduce = '0.05'; %supply reasonable default values
         thresh = 'Inf';
         smooth = '0';
-        vertexColor = '0';
+        vertexColor = '0'; 
         [thresh, reduce, smooth, vertexColor, cancelled] = promptOptionsDialogSub(num2str(thresh),num2str(reduce),num2str(smooth),num2str(vertexColor));
         if(cancelled), disp('load cancelled'); return; end;
     end
