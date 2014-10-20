@@ -16,13 +16,16 @@ function varargout = MRIcroS(varargin)
 % MRIcroS('saveBitmap','myPicture.png'); %save screenshot
 % MRIcroS('saveMesh','myMesh.ply'); %export mesh to PLY format
 % MRIcroS('closeAllItems') 
-% MRIcroS('addLayer','stroke.trib') 
+% MRIcroS('addLayer','stroke.mat') 
 % MRIcroS('addTrack','stroke.trk',1,9) 
 % MRIcroS('clipMesh',1,[-inf -inf -inf], [inf inf 30]) 
 % MRIcroS('vertexColorBrightness',1,0.5,1,3) %make layer 1 opaque (1.0), same brightness but blue color map
 % MRIcroS('closeAllItems'); 
 % MRIcroS('addLayer','BrainMesh_ICBM152.nv'); %open image
 % MRIcroS('addNodes', 'Node_Brodmann82.node', 'Edge_Brodmann82.edge');
+% MRIcroS('closeAllItems'); 
+% MRIcroS('addLayer','mni152_2009.mat'); %open image
+% MRIcroS('addLayer','invMotor.ply'); %add another fMRI (already a mesh)
 
 mOutputArgs = {}; % Variable for storing output when GUI returns
 h = gui.getGuiHandle(); 
