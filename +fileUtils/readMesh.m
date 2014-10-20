@@ -27,8 +27,8 @@ elseif fileUtils.isNv(filename)
     [faces, vertices] = fileUtils.nv.readNv(filename);
 elseif fileUtils.isPial(filename)
     [faces, vertices] = fileUtils.pial.readPial(filename);
-elseif fileUtils.isTrib(filename)
-    [faces, vertices, vertexColors, colorMap, colorMin] = fileUtils.trib.readTrib(filename);
+elseif fileUtils.isMat(filename)
+    [faces, vertices, vertexColors, colorMap, colorMin] = fileUtils.mat.readMat(filename);
 elseif fileUtils.isGifti(filename)
     gii = gifti(filename);
     faces = double(gii.faces); %convert to double or reducepatch fails

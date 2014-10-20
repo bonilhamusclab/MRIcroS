@@ -13,8 +13,8 @@ for i=1:length(v.surface)
         else
             fprintf('Error: Unable to save GIfTI files - make sure SPM is installed');
         end;
-    elseif fileUtils.isTrib(filename)
-        fileUtils.trib.writeTrib(v.surface(i).vertices,v.surface(i).vertexColors,...
+    elseif fileUtils.isMat(filename)
+        fileUtils.mat.writeMat(v.surface(i).vertices,v.surface(i).vertexColors,...
             v.surface(i).faces,filename, v.surface(i).colorMap, v.surface(i).colorMin);
     elseif fileUtils.isVtk(filename)
         fileUtils.vtk.writeVtk(v.surface(i).vertices,v.surface(i).faces,filename);

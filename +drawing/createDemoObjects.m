@@ -4,8 +4,8 @@ v.surface(1) = cubeFV;
 v.surface(2) = sphereFV;
 v.surface(1).colorMap = utils.colorTables(1);
 v.surface(2).colorMap = utils.colorTables(8);
-v.surface(1).colorMin = 0.5;
-v.surface(2).colorMin = 0.5;
+v.surface(1).colorMin = 0.0;
+v.surface(2).colorMin = 0.0;
 v.vprefs.demoObjects = true; %denote simulated objects
 %end createDemoObjects()
 

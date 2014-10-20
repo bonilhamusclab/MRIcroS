@@ -1,8 +1,8 @@
 function AddLayer_Callback(promptForValues, obj, ~)
 % --- add a new voxel image or mesh as a layer with default options
 v=guidata(obj);
-supportedFileExts = '*.nii;*.hdr;*.nii.gz;*.vtk;*.nv;*.pial;*.ply;*.trib;*.trk';
-supportedFileDescs = 'NIfTI/VTK/NV/Pial/PLY/trib/trk';
+supportedFileExts = '*.nii;*.hdr;*.nii.gz;*.vtk;*.nv;*.pial;*.ply;*.trk;*.mat';
+supportedFileDescs = 'NIfTI/VTK/NV/Pial/PLY/trk/mat';
 
 if utils.isGiftiInstalled()
     supportedFileExts = [supportedFileExts ';*.gii'];
@@ -36,7 +36,6 @@ smooth = '';
 vertexColor = '';%assume user does not want vertex colors
 if(promptForValues)  
     if fileUtils.isMesh(filename)
-        
         if fileUtils.isNv(filename) || fileUtils.isPial(filename)
             [reduce, cancelled] = promptNvPialDialogSub(reduce);
             if(cancelled)
