@@ -58,7 +58,7 @@ end
 commands.addLayer(v,filename, reduce, smooth, thresh, vertexColor);
 if promptForValues && ~fileUtils.isMesh(filename) && vertexColor
     v = guidata(v.hMainFigure);
-    commands.vertexColorBrightness(v,1);
+    commands.vertexColorBrightness(v,length(v.surface)); %change brightness of most recent layer
 end
 %end AddLayer_Callback()
 
