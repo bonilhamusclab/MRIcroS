@@ -65,7 +65,7 @@ v.vprefs.showEdges = zeros(size(v.vprefs.colors, 1),1);
 v.vprefs.materialKaKdKsn = [0.6 0.4 0.4 100.0];%ambient/diffuse/specular strength and specular exponent
 v.vprefs.backFaceLighting = 1;
 v.vprefs.azLight = 0; %light azimuth relative to camera
-v.vprefs.elLight = 60; %light elevation relative to camera
+v.vprefs.elLight = 90; %CRX v.vprefs.elLight = 60; %light elevation relative to camera
 v.vprefs.camLight = [];
 v.vprefs.az = 45; %camera azimuth
 v.vprefs.el = 10; %camera elevation

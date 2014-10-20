@@ -37,6 +37,12 @@ function writeTrib(vertex,vertexColors,face,filename, colorMap, colorMin)
 %   +0..3: FLOAT32: first color of first vertex
 %   +4..7: FLOAT32: if NCOLORS = 1: color of 2nd vertex, else 2nd color of 1st vertex
 %   ...
+%DATA is GZ-compressed
+
+%http://undocumentedmatlab.com/blog/savezip-utility
+
+%face = [1 2 3; 1 2 4]; %two triangles
+%vertex = [1 1 1; 2 2 2; 3 3 3; 4 4 4]; % 4 vertices
 
 [fid,Msg] = fopen(filename,'Wb', 'l');
 if fid == -1, error(Msg); end;
@@ -63,4 +69,7 @@ if  size(vertexColors,1) == size(vertex,1)
     fwrite(fid,vertexColors,'float32');  
 end
 fclose(fid);
+gzip(filename); %compress
+delete(filename); %delete uncompressed
+movefile([filename '.gz'], filename); %rename
 %end writeTrib()

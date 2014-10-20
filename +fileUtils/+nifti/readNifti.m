@@ -1,7 +1,6 @@
 function [Hdr, Vol] = readNifti(filename)
 %function [Hdr, Vol] = readNifti(filename)
 %file can be unzipped nifti (.gz) or nifti (.nii)
-
 [pathstr, name, ext] = fileparts(filename);
 
 isTmpUnpackedGz = false;
@@ -21,9 +20,9 @@ Vol = fileUtils.nifti.spm_read_vols_mimic(Hdr);%this call clones spm_read_vols w
 
 %Hdr = spm_vol(filename); % <- these are the actual SPM calls
 %Vol = spm_read_vols(Hdr); % <- these are the actual SPM calls
-
 if (isTmpUnpackedGz), delete(filename); end; %remove temporary uncompressed image
-
+%end readNifti()
 
 function isGz = isGzExtSub(fileExt)
-	isGz = length(fileExt)==3  && min((fileExt=='.gz')==1);
+isGz = length(fileExt)==3  && min((fileExt=='.gz')==1);
+%end isGzExtSub()
