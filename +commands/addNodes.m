@@ -9,9 +9,10 @@ function addNodes(v, node_file, edge_file, varargin)
 % 1) node_filepath
 % 2) edge_filepath: sepecify as '' if no edges to be loaded
 % Inputs below are optional
-% 3) nodeRadiusThreshold: filter for nodes with radius above threshold
+% 3) nodeThreshold: filter for nodes with radius above threshold
 %   any edges connected to a filtered node will be removed as well
-% 4) edgeWeightThreshold: filter for edges above specified threshold
+% 4) edgeThreshold: filter for edges above specified threshold
+% 5) colorMap: color map to be used for nodes
 %BrainNet Node And Edge Connectome Files
 %http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0068910
 
@@ -25,12 +26,12 @@ if ~fileUtils.isNode(node_file), fprintf('Odd extension for a node file %s\n',no
 if (nargin < 3)
   edge_file = '';  
 end
-nodeThreshold = -inf;
-edgeThreshold = -inf;
-colorMap = 'jet';
-if (length(varargin) >= 1) && isnumeric(varargin{1}), nodeThreshold = varargin{1}; end;
-if (length(varargin) >= 2) && isnumeric(varargin{2}), edgeThreshold = varargin{2}; end;
-if (length(varargin) >= 3), colorMap = varargin{3}; end;
+
+inputParams = parseInputParamsSub(varargin);
+
+nodeThreshold = inputParams.nodeThreshold;
+edgeThreshold = inputParams.edgeThreshold;
+colorMap = inputParams.colorMap;
 
 loadEdges = ~isempty(edge_file);
 if loadEdges 
@@ -66,4 +67,21 @@ guidata(v.hMainFigure, v);
 v = drawing.removeDemoObjects(v);
 guidata(v.hMainFigure, v);
 %end function addNodes()
+
+function inputParams = parseInputParamsSub(args)
+p = inputParser;
+
+d.nodeThreshold = 0; d.edgeThreshold = 0; d.colorMap = 'jet';
+
+
+p.addOptional('nodeThreshold',0, utils.unless(@isempty,...
+    @(x) validateattributes(x, {'numeric'}, {'real'})));
+p.addOptional('edgeThreshold',0, utils.unless(@isempty,... 
+    @(x) validateattributes(x, {'numeric'}, {'real'})));
+p.addOptional('colorMap', 'jet', utils.unless(@isempty, ...
+    @(x) validateattributes(x, {'char'}, {'nonempty'})));
+
+p = utils.stringSafeParse(p, args, fieldnames(d), d.nodeThreshold, d.edgeThreshold, d.colorMap);
+
+inputParams = p.Results;
     
