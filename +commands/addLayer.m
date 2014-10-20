@@ -9,7 +9,9 @@ function addLayer(v,filename,varargin)
 %       * default value of .25
 %   smooth (optional)
 %       * applies only to volumes (NiFTI)
-%       * default vaMRIlue 1
+%       * convolution kernel size for gaussian smoothing
+%       * default value 1 (no smoothing)
+%       * must be odd number
 %   thresh (optional)
 %       * applies only to volumes (NiFTI)
 %       * Inf for midrange, -Inf for Otsu
@@ -27,18 +29,13 @@ function addLayer(v,filename,varargin)
 %Otsu's threshold, defaults for reduce and smooth
 %MRIcroS('addLayer','attention.nii.gz','','',-Inf);
 %MRIcroS('addLayer','attention.nii.gz',0.05,0,3); %threshold >3
-reduce = 0.2;
-reduceMesh = 1.0;
-thresh = Inf;
-smooth = 0;
-vertexColor = 0;
-if (length(varargin) >= 1) && isnumeric(varargin{1})
-    reduce = varargin{1};
-    reduceMesh = reduce;
-end;
-if (length(varargin) >= 2) && isnumeric(varargin{2}), smooth = varargin{2}; end;
-if (length(varargin) >= 3) && isnumeric(varargin{3}), thresh = varargin{3}; end;
-if (length(varargin) >= 4) && isnumeric(varargin{4}), vertexColor = varargin{4}; end;
+
+inputs = parseInputParamsSub(varargin);
+reduce = inputs.reduce; 
+reduceMesh = inputs.reduceMesh;
+smooth = inputs.smooth;
+thresh = inputs.thresh; 
+vertexColor = inputs.vertexColor;
 
 [filename, isFound] = fileUtils.isFileFound(v, filename);
 if ~isFound
@@ -84,3 +81,27 @@ v.vprefs.demoObjects = false;
 guidata(v.hMainFigure,v);%store settings
 drawing.redrawSurface(v);
 %end addLayerSub()
+
+
+function inputParams = parseInputParamsSub(args)
+p = inputParser;
+d.reduce = .2; d.smooth = 1; d.thresh = Inf; d.vertexColor = 0;
+
+p.addOptional('reduce', d.reduce, ...
+    @(x) validateattributes(x, {'numeric'}, {'<=',1,'>=',0}));
+p.addOptional('smooth', d.smooth, ...
+    @(x) validateattributes(x, {'numeric'}, {'odd','positive'}));
+p.addOptional('thresh', d.thresh, ...
+    @(x) validateattributes(x, {'numeric'}, {'real'}));
+p.addOptional('vertexColor', d.vertexColor, ...
+    @(x) validateattributes(x, {'numeric'}, {'<=', 14, '>=', 0}));
+
+p = utils.stringSafeParse(p, args, fieldnames(d), d.reduce, d.smooth, d.thresh, ...
+    d.vertexColor);
+
+inputParams = p.Results;
+
+inputParams.reduceMesh = 1.0;
+if ~max(strcmp(p.UsingDefaults,'reduce'))
+	inputParams.reduceMesh = inputParams.reduce;
+end;
