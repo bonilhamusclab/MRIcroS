@@ -72,7 +72,8 @@ view( v.vprefs.az,  v.vprefs.el);
 if ~isempty(v.vprefs.camLight)
     delete(v.vprefs.camLight); % - delete previous lights!
 end
-v.vprefs.camLight = camlight( v.vprefs.azLight, v.vprefs.elLight);
+%v.vprefs.camLight = camlight( v.vprefs.azLight, v.vprefs.elLight);
+v.vprefs.camLight = camlight( 0, 90);
 material( v.vprefs.materialKaKdKsn);
 guidata(v.hMainFigure,v);%store settings
 %end redrawSurface()
