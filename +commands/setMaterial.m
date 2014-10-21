@@ -22,19 +22,19 @@ drawing.redrawSurface(v);
 
 function inputParams = parseInputParamsSub(materialKaKdKsn, backFaceLighting, args)
 
-d.a = materialKaKdKsn(1);
-d.d = materialKaKdKsn(2);
-d.s = materialKaKdKsn(3);
-d.n = materialKaKdKsn(4);
+d.ambient = materialKaKdKsn(1);
+d.diffuse = materialKaKdKsn(2);
+d.specular = materialKaKdKsn(3);
+d.specularExponent = materialKaKdKsn(4);
 d.backFaceLighting = backFaceLighting;
 
 p = inputParser;
-p.addOptional('ambient',d.a, @(x) validateattributes(x, {'numeric'}, {'>=', 0, '<=' 1}));
-p.addOptional('diffuse',d.d, @(x) validateattributes(x, {'numeric'}, {'>=', 0, '<=', 1}));
-p.addOptional('specular',d.s, @(x) validateattributes(x, {'numeric'}, {'>=', 0, '<=', 1}));
-p.addOptional('specularExponent', d.n, @(x) validateattributes(x, {'numeric'}, {'nonnegative'}));
+p.addOptional('ambient',d.ambient, @(x) validateattributes(x, {'numeric'}, {'>=', 0, '<=' 1}));
+p.addOptional('diffuse',d.diffuse, @(x) validateattributes(x, {'numeric'}, {'>=', 0, '<=', 1}));
+p.addOptional('specular',d.specular, @(x) validateattributes(x, {'numeric'}, {'>=', 0, '<=', 1}));
+p.addOptional('specularExponent', d.specularExponent, @(x) validateattributes(x, {'numeric'}, {'nonnegative'}));
 p.addOptional('backFaceLighting', d.backFaceLighting, @(x) validateattributes(x, {'numeric'}, {'binary'}));
 
-p = utils.stringSafeParse(p, args, fieldnames(d), d.a, d.d, d.s, d.n, d.backFaceLighting);
+p = utils.stringSafeParse(p, args, fieldnames(d), d.ambient, d.diffuse, d.specular, d.specularExponent, d.backFaceLighting);
 
 inputParams = p.Results;
