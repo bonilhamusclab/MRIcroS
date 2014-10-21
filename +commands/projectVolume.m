@@ -1,20 +1,49 @@
-function projectVolume(v,varargin)
-% inputs: layerNumber, volumeName, smooth, threshold
-% layerNumber: mesh index 
-% volumeFilename: name of nifti image for background
+function projectVolume(v,layer, volumeFilename, varargin)
+%function projectVolume(v,layer, volumeFilename)
+% inputs:
+%   layer: mesh index 
+%   volumeFilename: name of nifti image for background
+% Optional Inputs:
+%   smooth:
+%       convolution size of kernel for Gaussian smooth before projection
+%       defaults to 1 for no projection
+%   threshold:
+%       threshold below volume intensities are not projected
+%       defaults to .5
+%   brightness:
+%   `   how bright projection should be
+%       defaults to .5 - no increase or decrease
+%   colorMap:
+%       index of colorMap to use for projection
+%       defaults to color map for layer
+%       possible values:
+%           1=gray,2=autumn,3=bone,4=cool,5=copper,6=hot,7=hsv,8=jet,9=pink,10=winter'
+%   averageIntensities:
+%      set to 0 to average intensities of volume voxels
+%      slow but gives less jagged image
+%      default 0 due to processing spped
 
-layer = varargin{1};
-volumeFilename = varargin{2};
 v = guidata(v.hMainFigure);%retrieve latest settings
 %provide GUI
-answer = inputdlg({'Smooth (0=none,1=little,2=more...)','Do not allow colors darker than (0..1)','Brightness (0..1, 0.5=medium)','Colormap 1=gray,2=autumn,3=bone,4=cool,5=copper,6=hot,7=hsv,8=jet,9=pink,10=winter'},'Color vertices',1,{'1','0','0.5',num2str(v.surface(layer).colorMap)} );
-if isempty(answer), disp('options cancelled'); return; end;
-smooth = str2double(answer(1));
-threshold = str2double(answer(2));
-brightness = str2double(answer(3));
-v.surface(layer).colorMap = str2double(answer(4));
+
+colorMap = utils.colorMaps.nameIndices(v.surface(layer).colorMap);
+
+[volumeFilename, isFound] = fileUtils.isFileFound(v, volumeFilename);
+if ~isFound
+    fprintf('Unable to find "%s"\n',volumeFilename); 
+    return; 
+end;
+
+inputs = parseInputParams(colorMap, varargin);
+smooth = inputs.smooth;
+threshold = inputs.threshold;
+brightness = inputs.brightness;
+v.surface(layer).colorMap = utils.colorMaps.names(inputs.colorMap);
+averageIntensities = inputs.averageIntensities;
+
 %project new surface
-v.surface(layer).vertexColors = projectVolumeSub(v.surface(layer).faces, v.surface(layer).vertices, volumeFilename, smooth, threshold);
+v.surface(layer).vertexColors = projectVolumeSub(v.surface(layer).faces, v.surface(layer).vertices, volumeFilename, smooth, threshold, averageIntensities);
+
 %apply new brightness
 if (brightness ~= 0.5)
     if (brightness >= 1), brightness = 1 - eps; end;
@@ -26,17 +55,17 @@ guidata(v.hMainFigure,v);%store settings
 drawing.redrawSurface(v);
 %end projectVolumeSub()
 
-function vertexColors = projectVolumeSub(faces, vertices, volumeFilename, smooth, threshold)
+function vertexColors = projectVolumeSub(faces, vertices, volumeFilename, smooth, threshold, averageIntensities)
+
 [hdr, voxels] = fileUtils.nifti.readNifti(volumeFilename);
 voxels(isnan(voxels)) = min(voxels(:)); 
-rawVoxels = voxels;
-if (smooth > 0) %blur image prior to edge extraction
-    smooth = (2* round(smooth))+1; %1->3, 2->5, etc
-    if (smooth < 3), smooth = 3; end;
+
+if (smooth > 1) %blur image prior to edge extraction
     fprintf('Applying gaussian smooth with %d voxel diameter\n',round(smooth));
     if mod(round(smooth),2) == 0, error('Smooth diameter must be an odd number'); end;
     voxels = smooth3(voxels,'gaussian',round(smooth), round(smooth) * 0.2167);
 end;
+
 %thresh = 30;
 %mx = max(voxels(:));
 %voxels(rawVoxels(:) < thresh) = mx;  %make air BRIGHT   
@@ -44,7 +73,7 @@ vox_to_ras = hdr.mat;
 verticesRasSpace = [vertices ones(size(vertices,1),1)]';
 verticesVoxSpace = vox_to_ras\verticesRasSpace;
 %not sure why interp3 order is 2,1,3 instead of 1,2,3 
-if (smooth > 0) % vertex intensity smoothing: average intensity of all connected vertices: BrainNet.m EC.vol.mapalgorithm=2
+if averageIntensities % vertex intensity smoothing: average intensity of all connected vertices: BrainNet.m EC.vol.mapalgorithm=2
     surfaceIntensities = interp3(voxels, verticesVoxSpace(2,:), verticesVoxSpace(1,:), verticesVoxSpace(3,:), 'spline');
     fprintf('Averaging across %d vertices - this may be very slow\n', numel(surfaceIntensities));
     clrTmp = surfaceIntensities; %original estimates for each vertex color
@@ -69,9 +98,26 @@ if range ~= 0 %normalize for range 0 (black) to 1 (white)
     surfaceIntensities = power(surfaceIntensities, pow);
 end
 if threshold > 0  
-    surfaceIntensities(surfaceIntensities < threshold,:) = threshold;
+    surfaceIntensities(surfaceIntensities< threshold) = threshold;
 end
 vertexColors = surfaceIntensities';
 %end projectVolumeSub()
 
+function inputParams = parseInputParams(colorMap, args)
+p = inputParser;
 
+d.smooth = 1; d.threshold = .5; d.brightness = .5; d.colorMap = colorMap;
+d.averageIntensities = 0;
+
+p.addOptional('smooth',d.smooth, ...
+    @(x) validateattributes(x, {'numeric'}, {'nonnegative', 'odd'}));
+p.addOptional('threshold', d.threshold, @(x) validateattributes(x, {'numeric'}, {'>=', 0, '<=', 1}));
+p.addOptional('brightness', d.brightness, @(x) validateattributes(x, {'numeric'}, {'>=', 0, '<=', 1}));
+p.addOptional('colorMap', d.colorMap, ...
+    @(x) validateattributes(x, {'numeric'}, {'positive', 'integer', '<=', 13}));
+p.addOptional('averageIntensities', d.averageIntensities, ...
+    @(x) validateattributes(x, {'numeric'}, {'binary'}));
+
+p = utils.stringSafeParse(p, args, fieldnames(d), d.smooth, d.threshold, d.brightness, d.colorMap, d.averageIntensities);
+
+inputParams = p.Results;
