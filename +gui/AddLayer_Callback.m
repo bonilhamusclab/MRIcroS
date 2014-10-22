@@ -30,7 +30,7 @@ if fileUtils.isTrk(filename)
     end
     return;
 end
-reduce = '1';
+reduce = 1;
 thresh = '';
 smooth = '';
 vertexColor = '';%assume user does not want vertex colors
