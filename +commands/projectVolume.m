@@ -6,7 +6,7 @@ function projectVolume(v,layer, volumeFilename, varargin)
 % Optional Inputs:
 %   smooth:
 %       convolution size of kernel for Gaussian smooth before projection
-%       defaults to 1 for no projection
+%       defaults to 1 for no Gaussian smoothing
 %   threshold:
 %       threshold below volume intensities are not projected
 %       defaults to .5
@@ -21,7 +21,7 @@ function projectVolume(v,layer, volumeFilename, varargin)
 %   averageIntensities:
 %      set to 0 to average intensities of volume voxels
 %      slow but gives less jagged image
-%      default 0 due to processing spped
+%      default 0 due to processing speed
 
 v = guidata(v.hMainFigure);%retrieve latest settings
 %provide GUI
