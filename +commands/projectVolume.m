@@ -111,8 +111,9 @@ if range ~= 0 %normalize for range 0 (black) to 1 (white)
     mdn = median(normalizedSurfaceIntensities(:));
     pow = log(0.5)/log(mdn);
     normalizedSurfaceIntensities = power(normalizedSurfaceIntensities, pow);
+    
+    vertexColors(projectedIndices, :) =  utils.magnitudesToColors(normalizedSurfaceIntensities', colorMap);
 end
-vertexColors(projectedIndices, :) =  utils.magnitudesToColors(normalizedSurfaceIntensities', colorMap);
 
 vertexColors(~projectedIndices,:) = repmat(surfaceColor,[sum(~projectedIndices) 1]);
 
