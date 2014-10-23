@@ -23,7 +23,7 @@ function projectVolume(v,layer, volumeFilename, varargin)
 %      slow but gives less jagged image
 %      default 0 due to processing speed
 %   interpMethod:
-%       method using for interpolating the voxel intensities onto the
+%       method for interpolating the voxel intensities onto the
 %       surface coordinates
 %       default: nearest
 %       available options are 'nearest', 'linear', 'spline', 'cubic'
