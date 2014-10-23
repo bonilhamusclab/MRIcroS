@@ -44,12 +44,16 @@ inputs = parseInputParams(colorMap, varargin);
 smooth = inputs.smooth;
 threshold = inputs.threshold;
 brightness = inputs.brightness;
-v.surface(layer).colorMap = utils.colorMaps.names(inputs.colorMap);
 averageIntensities = inputs.averageIntensities;
 interpMethod = inputs.interpMethod;
+colorMap = inputs.colorMap;
+
+surfaceColor = drawing.utils.currentLayerRGBA(layer, v.vprefs.colors);
+
+v.surface(layer).colorMap = colorMap;
 
 %project new surface
-v.surface(layer).vertexColors = projectVolumeSub(v.surface(layer).faces, v.surface(layer).vertices, volumeFilename, smooth, threshold, averageIntensities, interpMethod);
+v.surface(layer).vertexColors = projectVolumeSub(v.surface(layer).faces, v.surface(layer).vertices, volumeFilename, smooth, threshold, averageIntensities, interpMethod, surfaceColor, colorMap);
 
 %apply new brightness
 if (brightness ~= 0.5)
@@ -62,7 +66,7 @@ guidata(v.hMainFigure,v);%store settings
 drawing.redrawSurface(v);
 %end projectVolume()
 
-function vertexColors = projectVolumeSub(faces, vertices, volumeFilename, smooth, threshold, averageIntensities, interpMethod)
+function vertexColors = projectVolumeSub(faces, vertices, volumeFilename, smooth, threshold, averageIntensities, interpMethod, surfaceColor, colorMap)
 
 [hdr, voxels] = fileUtils.nifti.readNifti(volumeFilename);
 voxels(isnan(voxels)) = min(voxels(:)); 
@@ -94,20 +98,20 @@ else
 end
 range = max(surfaceIntensities) - min(surfaceIntensities);
 if range ~= 0 %normalize for range 0 (black) to 1 (white)
-    surfaceIntensities = (surfaceIntensities - min(surfaceIntensities)) / range;
+    normalizedSurfaceIntensities = (surfaceIntensities - min(surfaceIntensities)) / range;
     %next- color balance, so typical voxels are mid-gray
     %we could use a histogram
     % http://angeljohnsy.blogspot.com/2011/04/matlab-code-histogram-equalization.html?m=1
     %instead, since range is 0..1 we will use power function to make median = 0.5
     % to determine power exponent, we compute Logarithm to an arbitrary base http://en.wikipedia.org/wiki/Logarithm 
-    mdn = median(surfaceIntensities(:));
+    mdn = median(normalizedSurfaceIntensities(:));
     pow = log(0.5)/log(mdn);
-    surfaceIntensities = power(surfaceIntensities, pow);
+    normalizedSurfaceIntensities = power(normalizedSurfaceIntensities, pow);
 end
-if threshold > 0  
-    surfaceIntensities(surfaceIntensities< threshold) = threshold;
+vertexColors =  utils.magnitudesToColors(normalizedSurfaceIntensities', colorMap);
+if threshold > -Inf  
+    vertexColors(surfaceIntensities< threshold,:) = repmat(surfaceColor,[sum(surfaceIntensities<threshold) 1]);
 end
-vertexColors = surfaceIntensities';
 %end projectVolumeSub()
 
 function inputParams = parseInputParams(colorMap, args)
@@ -118,7 +122,7 @@ d.averageIntensities = 0; d.interpMethod = 'nearest';
 
 p.addOptional('smooth',d.smooth, ...
     @(x) validateattributes(x, {'numeric'}, {'nonnegative', 'odd'}));
-p.addOptional('threshold', d.threshold, @(x) validateattributes(x, {'numeric'}, {'>=', 0, '<=', 1}));
+p.addOptional('threshold', d.threshold, @(x) validateattributes(x, {'numeric'}, {'real'}));
 p.addOptional('brightness', d.brightness, @(x) validateattributes(x, {'numeric'}, {'>=', 0, '<=', 1}));
 p.addOptional('colorMap', d.colorMap, ...
     @(x) validateattributes(x, {'numeric'}, {'positive', 'integer', '<=', 13}));
