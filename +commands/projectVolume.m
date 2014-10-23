@@ -96,9 +96,13 @@ if averageIntensities % vertex intensity smoothing: average intensity of all con
 else
     surfaceIntensities = interp3(voxels, verticesVoxSpace(2,:), verticesVoxSpace(1,:), verticesVoxSpace(3,:), interpMethod);
 end
-range = max(surfaceIntensities) - min(surfaceIntensities);
+
+projectedIndices = surfaceIntensities >= threshold;
+surfaceIntensitiesToProject = surfaceIntensities(projectedIndices);
+
+range = max(surfaceIntensitiesToProject) - min(surfaceIntensitiesToProject);
 if range ~= 0 %normalize for range 0 (black) to 1 (white)
-    normalizedSurfaceIntensities = (surfaceIntensities - min(surfaceIntensities)) / range;
+    normalizedSurfaceIntensities = (surfaceIntensitiesToProject - min(surfaceIntensitiesToProject)) / range;
     %next- color balance, so typical voxels are mid-gray
     %we could use a histogram
     % http://angeljohnsy.blogspot.com/2011/04/matlab-code-histogram-equalization.html?m=1
@@ -108,10 +112,10 @@ if range ~= 0 %normalize for range 0 (black) to 1 (white)
     pow = log(0.5)/log(mdn);
     normalizedSurfaceIntensities = power(normalizedSurfaceIntensities, pow);
 end
-vertexColors =  utils.magnitudesToColors(normalizedSurfaceIntensities', colorMap);
-if threshold > -Inf  
-    vertexColors(surfaceIntensities< threshold,:) = repmat(surfaceColor,[sum(surfaceIntensities<threshold) 1]);
-end
+vertexColors(projectedIndices, :) =  utils.magnitudesToColors(normalizedSurfaceIntensities', colorMap);
+
+vertexColors(~projectedIndices,:) = repmat(surfaceColor,[sum(~projectedIndices) 1]);
+
 %end projectVolumeSub()
 
 function inputParams = parseInputParams(colorMap, args)
