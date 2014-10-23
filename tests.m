@@ -20,7 +20,7 @@ MRIcroS('layerRGBA', 1, 'b', .8);
 
 MRIcroS('projectVolume', 1, 'stroke.nii.gz', '', '', '', '');
 %MRIcroS('closeProjections');
-MRIcroS('projectVolume', 1, 'stroke.nii.gz', 'colorMap', 2);
+MRIcroS('projectVolume', 1, 'stroke.nii.gz', 'colorMap', 2, 'interpMethod', 'spline');
 
 MRIcroS('setMaterial', '','','','','');
 MRIcroS('setMaterial', 'backFaceLighting',0);

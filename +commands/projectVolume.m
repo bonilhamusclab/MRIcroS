@@ -6,7 +6,7 @@ function projectVolume(v,layer, volumeFilename, varargin)
 % Optional Inputs:
 %   smooth:
 %       convolution size of kernel for Gaussian smooth before projection
-%       defaults to 1 for no projection
+%       defaults to 1 for no Gaussian smoothing
 %   threshold:
 %       threshold below volume intensities are not projected
 %       defaults to .5
@@ -21,7 +21,13 @@ function projectVolume(v,layer, volumeFilename, varargin)
 %   averageIntensities:
 %      set to 0 to average intensities of volume voxels
 %      slow but gives less jagged image
-%      default 0 due to processing spped
+%      default 0 due to processing speed
+%   interpMethod:
+%       method for interpolating the voxel intensities onto the
+%       surface coordinates
+%       default: nearest
+%       available options are 'nearest', 'linear', 'spline', 'cubic'
+%		same as options available for interp3
 
 v = guidata(v.hMainFigure);%retrieve latest settings
 %provide GUI
@@ -40,9 +46,10 @@ threshold = inputs.threshold;
 brightness = inputs.brightness;
 v.surface(layer).colorMap = utils.colorMaps.names(inputs.colorMap);
 averageIntensities = inputs.averageIntensities;
+interpMethod = inputs.interpMethod;
 
 %project new surface
-v.surface(layer).vertexColors = projectVolumeSub(v.surface(layer).faces, v.surface(layer).vertices, volumeFilename, smooth, threshold, averageIntensities);
+v.surface(layer).vertexColors = projectVolumeSub(v.surface(layer).faces, v.surface(layer).vertices, volumeFilename, smooth, threshold, averageIntensities, interpMethod);
 
 %apply new brightness
 if (brightness ~= 0.5)
@@ -53,9 +60,9 @@ if (brightness ~= 0.5)
 end;
 guidata(v.hMainFigure,v);%store settings
 drawing.redrawSurface(v);
-%end projectVolumeSub()
+%end projectVolume()
 
-function vertexColors = projectVolumeSub(faces, vertices, volumeFilename, smooth, threshold, averageIntensities)
+function vertexColors = projectVolumeSub(faces, vertices, volumeFilename, smooth, threshold, averageIntensities, interpMethod)
 
 [hdr, voxels] = fileUtils.nifti.readNifti(volumeFilename);
 voxels(isnan(voxels)) = min(voxels(:)); 
@@ -83,7 +90,7 @@ if averageIntensities % vertex intensity smoothing: average intensity of all con
         surfaceIntensities(i) = mean(clrTmp(u));
     end
 else
-    surfaceIntensities = interp3(voxels, verticesVoxSpace(2,:), verticesVoxSpace(1,:), verticesVoxSpace(3,:), 'nearest');
+    surfaceIntensities = interp3(voxels, verticesVoxSpace(2,:), verticesVoxSpace(1,:), verticesVoxSpace(3,:), interpMethod);
 end
 range = max(surfaceIntensities) - min(surfaceIntensities);
 if range ~= 0 %normalize for range 0 (black) to 1 (white)
@@ -107,7 +114,7 @@ function inputParams = parseInputParams(colorMap, args)
 p = inputParser;
 
 d.smooth = 1; d.threshold = .5; d.brightness = .5; d.colorMap = colorMap;
-d.averageIntensities = 0;
+d.averageIntensities = 0; d.interpMethod = 'nearest';
 
 p.addOptional('smooth',d.smooth, ...
     @(x) validateattributes(x, {'numeric'}, {'nonnegative', 'odd'}));
@@ -117,7 +124,9 @@ p.addOptional('colorMap', d.colorMap, ...
     @(x) validateattributes(x, {'numeric'}, {'positive', 'integer', '<=', 13}));
 p.addOptional('averageIntensities', d.averageIntensities, ...
     @(x) validateattributes(x, {'numeric'}, {'binary'}));
+p.addOptional('interpMethod', d.interpMethod',...
+    @(x) validateattributes(x, {'char'}, {'nonempty'}));
 
-p = utils.stringSafeParse(p, args, fieldnames(d), d.smooth, d.threshold, d.brightness, d.colorMap, d.averageIntensities);
+p = utils.stringSafeParse(p, args, fieldnames(d), d.smooth, d.threshold, d.brightness, d.colorMap, d.averageIntensities, d.interpMethod);
 
 inputParams = p.Results;
