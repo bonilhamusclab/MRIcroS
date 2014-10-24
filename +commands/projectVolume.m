@@ -14,10 +14,9 @@ function projectVolume(v,layer, volumeFilename, varargin)
 %   `   how bright projection should be
 %       defaults to .5 - no increase or decrease
 %   colorMap:
-%       index of colorMap to use for projection
-%       defaults to color map for layer
+%       name of colorMap to use for projection
 %       possible values:
-%           1=gray,2=autumn,3=bone,4=cool,5=copper,6=hot,7=hsv,8=jet,9=pink,10=winter'
+%           'gray','autumn','bone','cool','copper','hot','hsv','jet','pink','winter'
 %   averageIntensities:
 %      set to 0 to average intensities of volume voxels
 %      slow but gives less jagged image
@@ -32,8 +31,8 @@ function projectVolume(v,layer, volumeFilename, varargin)
 v = guidata(v.hMainFigure);%retrieve latest settings
 %provide GUI
 
-colorMap = utils.colorMaps.nameIndices(v.surface(layer).colorMap);
-
+%colorMap = utils.colorMaps.nameIndices(v.surface(layer).colorMap);
+colorMap = utils.colorTables(v.surface(layer).colorMap); %verify colorMap
 [volumeFilename, isFound] = fileUtils.isFileFound(v, volumeFilename);
 if ~isFound
     fprintf('Unable to find "%s"\n',volumeFilename); 
@@ -47,14 +46,12 @@ brightness = inputs.brightness;
 averageIntensities = inputs.averageIntensities;
 interpMethod = inputs.interpMethod;
 colorMap = inputs.colorMap;
-
+v.surface(layer).colorMap = colorMap;
 surfaceColor = drawing.utils.currentLayerRGBA(layer, v.vprefs.colors);
 
 v.surface(layer).colorMap = colorMap;
-
 %project new surface
 v.surface(layer).vertexColors = projectVolumeSub(v.surface(layer).faces, v.surface(layer).vertices, volumeFilename, smooth, threshold, averageIntensities, interpMethod, surfaceColor, colorMap);
-
 %apply new brightness
 if (brightness ~= 0.5)
     if (brightness >= 1), brightness = 1 - eps; end;
@@ -111,8 +108,11 @@ if range ~= 0 %normalize for range 0 (black) to 1 (white)
     mdn = median(normalizedSurfaceIntensities(:));
     pow = log(0.5)/log(mdn);
     normalizedSurfaceIntensities = power(normalizedSurfaceIntensities, pow);
-    
-    vertexColors(projectedIndices, :) =  utils.magnitudesToColors(normalizedSurfaceIntensities', colorMap);
+    if true %save as magnitude scalar
+        vertexColors(projectedIndices, :) =  normalizedSurfaceIntensities';
+    else %else save as RGB
+        vertexColors(projectedIndices, :) =  utils.magnitudesToColors(normalizedSurfaceIntensities', colorMap);
+    end
 end
 
 vertexColors(~projectedIndices,:) = repmat(surfaceColor,[sum(~projectedIndices) 1]);
@@ -122,15 +122,17 @@ vertexColors(~projectedIndices,:) = repmat(surfaceColor,[sum(~projectedIndices) 
 function inputParams = parseInputParams(colorMap, args)
 p = inputParser;
 
-d.smooth = 1; d.threshold = .5; d.brightness = .5; d.colorMap = colorMap;
+d.smooth = 1; d.threshold = .5; d.brightness = .5; d.colorMap = 'gray';
 d.averageIntensities = 0; d.interpMethod = 'nearest';
 
 p.addOptional('smooth',d.smooth, ...
     @(x) validateattributes(x, {'numeric'}, {'nonnegative', 'odd'}));
 p.addOptional('threshold', d.threshold, @(x) validateattributes(x, {'numeric'}, {'real'}));
 p.addOptional('brightness', d.brightness, @(x) validateattributes(x, {'numeric'}, {'>=', 0, '<=', 1}));
-p.addOptional('colorMap', d.colorMap, ...
-    @(x) validateattributes(x, {'numeric'}, {'positive', 'integer', '<=', 13}));
+p.addOptional('colorMap', d.interpMethod',...
+    @(x) validateattributes(x, {'char'}, {'nonempty'}));
+%p.addOptional('colorMap', d.colorMap, ...
+%    @(x) validateattributes(x, {'numeric'}, {'positive', 'integer', '<=', 13}));
 p.addOptional('averageIntensities', d.averageIntensities, ...
     @(x) validateattributes(x, {'numeric'}, {'binary'}));
 p.addOptional('interpMethod', d.interpMethod',...

@@ -5,22 +5,24 @@ v=guidata(obj);
 if(cancelled), return; end;
 [volumeFilename, cancelled] = selectVolumeFileSub();
 if(cancelled), return; end;
-
+colorMap = v.surface(layer).colorMap;
+[~,colorStr] = utils.colorTables(); %text names for colorMaps
 answer = inputdlg({'Smooth Kernel Size (1=none, must be odd...)',...
     'Threshold minimum (set to -Inf for no thresholding), all values below this will show surface color',...
     'Brightness (0..1, 0.5=medium)',...
-    'Colormap 1=gray,2=autumn,3=bone,4=cool,5=copper,6=hot,7=hsv,8=jet,9=pink,10=winter',...
+    ['Colormap ' colorStr],...
     'Average Intensities (0 no, 1 yes) - slows processing but decreases jagged edges',...
     'Interpolation of volume intensities onto surface (nearest, linear, cubic, spline)'},...
     'Project Volume',1,...
-    {'1','0','0.5', num2str(utils.colorMaps.nameIndices(v.surface(layer).colorMap)), '0', 'nearest'});
+    {'1','0','0.5', colorMap, '0', 'nearest'});
 
 if isempty(answer), disp('project volume cancelled'); return; end;
 
 smooth = str2double(answer(1));
 threshold = str2double(answer(2));
 brightness = str2double(answer(3));
-colorMap = str2double(answer(4));
+colorMap = answer(4);
+colorMap = utils.colorTables(colorMap); %verify text name
 averageIntensities = str2double(answer(5));
 interpMethod = answer{6};
 
