@@ -108,28 +108,24 @@ if range ~= 0 %normalize for range 0 (black) to 1 (white)
     mdn = median(normalizedSurfaceIntensities(:));
     pow = log(0.5)/log(mdn);
     normalizedSurfaceIntensities = power(normalizedSurfaceIntensities, pow);
-    if true %save as magnitude scalar
-        vertexColors(projectedIndices, :) =  normalizedSurfaceIntensities';
-    else %else save as RGB
-        vertexColors(projectedIndices, :) =  utils.magnitudesToColors(normalizedSurfaceIntensities', colorMap);
-    end
+    vertexColors(projectedIndices, :) =  normalizedSurfaceIntensities';
 end
 
-vertexColors(~projectedIndices,:) = repmat(surfaceColor,[sum(~projectedIndices) 1]);
+vertexColors(~projectedIndices,:) = -1;
 
 %end projectVolumeSub()
 
 function inputParams = parseInputParams(colorMap, args)
 p = inputParser;
 
-d.smooth = 1; d.threshold = .5; d.brightness = .5; d.colorMap = 'gray';
+d.smooth = 1; d.threshold = .5; d.brightness = .5; d.colorMap = colorMap;
 d.averageIntensities = 0; d.interpMethod = 'nearest';
 
 p.addOptional('smooth',d.smooth, ...
     @(x) validateattributes(x, {'numeric'}, {'nonnegative', 'odd'}));
 p.addOptional('threshold', d.threshold, @(x) validateattributes(x, {'numeric'}, {'real'}));
 p.addOptional('brightness', d.brightness, @(x) validateattributes(x, {'numeric'}, {'>=', 0, '<=', 1}));
-p.addOptional('colorMap', d.interpMethod',...
+p.addOptional('colorMap', d.colorMap,...
     @(x) validateattributes(x, {'char'}, {'nonempty'}));
 %p.addOptional('colorMap', d.colorMap, ...
 %    @(x) validateattributes(x, {'numeric'}, {'positive', 'integer', '<=', 13}));
