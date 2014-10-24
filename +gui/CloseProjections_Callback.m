@@ -27,7 +27,7 @@ function [layer, cancelled] = selectLayerSub(v)
         elseif length(layersWithProjections) == 1
             layer = firstLayerWithProjection;
         else
-            answer = inputdlg({['Layers (' num2str(layersWithProjections) ') have projections']}, 'Enter layer to close projections on', 1,{num2str(firstLayerWithProjection)});
+            answer = inputdlg({['Enter layer to close projections on, Layers (' num2str(layersWithProjections) ') have projections']}, 'Close Projections', 1,{num2str(firstLayerWithProjection)});
             if isempty(answer), disp('close projections cancelled'); return; end;
             layer = round(str2double(answer));
             layer = utils.boundArray(layer,1,nlayer);
