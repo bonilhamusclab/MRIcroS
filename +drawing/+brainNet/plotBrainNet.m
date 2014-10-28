@@ -34,7 +34,8 @@ for i = 1:numNodes
     y = ySph.*rads(i) + yCs(i);
     z = zSph.*rads(i) + zCs(i);
     nodeColor = nodeColors(i,:);
-    renderedNodes(i) = mesh(x,y,z,'EdgeColor', nodeColor, 'FaceColor', nodeColor);
+    %renderedNodes(i) = mesh(x,y,z,'EdgeColor', nodeColor, 'FaceColor', nodeColor);
+    renderedNodes(i) = mesh(x,y,z,'EdgeColor', 'none', 'FaceColor', nodeColor);
 end
 
 renderedEdges = [];

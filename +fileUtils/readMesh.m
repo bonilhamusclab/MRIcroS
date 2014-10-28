@@ -3,8 +3,8 @@ function [faces, vertices, vertexColors, colorMap, colorMin] = readMesh(varargin
 % --- open pre-generated vtk or gii mesh
 % --- gii processing requires spm
 %Examples
-%readMesh('myImg.vtk');
-%readMesh('myImg.vtk',0.5); % 50% reduction
+% readMesh('myImg.vtk');
+% readMesh('myImg.vtk',0.5); % 50% reduction
 vertexColors = [];
 colorMap = utils.colorTables(1);
 colorMin = 0;

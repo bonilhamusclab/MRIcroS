@@ -48,6 +48,29 @@ if(loadEdges)
     if ~fileUtils.isEdge(edge_file), fprintf('Odd extension for an edge file %s\n',edge_file); end;
     edges = fileUtils.brainNet.readEdge(edge_file);
 end
+%this next segment makes sure the nodes are not larger than the image they are drawn on
+surfaceCount = 0;
+if(isfield(v, 'surface'))
+    surfaceCount = length(v.surface);
+end
+if (surfaceCount > 0)
+    rng = zeros(3,1);
+    minMM = inf;
+    for i=1:surfaceCount
+        rng(1) = max(v.surface(i).vertices(:,1))- min(v.surface(i).vertices(:,1));
+        rng(2) = max(v.surface(i).vertices(:,2))- min(v.surface(i).vertices(:,2));
+        rng(3) = max(v.surface(i).vertices(:,3))- min(v.surface(i).vertices(:,3));
+        if min(rng(:)) < minMM, minMM = min(rng(:)); end;
+    end
+    maxNodeFrac = 0.1; %e.g. if 0.1 a node can not be larger than 10% the size of the object
+    if (minMM > 0) && (maxNodeFrac*minMM) < (max(nodes(:,5)))
+        scale = maxNodeFrac * (minMM / max(nodes(:,5)));
+        fprintf('Nodes larger than rendered object: shrinking node diameter by a factor of %g\n', scale);
+        nodes(:,5) = nodes(:,5) * scale;
+    end
+    
+end
+%next filter nodes
 if (nodeThreshold > -inf || edgeThreshold > -inf)
     [nodes, passingNodeIndexes] = ...
         utils.brainNet.filterNodes(nodes, nodeThreshold);

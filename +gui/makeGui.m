@@ -1,5 +1,6 @@
 function [vFig] = makeGui()
 % --- Declare and create all the user interface objects
+checkVersionSub()
 sz = [980 680]; % figure width, height in pixels
 screensize = get(0,'ScreenSize');
 margin = [ceil((screensize(3)-sz(1))/2) ceil((screensize(4)-sz(2))/2)];
@@ -45,8 +46,8 @@ v.hSimplifyMeshesMenu = uimenu('Parent',v.hFunctionMenu,'Label','Simplify mesh(e
 v.hRotateToggleMenu = uimenu('Parent',v.hFunctionMenu,'Label','Rotate','HandleVisibility', 'callback', 'Callback', utils.curry(@gui.RotateToggle_Callback, ~showOpts));
 v.hRotateToggleWithOptionsMenu = uimenu('Parent',v.hFunctionMenu,'Label','Rotate With Options','HandleVisibility', 'callback', 'Callback', utils.curry(@gui.RotateToggle_Callback, showOpts));
 v.hChangeBgColorMenu = uimenu('Parent',v.hFunctionMenu, 'Label', 'Change Background Color', 'HandleVisibility', 'callback', 'Callback', @gui.ChangeBgColor_Callback);
-v.hProjectVolumeMenu = uimenu('Parent',v.hFunctionMenu, 'Label', 'Project Volume onto Surface', 'HandleVisibility', 'callback', 'Callback', utils.curry(@gui.ProjectVolume_Callback));
-v.hCloseProjectionsMenu = uimenu('Parent',v.hFunctionMenu, 'Label', 'Close Projected Volumes', 'HandleVisibility', 'callback', 'Callback', @gui.CloseProjections_Callback);
+%v.hProjectVolumeMenu = uimenu('Parent',v.hFunctionMenu, 'Label', 'Project Volume onto Surface', 'HandleVisibility', 'callback', 'Callback', utils.curry(@gui.ProjectVolume_Callback));
+%v.hCloseProjectionsMenu = uimenu('Parent',v.hFunctionMenu, 'Label', 'Close Projected Volumes', 'HandleVisibility', 'callback', 'Callback', @gui.CloseProjections_Callback);
 
 v.hHelpMenu = uimenu('Parent',v.hMainFigure,'HandleVisibility','callback','Label','Help');
 v.hAboutMenu = uimenu('Parent',v.hHelpMenu,'Label','About','HandleVisibility','callback','Callback', @gui.AboutMenu_Callback);
@@ -76,3 +77,18 @@ set(vFig,'name','MRIcroS');
 commands.setBackgroundColor(v,[1 1 1]);
 drawing.redrawSurface(v);
 %end makeGUI()
+
+function checkVersionSub()
+%http://en.wikipedia.org/wiki/MATLAB
+v = sscanf (version, '%d.%d.%d') ; %e.g. Matlab 7.14.0 v = [7; 14; 0]
+v = v(1)+v(2)/100;
+if (v < 7.09)
+   error('This software requires Matlab 2009b or later (requires unused argument syntax, "[~ d] = version")');
+    %8.1 <- Matlab 2010b
+    % http://blogs.mathworks.com/steve/2010/01/11/about-the-unused-argument-syntax-in-r2009b/
+    % 2009b adds support for empty returns ~ , e.g. [~, idx] = sort(A);
+end
+if (v < 7.11)
+   printf('WARNING: This software has only been tested on Matlab 2010b and later\n');
+end
+%end checkVersionSub()

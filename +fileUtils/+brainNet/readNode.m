@@ -43,6 +43,21 @@ function [nsph, spheres, labels]= readNode(filename)
 end
 
 function scanNodeFileSub(filename, lineOp)
+%modified to allow comments in node files 
+% comments are lines that start with the # symbol
+    fid = fopen(filename);
+    %data = textscan(fid,'%f %f %f %f %f %s','Delimiter','\t','CommentStyle','#');
+    data = textscan(fid,'%f %f %f %f %f %s','CommentStyle','#');
+    fclose(fid);
+    spheres = [cell2mat(data(1)) cell2mat(data(2)) cell2mat(data(3)) cell2mat(data(4)) cell2mat(data(5))];
+    labels = data(6);
+    for i = 1: size(spheres,1)
+        lineOp(i, spheres(i,:), labels{1}(i));
+    end
+end
+%scanNodeFileSub
+
+function scanNodeFileSubOld(filename, lineOp)
     fid = fopen(filename);
     i=0;
     while ~feof(fid)

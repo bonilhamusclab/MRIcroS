@@ -10,9 +10,14 @@ if (reduce > 1) || (reduce <= 0), reduce = 1; end;
 [Hdr, Vol] = fileUtils.nifti.readNifti(filename);
 Vol(isnan(Vol)) = 0; 
 rawVol = Vol;
-if (round(smooth) > 2.5) %blur image prior to edge extraction
+smooth = round(smooth); %smooth MUST be an integer
+if smooth > 0 %blur image prior to edge extraction
+    if mod(smooth,2) == 0
+        smooth = smooth+1;
+        fprintf('Note: Smooth diameter incremented. Smooth must be an odd number (voxel diameter of kernel)\n'); 
+    end;
     fprintf('Applying gaussian smooth with %d voxel diameter\n',round(smooth));
-    if mod(round(smooth),2) == 0, error('Smooth diameter must be an odd number'); end;
+
     Vol = smooth3(Vol,'gaussian',round(smooth), round(smooth) * 0.2167);
 end;
 if (isinf(thresh) && (thresh < 0)) %if -Inf, use Otsu's method

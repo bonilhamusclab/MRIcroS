@@ -26,11 +26,14 @@ function varargout = MRIcroS(varargin)
 % MRIcroS('closeAllItems'); 
 % MRIcroS('addLayer','mni152_2009.mat'); %open image
 % MRIcroS('addLayer','invMotor.ply'); %add another fMRI (already a mesh)
-
+% MRIcroS('closeAllItems'); 
+% MRIcroS('addLayer','BrainMesh_ICBM152.nv'); %open image
+% MRIcroS('addNodes','myNodes.node'); %add hot spots
+% MRIcroS('layerRGBA',1,0.9,0.6,0.6,0.7); %make layer 1 pink and translucent
 mOutputArgs = {}; % Variable for storing output when GUI returns
 h = gui.getGuiHandle(); 
 if (isempty(h)) % new instance
-   h = gui.makeGui(); %set up user interface
+    h = gui.makeGui(); %set up user interface
 else % instance already running
    figure(h);  %Figure exists so bring Figure to the focus
 end;
