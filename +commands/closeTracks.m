@@ -6,5 +6,6 @@ if isfield(v, 'tracks')
     v = rmfield(v, 'tracks');
 	guidata(v.hMainFigure, v);%store changes
 end
-
+drawing.createDemoObjects(v, true);
+%end closeNodes()
 

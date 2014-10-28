@@ -41,13 +41,14 @@ if loadEdges
         return; 
     end
 end;
-
 [ ~, nodes, ~] = fileUtils.brainNet.readNode(node_file);
 edges = [];
 if(loadEdges)
     if ~fileUtils.isEdge(edge_file), fprintf('Odd extension for an edge file %s\n',edge_file); end;
     edges = fileUtils.brainNet.readEdge(edge_file);
 end
+%unload demo objects
+v = drawing.removeDemoObjects(v);
 %this next segment makes sure the nodes are not larger than the image they are drawn on
 surfaceCount = 0;
 if(isfield(v, 'surface'))
@@ -86,9 +87,9 @@ brainNetsIndex = 1;
 if(hasBrainNets) brainNetsIndex = brainNetsIndex + length(v.brainNets); end
 v.brainNets(brainNetsIndex).renderedNodes = renderedNodes;
 v.brainNets(brainNetsIndex).renderedEdges = renderedEdges;
-guidata(v.hMainFigure, v);
-v = drawing.removeDemoObjects(v);
-guidata(v.hMainFigure, v);
+%guidata(v.hMainFigure, v); %save data
+%v = drawing.removeDemoObjects(v);
+guidata(v.hMainFigure, v); %save data
 %end function addNodes()
 
 function inputParams = parseInputParamsSub(args)

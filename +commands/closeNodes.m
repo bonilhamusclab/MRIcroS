@@ -8,3 +8,5 @@ if isfield(v, 'brainNets')
     v = rmfield(v, 'brainNets');
 	guidata(v.hMainFigure, v);
 end
+drawing.createDemoObjects(v, true);
+%end closeNodes()
