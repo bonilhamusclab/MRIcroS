@@ -28,7 +28,11 @@ MRIcroS('closeAllItems');
 MRIcroS('addLayer','BrainMesh_ICBM152.nv'); %open image
 MRIcroS('addNodes','myNodes.node'); %add hot spots
 MRIcroS('layerRGBA',1,0.9,0.6,0.6,0.7); %make layer 1 pink and translucent
-  
+MRIcroS('closeAllItems');
+MRIcroS('addLayer', 'BrainMesh_ICBM152.nv');
+MRIcroS('simplifyMeshes', 0.1); %reduce mesh to 10% complexity
+MRIcroS('layerProjectVolume', 1, 'motor.nii.gz', 3, 2, 0.5, 0, 'jet', 'spline');
+
 %test missing parameters
 MRIcroS('addLayer','motor.nii.gz');
 MRIcroS('addLayer','motor.nii.gz', '', 3);
