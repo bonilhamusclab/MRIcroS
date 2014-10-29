@@ -79,16 +79,24 @@ drawing.redrawSurface(v);
 %end makeGUI()
 
 function checkVersionSub()
-%http://en.wikipedia.org/wiki/MATLAB
-v = sscanf (version, '%d.%d.%d') ; %e.g. Matlab 7.14.0 v = [7; 14; 0]
-v = v(1)+v(2)/100;
-if (v < 7.09)
-   error('This software requires Matlab 2009b or later (requires unused argument syntax, "[~ d] = version")');
-    %8.1 <- Matlab 2010b
+if verLessThan('matlab', '7.09')
+    error('This software requires Matlab 2009b or later (requires unused argument syntax, "[~ d] = version")');
     % http://blogs.mathworks.com/steve/2010/01/11/about-the-unused-argument-syntax-in-r2009b/
-    % 2009b adds support for empty returns ~ , e.g. [~, idx] = sort(A);
 end
-if (v < 7.11)
+if verLessThan('matlab', '7.11')
    printf('WARNING: This software has only been tested on Matlab 2010b and later\n');
 end
 %end checkVersionSub()
+
+% function checkVersionSub()
+% %http://en.wikipedia.org/wiki/MATLAB
+% v = sscanf (version, '%d.%d.%d') ; %e.g. Matlab 7.14.0 v = [7; 14; 0]
+% v = v(1)+v(2)/100;
+% if (v < 7.09)
+%    error('This software requires Matlab 2009b or later (requires unused argument syntax, "[~ d] = version")');
+%     % http://blogs.mathworks.com/steve/2010/01/11/about-the-unused-argument-syntax-in-r2009b/
+% end
+% if (v < 7.11)
+%    printf('WARNING: This software has only been tested on Matlab 2010b and later\n');
+% end
+% %end checkVersionSub()
