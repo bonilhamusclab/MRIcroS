@@ -33,7 +33,7 @@ function varargout = MRIcroS(varargin)
 % MRIcroS('closeAllItems');
 % MRIcroS('addLayer', 'BrainMesh_ICBM152.nv');
 % MRIcroS('simplifyMeshes', 0.1); %reduce mesh to 10% complexity
-% MRIcroS('layerProjectVolume', 1, 'motor.nii.gz', 3, 2, 0.5, 0, 'jet', 'spline');
+% MRIcroS('layerProjectVolume', 1, 'wzstat1.nii.gz', 3, 2, 0.5, 0, 'jet', 'spline');
 
 mOutputArgs = {}; % Variable for storing output when GUI returns
 h = gui.getGuiHandle(); 
