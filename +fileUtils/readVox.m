@@ -8,6 +8,7 @@ function [faces, vertices, vertexColors] = readVox (filename, reduce, smooth, th
 vertexColors = [];
 if (reduce > 1) || (reduce <= 0), reduce = 1; end;
 [Hdr, Vol] = fileUtils.nifti.readNifti(filename);
+Vol = double(Vol);
 Vol(isnan(Vol)) = 0; 
 rawVol = Vol;
 smooth = round(smooth); %smooth MUST be an integer
