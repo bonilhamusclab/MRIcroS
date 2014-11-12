@@ -9,8 +9,8 @@ function [renderedNodes, renderedEdges] = plotBrainNet(nodes, edges, colorMap)
 if nargin < 3, colorMap = 'jet'; end;
 
 alsoPlotEdges = ~isempty(edges);
-if(alsoPlotEdges && numel(edges) ~= length(nodes)^2)
-    error('num edges (%d) must equal the square of num nodes (%d)',...
+if(alsoPlotEdges && numel(edges) > length(nodes)^2)
+    error('num edges (%d) must be less than the square of num nodes (%d)',...
         numel(edges), length(nodes));
 end
 
@@ -51,16 +51,16 @@ if(alsoPlotEdges)
     zStops = bsxfun(@times, edgesBinary, zCs');
 
     edgeIdxs = find(edgesBinary);
-    numEdges = length(edgeIdxs);
+    numEdges = sum(edgesBinary(:));
 
-    renderedEdges = zeros(numNodes);
+    renderedEdges = zeros(numEdges);
     for i = 1:numEdges
         edgeIdx = edgeIdxs(i);
         hold on
         x = [xStarts(edgeIdx) xStops(edgeIdx)];
         y = [yStarts(edgeIdx) yStops(edgeIdx)];
         z = [zStarts(edgeIdx) zStops(edgeIdx)];
-        renderedEdges(edgeIdx) = plot3(x,y,z);
+        renderedEdges(edgeIdx) = plot3(x,y,z, 'LineWidth', edges(edgeIdx), 'Color', 'b');
     end
 end
 
