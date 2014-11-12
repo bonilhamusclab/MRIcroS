@@ -44,8 +44,16 @@ else % instance already running
 end;
 if (nargin) && (ischar(varargin{1})) 
  funcName = varargin{1};
+ fnPath = strcat('commands.',funcName);
  f = str2func(strcat('commands.', funcName));
- f(guidata(h),varargin{2:nargin})
+
+ v = guidata(h);
+ histIx = utils.fieldIndex(v, 'history');
+ v.history(histIx).function = fnPath;
+ v.history(histIx).args = varargin{2:nargin};
+ guidata(h, v);
+
+ f(v, varargin{2:nargin})
 end
 mOutputArgs{1} = h;% return handle to main figure
 if nargout>0

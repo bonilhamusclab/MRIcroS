@@ -50,7 +50,7 @@ function AddNodes_Callback(promptForThresholds, obj, ~)
         
     end
     
-    commands.addNodes(v, node_filename, edge_filename, ...
+    MRIcroS('addNodes', node_filename, edge_filename, ...
         nodeRadiusT, edgeWeightT, nodeColorMap); 
 	
 	
