@@ -8,4 +8,4 @@ function indx = fieldIndex(v, field)
 % Why use? To conviniently find a safe index to add with the field
 	hasField = isfield(v,field);
 	indx = 1;
-	if(hasField) indx = indx + length(getfield(v, field)); end
+	if(hasField), indx = indx + length(getfield(v, field)); end
