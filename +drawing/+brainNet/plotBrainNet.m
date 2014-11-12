@@ -54,13 +54,21 @@ if(alsoPlotEdges)
     numEdges = sum(edgesBinary(:));
 
     renderedEdges = zeros(numEdges);
+    
+    normalizedEdges = (edges(:) - min(edges(:)))./range(edges(:));
+    
+    edgeColors = utils.magnitudesToColors(normalizedEdges, colorMap);
     for i = 1:numEdges
         edgeIdx = edgeIdxs(i);
         hold on
+        
         x = [xStarts(edgeIdx) xStops(edgeIdx)];
         y = [yStarts(edgeIdx) yStops(edgeIdx)];
         z = [zStarts(edgeIdx) zStops(edgeIdx)];
-        renderedEdges(edgeIdx) = plot3(x,y,z, 'LineWidth', edges(edgeIdx), 'Color', 'b');
+        
+        edgeW = edges(edgeIdx);
+        edgeC = edgeColors(edgeIdx,:);
+        renderedEdges(i) = plot3(x,y,z, 'LineWidth', edgeW, 'Color', edgeC);
     end
 end
 
