@@ -49,7 +49,7 @@ if (nargin) && (ischar(varargin{1}))
 
  v = guidata(h);
  histIx = utils.fieldIndex(v, 'history');
- v.history(histIx).function = fnPath;
+ v.history(histIx).function = funcName;
  v.history(histIx).args = varargin{2:nargin};
  guidata(h, v);
 
