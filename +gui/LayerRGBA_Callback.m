@@ -17,8 +17,8 @@ if numel(v.surface(layer).vertexColors) < 1 %objects with vertex colors ignore s
 	answer = inputdlg({'Alpha (0[transparent]..1[opaque])'},'Set opacity',1,{num2str( v.vprefs.colors(layer,4))} );
 	if isempty(answer), disp('options cancelled'); return; end;
     alpha = str2double(answer(1));
-    commands.layerRGBA(v, layer, rgb(1), rgb(2), rgb(3), alpha);
+    MRIcroS('layerRGBA', layer, rgb(1), rgb(2), rgb(3), alpha);
 else
-    commands.vertexColorBrightness(v,layer);
+    MRIcroS('vertexColorBrightness',layer);
 end
 %end LayerRGBA_Callback()

@@ -27,11 +27,11 @@ if(showOpts)
         return;
     end;
     
-    commands.showWireframe(v, layer, rgb, alpha);
+    MRIcroS('showWireframe', layer, rgb, alpha);
 
 else
     
-    commands.showWireframe(v, layer);
+    MRIcroS('showWireframe', layer);
     
 end
 

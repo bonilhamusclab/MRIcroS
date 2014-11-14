@@ -12,5 +12,5 @@ function AddTracks_Callback(obj, eventdata)
 	trackSpacing = str2double(opts(1));
 	fiberLen = str2double(opts(2));
 	v = guidata(obj);
-    commands.addTrack(v, track_filename, trackSpacing, fiberLen);
+    MRIcroS('addTrack', track_filename, trackSpacing, fiberLen);
 %end Add_tracks_Callback()

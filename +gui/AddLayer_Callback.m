@@ -18,7 +18,7 @@ if isequal(brain_filename,0), return; end;
 filename=[brain_pathname brain_filename];
 if fileUtils.isTrk(filename)
     if ~promptForValues
-        commands.addTrack(v,filename);
+		MRIcroS('addTrack',filename);
     else
         %from AddTracks_Callback
         prompt = {'Track Sampling (1/ts tracks will be loaded, large values increase speed but decreases information):','Minimum fiber length (only sampled tracks with this minimum fiber length will be rendered, increases speed but decreases information):'};
@@ -26,7 +26,7 @@ if fileUtils.isTrk(filename)
         if isempty(opts), disp('load cancelled'); return; end;
         trackSpacing = str2double(opts(1));
         fiberLen = str2double(opts(2));
-        commands.addTrack(v, filename, trackSpacing, fiberLen); 
+		MRIcroS('addTrack', filename, trackSpacing, fiberLen);
     end
     return;
 end
@@ -54,10 +54,12 @@ if(promptForValues)
         if(cancelled), disp('load cancelled'); return; end;
     end
 end
-commands.addLayer(v,filename, reduce, smooth, thresh, vertexColor);
+
+MRIcroS('addLayer',filename, reduce, smooth, thresh, vertexColor);
+
 if promptForValues && ~fileUtils.isMesh(filename) && vertexColor
     v = guidata(v.hMainFigure);
-    commands.vertexColorBrightness(v,length(v.surface)); %change brightness of most recent layer
+    MRIcroS('vertexColorBrightness',length(v.surface)); %change brightness of most recent layer
 end
 %end AddLayer_Callback()
 

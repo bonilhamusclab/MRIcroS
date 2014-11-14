@@ -5,7 +5,7 @@ v=guidata(obj);
 [layer, cancelled] = selectLayerSub(v);
 if(cancelled), return; end;
 
-commands.closeProjections(v, layer);
+MRIcroS('closeProjections', layer);
 
 end
 

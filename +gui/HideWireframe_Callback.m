@@ -10,4 +10,4 @@ else
     layer = 1;
 end; 
 
-commands.hideWireframe(v, layer);
+MRIcroS('hideWireframe', layer);

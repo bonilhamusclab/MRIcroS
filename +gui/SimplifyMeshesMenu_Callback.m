@@ -33,5 +33,5 @@ if(moreThanOneMesh)
     meshIndx = str2double(answer(2));
 end
 
-commands.simplifyMeshes(v,reduce, meshIndx)
+MRIcroS('simplifyMeshes',reduce, meshIndx)
 %end SimplifyMeshesMenu_Callback()

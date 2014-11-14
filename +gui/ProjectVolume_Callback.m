@@ -26,7 +26,7 @@ colorMap = utils.colorTables(colorMap); %verify text name
 averageIntensities = str2double(answer(5));
 interpMethod = answer{6};
 
-commands.projectVolume(v, layer, volumeFilename, smooth, threshold, brightness, colorMap, averageIntensities, interpMethod);
+MRIcroS('projectVolume', layer, volumeFilename, smooth, threshold, brightness, colorMap, averageIntensities, interpMethod);
 %end ProjectVolume_Callback()
 
 function [layer, cancelled] = selectLayerSub(v)

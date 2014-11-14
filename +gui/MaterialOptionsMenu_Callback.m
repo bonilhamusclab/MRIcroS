@@ -17,7 +17,7 @@ specularStrength = bindToZeroOrOne(answer(3));
 specularExponent = str2double(answer(4));
 backFaceLighting = round(str2double(answer(5)));
 
-commands.setMaterial(v, ambience, diffuse, specularStrength, ...
+MRIcroS('setMaterial', ambience, diffuse, specularStrength, ...
     specularExponent, backFaceLighting);
 
 %end MaterialOptionsMenu_Callback()

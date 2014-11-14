@@ -8,5 +8,5 @@ end
 if isequal(file,0), return; end;
 filename=[path file];
 v=guidata(obj);
-commands.saveMesh(v, filename);
+MRIcroS('saveMesh', filename);
 %end SaveMeshesMenu_Callback()
