@@ -1,8 +1,10 @@
 function [header data] = readTrack(fullPath)
+%read TrackVis .trk format data
+% fillPath: filename of track to read.
+%for format details http://www.trackvis.org/docs/?subsect=fileformat
+
 fid = fopen(fullPath);
-
 header = getHeader(fid);
-
 if header.hdr_size~=1000
     fclose(fid);
     fid    = fopen(filePath, 'r', 'b'); % Big endian for old PPCs
@@ -11,18 +13,17 @@ if header.hdr_size~=1000
 		error('Header length is not 1000, file may be corrupted');
 	end
 end
-
 seekFirstDataPoint(fid);
 dataAsFloat = fread(fid, inf, 'float32');
 seekFirstDataPoint(fid);
 pointCountsPerTrack = fread(fid, inf, 'int32');
-
 data = mergeDataPointsAndCounts(dataAsFloat, pointCountsPerTrack, header);
 fclose(fid);
 %end readTrack()
 
 function seekFirstDataPoint(fid)
 	fseek(fid, 1000, -1);
+%end seekFirstDataPoint()
 
 function data = mergeDataPointsAndCounts(dataAsFloat, pointCountsPerTrack, header)
 	countIndex = 1;
@@ -34,7 +35,7 @@ function data = mergeDataPointsAndCounts(dataAsFloat, pointCountsPerTrack, heade
 		data(countIndex) = pointsInBatch;
 		countIndex = countIndex + pointsInBatch * pointDim + header.n_properties+ 1; 
 	end
-
+%end mergeDataPointsAndCounts()
 
 function header = getHeader(fid)
 	header.id_string                 = fread(fid, 6, '*char')';
@@ -60,3 +61,4 @@ function header = getHeader(fid)
 	header.n_count                   = fread(fid, 1, 'int')';
 	header.version                   = fread(fid, 1, 'int')';
 	header.hdr_size                  = fread(fid, 1, 'int')';
+%end getHeader()

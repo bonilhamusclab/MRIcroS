@@ -10,7 +10,7 @@ function addLayer(v,filename,varargin)
 %   smooth (optional)
 %       * applies only to volumes (NiFTI)
 %       * convolution kernel size for gaussian smoothing
-%       * default value 1 (no smoothing)
+%       * default value 1 (slight smoothing)
 %       * must be odd number
 %   thresh (optional)
 %       * applies only to volumes (NiFTI)
