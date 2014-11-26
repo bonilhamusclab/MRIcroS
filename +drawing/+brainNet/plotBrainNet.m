@@ -41,7 +41,12 @@ end
 renderedEdges = [];
 if(alsoPlotEdges)
     edgesBinary = edges ~= 0 & ~tril(edges);
-
+    %get(0, 'screensize')
+    if max(edges(:)) <= 0
+        scaleFactor = 1;
+    else
+        scaleFactor = 100 * 1/max(edges(:));
+    end
     %several times faster than double for loop
     xStarts = bsxfun(@times, edgesBinary, xCs);
     xStops = bsxfun(@times, edgesBinary, xCs');
@@ -68,8 +73,7 @@ if(alsoPlotEdges)
         
         edgeW = edges(edgeIdx);
         edgeC = edgeColors(edgeIdx,:);
-        renderedEdges(i) = plot3(x,y,z, 'LineWidth', edgeW, 'Color', edgeC);
+        renderedEdges(i) = plot3(x,y,z, 'LineWidth', abs(edgeW)*scaleFactor, 'Color', edgeC);
     end
 end
 
-end
