@@ -50,7 +50,7 @@ if(promptForValues)
         thresh = 'Inf';
         smooth = '0';
         vertexColor = '0'; 
-        [thresh, reduce, smooth, vertexColor, cancelled] = promptOptionsDialogSub(num2str(thresh),num2str(reduce),num2str(smooth),num2str(vertexColor));
+        [thresh, reduce, smooth, vertexColor, cancelled] = promptOptionsDialogSub(filename,num2str(thresh),num2str(reduce),num2str(smooth),num2str(vertexColor));
         if(cancelled), disp('load cancelled'); return; end;
     end
 end
@@ -63,7 +63,13 @@ if promptForValues && ~fileUtils.isMesh(filename) && vertexColor
 end
 %end AddLayer_Callback()
 
-function [thresh, reduce, smooth, vertexColor, cancelled] = promptOptionsDialogSub(defThresh, defReduce, defSmooth, defVertexColor)
+function [thresh, reduce, smooth, vertexColor, cancelled] = promptOptionsDialogSub(filename, defThresh, defReduce, defSmooth, defVertexColor)
+
+showData = questdlg('Show Data Overview Before Setting Options?', 'Data Overview', 'Yes', 'No');
+if strcmp(showData, 'Yes')
+    uiwait(gui.volumeRender.quickDataView(filename));
+end
+
 prompt = {'Surface intensity threshold (Inf=midrange, -Inf=Otsu):','Reduce Path, e.g. 0.5 means half resolution (0..1):','Smoothing radius in voxels (0=none):',...
     'Vertex color (0=no,1=yes):'};
 dlg_title = 'Select options for loading image';
