@@ -1,10 +1,11 @@
-function writePly(vertex,vertexColors,face,filename)
+function writePly(vertex,vertexColors,face,filename, alpha)
 %for format details, see http://paulbourke.net/dataformats/ply/
 % see also http://www.okino.com/conv/imp_ply.htm http://www.mathworks.com/matlabcentral/fx_files/5459/1/content/ply.htm
 % vertex: Vx3 array with X,Y,Z coordinates of each vertex
 % vertexColors: Vx0 (empty), Vx1 (scalar) or Vx3 (RGB) colors for each vertex
 % face: Fx3 triangle list indexed from 1, e.g. 1,2,3 is triangle connecting first 3 vertices
 % filename: name to save object
+% alpha: (optional) if provided, sets transparency of vertex colors, range 0..1
 % --- creates binary format ply file, e.g. for meshlab
  
 [fid,Msg] = fopen(filename,'Wt');
@@ -48,12 +49,15 @@ if size(vertex,1) == size(vertexColors,1) %Save vertex+color: xyzrgb
     vertex32 = reshape(vertex32,12,size(vertex,1)); %XYZ vertices, each 4 bytes
     %(2) convert colors into RGB colors into byte array with 8-bit precision
     clr8 = uint8(vertexColors * 255); %scale 0..1 to 0..255
-    alpha = ones(size(clr8,1),1);
-    alpha = uint8(alpha * 128); %set each vector to mid transparency
+    alpha8 = ones(size(clr8,1),1);
+    if exist('alpha','var') 
+    	alpha8(:) = alpha;
+    end
+    alpha8 = uint8(alpha8 * 255); 
     if size(vertexColors,2) == 1 
-        clr8 = [clr8 clr8 clr8 alpha]; %convert scalar to RGB, add alpha
+        clr8 = [clr8 clr8 clr8 alpha8]; %convert scalar to RGB, add alpha
     else
-        clr8 = [clr8 alpha]; %add alpha to RGB
+        clr8 = [clr8 alpha8]; %add alpha to RGB
     end
     clr8 = clr8';
     %(3) combine vertex and color information
