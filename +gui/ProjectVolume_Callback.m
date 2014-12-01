@@ -5,6 +5,9 @@ v=guidata(obj);
 if(cancelled), return; end;
 [volumeFilename, cancelled] = selectVolumeFileSub();
 if(cancelled), return; end;
+
+gui.volumeRender.quickDataViewPopup(volumeFilename);
+
 colorMap = v.surface(layer).colorMap;
 [~,colorStr] = utils.colorTables(); %text names for colorMaps
 answer = inputdlg({'Smooth Kernel Size (1=none, must be odd...)',...

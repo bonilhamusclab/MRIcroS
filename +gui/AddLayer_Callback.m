@@ -65,10 +65,7 @@ end
 
 function [thresh, reduce, smooth, vertexColor, cancelled] = promptOptionsDialogSub(filename, defThresh, defReduce, defSmooth, defVertexColor)
 
-showData = questdlg('Show Data Overview Before Setting Options?', 'Data Overview', 'Yes', 'No');
-if strcmp(showData, 'Yes')
-    uiwait(gui.volumeRender.quickDataView(filename));
-end
+gui.volumeRender.quickDataViewPopup(filename);
 
 prompt = {'Surface intensity threshold (Inf=midrange, -Inf=Otsu):','Reduce Path, e.g. 0.5 means half resolution (0..1):','Smoothing radius in voxels (0=none):',...
     'Vertex color (0=no,1=yes):'};
