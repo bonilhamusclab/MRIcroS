@@ -28,11 +28,9 @@ if (nargin < 3)
 end
 
 inputParams = parseInputParamsSub(varargin);
-
 nodeThreshold = inputParams.nodeThreshold;
 edgeThreshold = inputParams.edgeThreshold;
 colorMap = inputParams.colorMap;
-
 loadEdges = ~isempty(edge_file);
 if loadEdges 
     [edge_file, isFound] = fileUtils.isFileFound(v, edge_file);
@@ -80,16 +78,19 @@ if (nodeThreshold > -inf || edgeThreshold > -inf)
             utils.brainNet.filterEdges(edges, edgeThreshold, passingNodeIndexes);
     end
 end
-    
-[renderedNodes, renderedEdges] = drawing.brainNet.plotBrainNet(nodes, edges, colorMap);
-hasBrainNets = isfield(v,'brainNets');
-brainNetsIndex = 1;
-if(hasBrainNets) brainNetsIndex = brainNetsIndex + length(v.brainNets); end
-v.brainNets(brainNetsIndex).renderedNodes = renderedNodes;
-v.brainNets(brainNetsIndex).renderedEdges = renderedEdges;
-%guidata(v.hMainFigure, v); %save data
-%v = drawing.removeDemoObjects(v);
-guidata(v.hMainFigure, v); %save data
+if false
+    [renderedNodes, renderedEdges] = drawing.brainNet.plotBrainNetOld(nodes, edges, colorMap);
+    v = guidata(v.hMainFigure);%load data
+    hasBrainNets = isfield(v,'brainNets');
+    brainNetsIndex = 1;
+    if(hasBrainNets) brainNetsIndex = brainNetsIndex + length(v.brainNets); end
+    v.brainNets(brainNetsIndex).renderedNodes = renderedNodes;
+    v.brainNets(brainNetsIndex).renderedEdges = renderedEdges;
+    guidata(v.hMainFigure, v); %save data
+else
+    guidata(v.hMainFigure, v); %save data
+    drawing.brainNet.plotBrainNet(v, nodes, edges, colorMap);
+end
 %end function addNodes()
 
 function inputParams = parseInputParamsSub(args)

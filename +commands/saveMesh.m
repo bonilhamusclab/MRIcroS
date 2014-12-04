@@ -22,7 +22,7 @@ for i=1:length(v.surface)
         if ~isempty(v.surface(i).vertexColors) %PLY only supports RGB, not scalar
             v.surface(i).vertexColors = utils.magnitudesToColors(v.surface(i).vertexColors, v.surface(i).colorMap);
         end
-        fileUtils.ply.writePly(v.surface(i).vertices,v.surface(i).vertexColors,v.surface(i).faces,filename);
+        fileUtils.ply.writePly(v.surface(i).vertices,v.surface(i).vertexColors,v.surface(i).faces,filename, v.vprefs.colors(i,4));
     end;
 end;
 %end saveMesh()
