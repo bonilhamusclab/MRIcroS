@@ -25,7 +25,6 @@ v.hAddNodesMenu = uimenu('Parent',v.hFileMenu, 'Label','Add Nodes', 'HandleVisib
     'Callback', utils.curry(@gui.AddNodes_Callback, ~showOpts));
 v.hAddNodesWithOptsMenu = uimenu('Parent',v.hFileMenu, 'Label','Add Nodes with options', 'HandleVisibility', 'callback',...
     'Callback', utils.curry(@gui.AddNodes_Callback, showOpts));
-v.hCloseNodesMenu = uimenu('Parent',v.hFileMenu, 'Label','Close Nodes', 'HandleVisibility', 'callback','Callback', @gui.CloseNodes_Callback);
 v.hSaveBmpMenu = uimenu('Parent',v.hFileMenu,'Label','Save bitmap','HandleVisibility','callback', 'Callback', @gui.SaveBmpMenu_Callback);
 v.hSaveMeshesMenu = uimenu('Parent',v.hFileMenu,'Label','Save mesh(es)','HandleVisibility','callback', 'Callback', @gui.SaveMeshesMenu_Callback);
 v.closeAllItemsMenu = uimenu('Parent',v.hFileMenu, 'Label','Close All Items', 'HandleVisibility', 'callback','Callback', @gui.CloseAllItems_Callback);
