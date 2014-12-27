@@ -1,4 +1,4 @@
-function [hdr, img] = readNifti(filename)
+function [hdr, img] = readNifti(filename, open4D)
 %function [hdr, img] = readNifti(filename)
 %load NIfTI (.nii, .nii.gz, .hdr/.img) image and header 
 % filename: image to open
@@ -7,11 +7,15 @@ function [hdr, img] = readNifti(filename)
 %Examples
 % hdr = nii_loadhdrimg('myimg.nii');
 % [hdr, img] = nii_loadhdrimg('myimg.nii');
+% [hdr, img] = nii_loadhdrimg('img4d.nii', true);
 
 if ~exist('filename','var')  %fnmFA not specified
    [A,Apth] = uigetfile({'*.nii;*.gz;*.hdr;';'*.*'},'Select image');
    filename = [Apth, A];
-end;
+end
+if ~exist('open4D','var')  %fnmFA not specified
+	open4D = false;
+end
 [fpth, fnam,fext] = fileparts(filename);
 if strcmpi(fext,'.img') %hdr/img pair
     filename = fullfile(fpth, [fnam, '.hdr']);
@@ -22,7 +26,7 @@ end
 %load data
 if strcmpi(fext,'.gz') %unzip compressed data
 	%http://undocumentedmatlab.com/blog/savezip-utility
-    %http://www.mathworks.com/matlabcentral/fileexchange/39526-byte-encoding-utilities/content/encoder/gzipdecode.m
+%http://www.mathworks.com/matlabcentral/fileexchange/39526-byte-encoding-utilities/content/encoder/gzipdecode.m
     streamCopier = com.mathworks.mlwidgets.io.InterruptibleStreamCopier.getInterruptibleStreamCopier;
     baos = java.io.ByteArrayOutputStream;
     fis  = java.io.FileInputStream(filename);
@@ -38,6 +42,13 @@ else
 end
 %read header
 hdr = spm_vol_Sub(filename, data);
+if ~open4D
+    hdr.dim = hdr.dim(1:3); %no non-spatial dimensions
+    Hdr.private.dime(5:8) = 1; %no non-spatial dimensions
+    Hdr.private.dime(1) = 3; %3D file
+    
+end
+hdr
 if nargout < 2, return; end; %only read image if requested
 if strcmpi(fext,'.hdr') || strcmpi(fext,'.img') %analyze style .hdr and .img pairs
     if ~exist(Hdr.fname, 'file')
