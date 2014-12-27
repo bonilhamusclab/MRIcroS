@@ -23,7 +23,7 @@ end
 
 for i=startIndx:endIndx
     FVr = reducepatch(v.surface(i),reduce);
-    v.surface(i).vertexColors = []; %CRV colors no longer correspond to vertices.
+    v.surface(i).vertexColors = []; %n.b. colors no longer correspond to vertices.
     fprintf('Mesh reduced %d->%d vertices and %d->%d faces\n',size(v.surface(i).vertices,1),size(FVr.vertices,1),size(v.surface(i).faces,1),size(FVr.faces,1) );
     v.surface(i).faces = FVr.faces;
     v.surface(i).vertices = FVr.vertices;

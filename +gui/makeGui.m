@@ -47,7 +47,8 @@ v.hRotateToggleWithOptionsMenu = uimenu('Parent',v.hFunctionMenu,'Label','Rotate
 v.hChangeBgColorMenu = uimenu('Parent',v.hFunctionMenu, 'Label', 'Change Background Color', 'HandleVisibility', 'callback', 'Callback', @gui.ChangeBgColor_Callback);
 v.hProjectVolumeMenu = uimenu('Parent',v.hFunctionMenu, 'Label', 'Project Volume onto Surface', 'HandleVisibility', 'callback', 'Callback', utils.curry(@gui.ProjectVolume_Callback));
 v.hCloseProjectionsMenu = uimenu('Parent',v.hFunctionMenu, 'Label', 'Close Projected Volumes', 'HandleVisibility', 'callback', 'Callback', @gui.CloseProjections_Callback);
-v.viewHistoryMenu = uimenu('Parent',v.hFunctionMenu, 'Label', 'Store History in Base Workspace', 'HandleVisibility', 'callback', 'Callback', @gui.StoreHistory_Callback);
+%CRX v.viewHistoryMenu = uimenu('Parent',v.hFunctionMenu, 'Label', 'Store History in Base Workspace', 'HandleVisibility', 'callback', 'Callback', @gui.StoreHistory_Callback);
+v.viewHistoryMenu = uimenu('Parent',v.hFunctionMenu, 'Label', 'Echo instructions to command window', 'HandleVisibility', 'callback', 'Callback', @gui.StoreHistory_Callback);
 
 v.hHelpMenu = uimenu('Parent',v.hMainFigure,'HandleVisibility','callback','Label','Help');
 v.hAboutMenu = uimenu('Parent',v.hHelpMenu,'Label','About','HandleVisibility','callback','Callback', @gui.AboutMenu_Callback);
@@ -67,10 +68,11 @@ v.vprefs.showEdges = zeros(size(v.vprefs.colors, 1),1);
 v.vprefs.materialKaKdKsn = [0.6 0.4 0.4 100.0];%ambient/diffuse/specular strength and specular exponent
 v.vprefs.backFaceLighting = 1;
 v.vprefs.azLight = 0; %light azimuth relative to camera
-v.vprefs.elLight = 90; %CRX v.vprefs.elLight = 60; %light elevation relative to camera
+v.vprefs.elLight = 90; %light elevation relative to camera
 v.vprefs.camLight = [];
 v.vprefs.az = 45; %camera azimuth
 v.vprefs.el = 10; %camera elevation
+v.echoCommands = false; %do not echo user actions to command window
 guidata(v.hMainFigure,v);%store settings
 vFig = v.hMainFigure;
 set(vFig,'name','MRIcroS');

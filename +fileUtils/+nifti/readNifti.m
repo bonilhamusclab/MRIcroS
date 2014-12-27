@@ -48,7 +48,6 @@ if ~open4D
     Hdr.private.dime(1) = 3; %3D file
     
 end
-hdr
 if nargout < 2, return; end; %only read image if requested
 if strcmpi(fext,'.hdr') || strcmpi(fext,'.img') %analyze style .hdr and .img pairs
     if ~exist(Hdr.fname, 'file')

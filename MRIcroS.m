@@ -44,15 +44,30 @@ else % instance already running
 end;
 if (nargin) && (ischar(varargin{1})) 
  funcName = varargin{1};
- fnPath = strcat('commands.',funcName);
+ %fnPath = strcat('commands.',funcName);
  f = str2func(strcat('commands.', funcName));
-
  v = guidata(h);
- histIx = utils.fieldIndex(v, 'history');
- v.history(histIx).function = funcName;
- v.history(histIx).args = {varargin{2:nargin}};
- guidata(h, v);
-
+ if v.echoCommands 
+     %
+     %histIx = utils.fieldIndex(v, 'history');
+     %v.history(histIx).function = funcName;
+     %v.history(histIx).args = {varargin{2:nargin}};
+     %guidata(h, v);
+     command = [mfilename '('];
+     for i = 1 : nargin
+        if ~isempty(varargin{i}) 
+            if ischar(varargin{i})
+                command = [command '''' varargin{i} ''',' ]; %#ok<AGROW>
+            else
+                command = [command sprintf('%g',varargin{i}) ',' ]; %#ok<AGROW>
+            end
+        end
+     end
+     command = command(1:end-1); %remove trailing comma
+     fprintf('%s);\n', command);
+ end
+ %fprintf('%s (''%s'', ''%s'')\n', mfilename, funcName,  varargin{2});
+ 
  f(v, varargin{2:nargin})
 end
 mOutputArgs{1} = h;% return handle to main figure
