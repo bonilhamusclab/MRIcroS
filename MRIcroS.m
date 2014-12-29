@@ -44,15 +44,16 @@ else % instance already running
 end;
 if (nargin) && (ischar(varargin{1})) 
  funcName = varargin{1};
- fnPath = strcat('commands.',funcName);
+ %fnPath = strcat('commands.',funcName);
  f = str2func(strcat('commands.', funcName));
-
  v = guidata(h);
+ 
  histIx = utils.fieldIndex(v, 'history');
- v.history(histIx).function = funcName;
- v.history(histIx).args = {varargin{2:nargin}};
+ v.history(histIx) = {varargin};
  guidata(h, v);
-
+ 
+ %fprintf('%s (''%s'', ''%s'')\n', mfilename, funcName,  varargin{2});
+ 
  f(v, varargin{2:nargin})
 end
 mOutputArgs{1} = h;% return handle to main figure

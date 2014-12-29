@@ -54,9 +54,7 @@ if(promptForValues)
         if(cancelled), disp('load cancelled'); return; end;
     end
 end
-
 MRIcroS('addLayer',filename, reduce, smooth, thresh, vertexColor);
-
 if promptForValues && ~fileUtils.isMesh(filename) && vertexColor
     v = guidata(v.hMainFigure);
     MRIcroS('vertexColorBrightness',length(v.surface)); %change brightness of most recent layer

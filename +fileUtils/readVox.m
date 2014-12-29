@@ -18,7 +18,6 @@ if smooth > 0 %blur image prior to edge extraction
         fprintf('Note: Smooth diameter incremented. Smooth must be an odd number (voxel diameter of kernel)\n'); 
     end;
     fprintf('Applying gaussian smooth with %d voxel diameter\n',round(smooth));
-
     Vol = smooth3(Vol,'gaussian',round(smooth), round(smooth) * 0.2167);
 end;
 if (isinf(thresh) && (thresh < 0)) %if -Inf, use Otsu's method

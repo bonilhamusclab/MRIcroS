@@ -21,8 +21,15 @@ v = guidata(v.hMainFigure);%load data
 layer = utils.fieldIndex(v, 'surface');
 v.surface(layer).colorMap = utils.colorTables(1);
 v.surface(layer).colorMin = 0;
-[xSph ySph zSph] = sphere(20); 
+[xSph ySph zSph] = sphere(12); 
 FV = surf2patch(xSph, ySph, zSph,'triangles'); %use triangles to save to PLY
+
+half = size(FV.faces,1);
+%FV.faces(1:half, :) = fliplr(FV.faces(1:half,:))
+FV.faces(half+1:end, :) = fliplr(FV.faces(half+1:end,:))
+%FV.faces(:, :) = fliplr(FV.faces(:,:));
+
+
 nFaces = size(FV.vertices,1);
 vtxs = [];%zeros(nFaces*numNodes, 3);
 facs = [];%zeros(size(FV.faces,1), 3);
