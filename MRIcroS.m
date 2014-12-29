@@ -47,25 +47,11 @@ if (nargin) && (ischar(varargin{1}))
  %fnPath = strcat('commands.',funcName);
  f = str2func(strcat('commands.', funcName));
  v = guidata(h);
- if v.echoCommands 
-     %
-     %histIx = utils.fieldIndex(v, 'history');
-     %v.history(histIx).function = funcName;
-     %v.history(histIx).args = {varargin{2:nargin}};
-     %guidata(h, v);
-     command = [mfilename '('];
-     for i = 1 : nargin
-        if ~isempty(varargin{i}) 
-            if ischar(varargin{i})
-                command = [command '''' varargin{i} ''',' ]; %#ok<AGROW>
-            else
-                command = [command sprintf('%g',varargin{i}) ',' ]; %#ok<AGROW>
-            end
-        end
-     end
-     command = command(1:end-1); %remove trailing comma
-     fprintf('%s);\n', command);
- end
+ 
+ histIx = utils.fieldIndex(v, 'history');
+ v.history(histIx) = {varargin};
+ guidata(h, v);
+ 
  %fprintf('%s (''%s'', ''%s'')\n', mfilename, funcName,  varargin{2});
  
  f(v, varargin{2:nargin})
