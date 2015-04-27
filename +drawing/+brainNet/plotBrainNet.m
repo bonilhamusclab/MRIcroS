@@ -21,13 +21,11 @@ v = guidata(v.hMainFigure);%load data
 layer = utils.fieldIndex(v, 'surface');
 v.surface(layer).colorMap = utils.colorTables(1);
 v.surface(layer).colorMin = 0;
-[xSph ySph zSph] = sphere(12); 
+[xSph, ySph, zSph] = sphere(12); 
 FV = surf2patch(xSph, ySph, zSph,'triangles'); %use triangles to save to PLY
 
 half = size(FV.faces,1);
-%FV.faces(1:half, :) = fliplr(FV.faces(1:half,:))
-FV.faces(half+1:end, :) = fliplr(FV.faces(half+1:end,:))
-%FV.faces(:, :) = fliplr(FV.faces(:,:));
+FV.faces(half+1:end, :) = fliplr(FV.faces(half+1:end,:));
 
 
 nFaces = size(FV.vertices,1);
@@ -89,22 +87,25 @@ for i = 1:numEdges
     edgeIdx = edgeIdxs(i);
     startXYZ = [xStarts(edgeIdx), yStarts(edgeIdx), zStarts(edgeIdx)];
     endXYZ = [xStops(edgeIdx), yStops(edgeIdx), zStops(edgeIdx)];
-    %edgeW = edges(edgeIdx);
     edgeW = normalizedEdges(edgeIdx) * kThick;
+    
     FV = cylinderSubX(startXYZ, endXYZ, edgeW);
     newTri = max(FV.faces(:));
     FV.faces = FV.faces + nTri;
     nTri = nTri + newTri;
-    vtxs = [vtxs; FV.vertices]; %#ok<AGROW>
-    facs = [facs; FV.faces]; %#ok<AGROW>
+    vtxs = [vtxs; FV.vertices];
+    facs = [facs; FV.faces];
     clr = repmat(edgeColors(edgeIdx,:),[newTri,1]);
-    clrs = [clrs; clr]; %#ok<AGROW>
+    clrs = [clrs; clr];
 end
 v.surface(layer).faces = [v.surface(layer).faces; facs];
-v.surface(layer).vertices = [v.surface(layer).vertices; vtxs];%FV.vertices;
+v.surface(layer).vertices = [v.surface(layer).vertices; vtxs];
 v.surface(layer).vertexColors = [v.surface(layer).vertexColors; clrs];
-%save...
-guidata(v.hMainFigure, v); %save data
+
+brainNetLayersIndx = utils.fieldIndex(v, 'brainNetLayers');
+v.brainNetLayers(brainNetLayersIndx) = layer;
+
+guidata(v.hMainFigure, v);
 drawing.redrawSurface(v);  
 %end plotBrainNet()
 

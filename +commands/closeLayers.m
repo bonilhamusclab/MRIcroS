@@ -1,13 +1,28 @@
-function closeLayers(v, ~)
-%MRIcroS('closeLayers');
-% --- close all open volume surfaces
+function closeLayers(v, layerIndxs)
+%MRIcroS('closeLayers', layerIndxs);
+%if layerIndxs not set, close all open surfaces
+
+if nargin < 2
+    layerIndxs = -1;
+end
+
 v = guidata(v.hMainFigure);
 if(isfield(v, 'surface'))
-    if (~isempty(v.surface)) 
+    if layerIndxs < 0
         v = rmfield(v,'surface');
-        guidata(v.hMainFigure,v);%store settings
-        %drawing.redrawSurface(v);
-    end; 
+    else
+        v.surface(layerIndxs) = [];
+        if isempty(v.surface)
+            v = rmfield(v, 'surface');
+        end
+    end
+    guidata(v.hMainFigure,v);
 end
-drawing.createDemoObjects(v, true);
-%end closeLayers()
+
+if(~isfield(v, 'surface'))
+    drawing.createDemoObjects(v, true);
+else
+    drawing.redrawSurface(v);
+end
+
+end

@@ -78,19 +78,9 @@ if (nodeThreshold > -inf || edgeThreshold > -inf)
             utils.brainNet.filterEdges(edges, edgeThreshold, passingNodeIndexes);
     end
 end
-if false
-    [renderedNodes, renderedEdges] = drawing.brainNet.plotBrainNetOld(nodes, edges, colorMap);
-    v = guidata(v.hMainFigure);%load data
-    hasBrainNets = isfield(v,'brainNets');
-    brainNetsIndex = 1;
-    if(hasBrainNets) brainNetsIndex = brainNetsIndex + length(v.brainNets); end
-    v.brainNets(brainNetsIndex).renderedNodes = renderedNodes;
-    v.brainNets(brainNetsIndex).renderedEdges = renderedEdges;
-    guidata(v.hMainFigure, v); %save data
-else
-    guidata(v.hMainFigure, v); %save data
-    drawing.brainNet.plotBrainNet(v, nodes, edges, colorMap);
-end
+
+guidata(v.hMainFigure, v);
+drawing.brainNet.plotBrainNet(v, nodes, edges, colorMap);
 %end function addNodes()
 
 function inputParams = parseInputParamsSub(args)
