@@ -1,12 +1,15 @@
-function plotBrainNet(v, nodes, edges, colorMap)
+function plotBrainNet(v, nodes, edges, nodeColorMap, edgeColorMap)
 %function plotBrainNet(v, nodes, edges)
 %inputs:   
 %   nodes
 %   edges: set to [] if none should be plotted
-%   colorMapFn (optional): map for the node color function, default is jet
+%   nodeColorMap (optional): map for the node color
+%   edgeColorMap (optional): map for the node color
 %http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0068910
 
-    if nargin < 3, colorMap = 'jet'; end;
+    if nargin < 5, edgeColorMap = 'jet'; end;
+    if nargin < 4, nodeColorMap = 'jet'; end;
+    
 
     xCs = nodes(:,1);
     yCs = nodes(:,2);
@@ -15,7 +18,7 @@ function plotBrainNet(v, nodes, edges, colorMap)
     cols = nodes(:,4);
 
     nNodes = size(nodes, 1);
-    nodeColors = utils.magnitudesToColors(cols./max(cols), colorMap);
+    nodeColors = utils.magnitudesToColors(cols./max(cols), nodeColorMap);
 
     v = guidata(v.hMainFigure);
     layer = utils.fieldIndex(v, 'surface');
@@ -93,7 +96,7 @@ function plotBrainNet(v, nodes, edges, colorMap)
     edgeRange =max(usedEdges(:)) -  min(usedEdges(:)); %'range' does not exist in Matlab 2012
     normalizedEdges = (edges(:) - min(usedEdges(:)))./edgeRange;
     kThick = 2;
-    edgeColors = utils.magnitudesToColors(normalizedEdges, colorMap);
+    edgeColors = utils.magnitudesToColors(normalizedEdges, edgeColorMap);
 
     vtxs = [];
     facs = [];

@@ -5,6 +5,8 @@ function addNodes(v, node_file, edge_file, varargin)
 %MRIcroS('addNodes','a.node', 'a.edge', 2, 2)
 %MRIcroS('addNodes','a.node', '', 2) % no edges
 %MRIcroS('addNodes','a.node', 'a.edge', 2, 2, 'hsv') %plot nodes with 'hsv'
+%MRIcroS('addNodes','a.node', 'a.edge', 2, 2, 'hsv', 'jet') %plot nodes
+%with 'hsv' & edges with 'jet'
 %inputs: 
 % 1) node_filepath
 % 2) edge_filepath: sepecify as '' if no edges to be loaded
@@ -12,7 +14,8 @@ function addNodes(v, node_file, edge_file, varargin)
 % 3) nodeThreshold: filter for nodes with radius above threshold
 %   any edges connected to a filtered node will be removed as well
 % 4) edgeThreshold: filter for edges above specified threshold
-% 5) colorMap: color map to be used for nodes
+% 5) nodeColorMap: color map to be used for nodes
+% 6) edgeColorMap: color map to be used for edges
 %BrainNet Node And Edge Connectome Files
 %http://www.plosone.org/article/info%3Adoi%2F10.1371%2Fjournal.pone.0068910
 
@@ -30,7 +33,8 @@ end
 inputParams = parseInputParamsSub(varargin);
 nodeThreshold = inputParams.nodeThreshold;
 edgeThreshold = inputParams.edgeThreshold;
-colorMap = inputParams.colorMap;
+nodeColorMap = inputParams.nodeColorMap;
+edgeColorMap = inputParams.edgeColorMap;
 loadEdges = ~isempty(edge_file);
 if loadEdges 
     [edge_file, isFound] = fileUtils.isFileFound(v, edge_file);
@@ -80,24 +84,27 @@ if (nodeThreshold > -inf || edgeThreshold > -inf)
 end
 
 guidata(v.hMainFigure, v);
-drawing.brainNet.plotBrainNet(v, nodes, edges, colorMap);
+drawing.brainNet.plotBrainNet(v, nodes, edges, nodeColorMap, edgeColorMap);
 %end function addNodes()
 
 
 function inputParams = parseInputParamsSub(args)
 p = inputParser;
 
-d.nodeThreshold = 0; d.edgeThreshold = 0; d.colorMap = 'jet';
+d.nodeThreshold = 0; d.edgeThreshold = 0; d.nodeColorMap = 'jet';
+d.edgeColorMap = 'jet';
 
 
 p.addOptional('nodeThreshold',0, utils.unless(@isempty,...
     @(x) validateattributes(x, {'numeric'}, {'real'})));
 p.addOptional('edgeThreshold',0, utils.unless(@isempty,... 
     @(x) validateattributes(x, {'numeric'}, {'real'})));
-p.addOptional('colorMap', 'jet', utils.unless(@isempty, ...
+p.addOptional('nodeColorMap', 'jet', utils.unless(@isempty, ...
+    @(x) validateattributes(x, {'char'}, {'nonempty'})));
+p.addOptional('edgeColorMap', 'jet', utils.unless(@isempty, ...
     @(x) validateattributes(x, {'char'}, {'nonempty'})));
 
-p = utils.stringSafeParse(p, args, fieldnames(d), d.nodeThreshold, d.edgeThreshold, d.colorMap);
+p = utils.stringSafeParse(p, args, fieldnames(d), d.nodeThreshold, d.edgeThreshold, d.nodeColorMap, d.edgeColorMap);
 
 inputParams = p.Results;
     

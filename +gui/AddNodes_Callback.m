@@ -41,6 +41,9 @@ function AddNodes_Callback(promptForOpts, obj, ~)
             edgeAlphaMsg = 'Edge alpha:';
             prompt = { nodeRadThreshMsg, nodeAlphaMsg, edgeWightThreshMsg, edgeAlphaMsg };
             opts = inputdlg(prompt, 'Thresholds', 1, {num2str(-inf), num2str(1), num2str(-inf), num2str(1)});
+            if isempty(opts)
+                return;
+            end
             nodeRadiusT = str2double(opts(1));
             nodeAlpha = str2double(opts(2));
             edgeWeightT = str2double(opts(3));
@@ -51,12 +54,15 @@ function AddNodes_Callback(promptForOpts, obj, ~)
             nodeAlpha = str2double(opts(2));
         end
         
-        nodeColorMap = gui.brainNet.promptNodeColorMap();
+        nodeColorMap = gui.brainNet.promptColorMap('Node Colormap');
+        if loadEdges
+            edgeColorMap = gui.brainNet.promptColorMap('Edge Colormap');
+        end
         
     end
     
     MRIcroS('addNodes', node_filename, edge_filename, ...
-        nodeRadiusT, edgeWeightT, nodeColorMap);
+        nodeRadiusT, edgeWeightT, nodeColorMap, edgeColorMap);
     
     if(promptForOpts)
         MRIcroS('brainNetAlpha', '', nodeAlpha, edgeAlpha);
