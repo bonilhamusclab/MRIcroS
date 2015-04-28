@@ -45,7 +45,7 @@ if(loadEdges)
     if ~fileUtils.isEdge(edge_file), fprintf('Odd extension for an edge file %s\n',edge_file); end;
     edges = fileUtils.brainNet.readEdge(edge_file);
 end
-%unload demo objects
+
 v = drawing.removeDemoObjects(v);
 %this next segment makes sure the nodes are not larger than the image they are drawn on
 surfaceCount = 0;
@@ -82,6 +82,7 @@ end
 guidata(v.hMainFigure, v);
 drawing.brainNet.plotBrainNet(v, nodes, edges, colorMap);
 %end function addNodes()
+
 
 function inputParams = parseInputParamsSub(args)
 p = inputParser;

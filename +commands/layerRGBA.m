@@ -1,7 +1,7 @@
 function layerRGBA(v,layer, varargin)
 %function layerRGBA(v,layer, varargin)
 % inputs: 
-% 1) layer, '' set to layer 1
+% 1) layer, '' sets to maximum layer
 % Optional Inputs
 %   defaults to current rgba values for the layer if not specified
 % 2) r (Red)
@@ -11,11 +11,11 @@ function layerRGBA(v,layer, varargin)
 %MRIcroS('layerRGBA', 1, 0.9, 0, 0, 0.2) %set layer 1 to bright red (0.9) with 20% opacity
 % --- set a Layer's color and transparency
 
-if isempty(layer)
-    layer = 1;
-end
-
 numLayers = length(v.surface);
+
+if isempty(layer)
+    layer = numLayers;
+end
 
 validateattributes(layer, {'numeric'}, {'>=', 1, '<=', numLayers, 'integer'});
 
