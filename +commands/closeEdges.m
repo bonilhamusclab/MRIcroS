@@ -5,14 +5,20 @@ function closeEdges(v, ~)
 
     if isfield(v, 'brainNetMeta')
         
-        nodesWithEdges = arrayfun( @(m) m.edgesLayer > -1, v.brainNetMeta);
-        edgesLayers = arrayfun(@(m) m.edgesLayer, v.brainNetMeta(nodesWithEdges));
         
+        edgesLayers = arrayfun(@(m) m.edgesLayer, v.brainNetMeta);
+        metaIxs = edgesLayers > -1;
+        
+        if isempty(edgesLayers)
+            return;
+        end
+        
+        nodesWithEdges = arrayfun( @(m) m.layer, v.brainNetMeta(metaIxs));
         for l = nodesWithEdges
             v.brainNetMeta(l).edgesLayer = -1;
         end
         guidata(v.hMainFigure, v);
         
-        commands.closeLayers(v, edgesLayers);
+  	    commands.closeLayers(v, edgesLayers(metaIxs));
     end
 end

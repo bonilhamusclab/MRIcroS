@@ -7,6 +7,7 @@ function closeNodes(v, ~)
         
         nodesWithEdges = arrayfun( @(m) isfield(m, 'edgesLayer'), v.brainNetMeta);
         edgesLayers = arrayfun(@(m) m.edgesLayer, v.brainNetMeta(nodesWithEdges));
+        edgesLayers = edgesLayers(edgesLayers > -1);
         
         allLayers = [nodeLayers edgesLayers];
         
