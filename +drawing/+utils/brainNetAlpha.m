@@ -7,7 +7,7 @@ function [nodeAlpha, edgeAlpha] = brainNetAlpha(layer, v)
     if isfield(v, 'brainNetMeta')
         brainNetIndx = find(arrayfun(@(m) m.layer == layer, v.brainNetMeta), 1);
         if isempty(brainNetIndx)
-            error('%dq not a layer with nodes', layer);
+            error('%d not a layer with nodes', layer);
         end
         
         meta = v.brainNetMeta(brainNetIndx);

@@ -29,7 +29,10 @@ function AddNodes_Callback(promptForOpts, obj, ~)
     
     nodeRadiusT = -inf;
     edgeWeightT = -inf;
+    edgeWeightT = '';
+    edgeAlpha = '';
     nodeColorMap = 'jet';
+    edgeColorMap = 'jet';
     if(promptForOpts)
         nodeRadThreshMsg = 'Node radius threshold (specify -inf for no thresholding):';
         nodeAlphaMsg = 'Node alpha:';
@@ -55,11 +58,13 @@ function AddNodes_Callback(promptForOpts, obj, ~)
         end
         
         nodeColorMap = gui.brainNet.promptColorMap('Node Colormap');
+        edgeColorMap = '';
         if loadEdges
             edgeColorMap = gui.brainNet.promptColorMap('Edge Colormap');
         end
         
     end
+
     
     MRIcroS('addNodes', node_filename, edge_filename, ...
         nodeRadiusT, edgeWeightT, nodeColorMap, edgeColorMap);

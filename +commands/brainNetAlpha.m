@@ -9,7 +9,8 @@ function brainNetAlpha(v, layer, varargin)
 %function brainNetAlpha(v, layer, nodeAlpha, edgeAlpha)
 
     if isempty(layer)
-    	layer = utils.fieldIndex(v, 'brainNetLayers');
+        bNetIndx = length(v.brainNetMeta);
+        layer = v.brainNetMeta(bNetIndx).layer;
     end
     
     inputParams = parseInputParamsSub(v, layer, varargin);
