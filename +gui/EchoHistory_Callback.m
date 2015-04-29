@@ -27,12 +27,10 @@ function echoCommandsSub(history)
         inputs = history(i);
         inputs = inputs{:};
             for j = 1 : length(inputs)
-               if ~isempty(inputs{j}) 
-                   if ischar(inputs{j})
-                       command = [command '''' inputs{j} ''',' ]; %#ok<AGROW>
-                   else
-                       command = [command sprintf('%g',inputs{j}) ',' ]; %#ok<AGROW>
-                   end
+               if ischar(inputs{j})
+                   command = [command '''' inputs{j} ''',' ];
+               else
+                   command = [command sprintf('%g',inputs{j}) ',' ];
                end
             end
         command(end) = ')'; %remove trailing comma with )
