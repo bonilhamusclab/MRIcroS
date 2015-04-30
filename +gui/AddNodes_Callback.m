@@ -52,7 +52,7 @@ function AddNodes_Callback(promptForOpts, obj, ~)
             edgeWeightT = str2double(opts(3));
             edgeAlpha = str2double(opts(4));
         else
-            opts = inputdlg(prompt, 'Thresholds', 1, {num2str(-inf)});
+            opts = inputdlg(prompt, 'Thresholds', 1, {num2str(-inf), num2str(1)});
             nodeRadiusT = str2double(opts(1));
             nodeAlpha = str2double(opts(2));
         end

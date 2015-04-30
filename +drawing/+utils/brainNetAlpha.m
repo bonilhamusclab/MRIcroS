@@ -16,7 +16,7 @@ function [nodeAlpha, edgeAlpha] = brainNetAlpha(layer, v)
         
         clrs = colors(layer);
         nodeAlpha = clrs(1, 4);
-        if isfield(meta, 'edgesLayer')
+        if meta.edgesLayer > -1
             clrs = colors(meta.edgesLayer);
             edgeAlpha = clrs(1, 4);
         end
