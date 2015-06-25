@@ -19,6 +19,11 @@ if numel(v.surface(layer).vertexColors) < 1 %objects with vertex colors ignore s
     alpha = str2double(answer(1));
     MRIcroS('layerRGBA', layer, rgb(1), rgb(2), rgb(3), alpha);
 else
-    MRIcroS('vertexColorBrightness',layer);
+    [brightness, alpha, colorMap, colorMin, cancelled] = ...
+        gui.utils.vertexColorBrightnessPrompt(v, layer);
+    if cancelled
+        return;
+    end
+    MRIcroS('vertexColorBrightness',layer, brightness, alpha, colorMap, colorMin);
 end
 %end LayerRGBA_Callback()

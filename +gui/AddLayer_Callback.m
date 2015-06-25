@@ -57,7 +57,13 @@ end
 MRIcroS('addLayer',filename, reduce, smooth, thresh, vertexColor);
 if promptForValues && ~fileUtils.isMesh(filename) && vertexColor
     v = guidata(v.hMainFigure);
-    MRIcroS('vertexColorBrightness',length(v.surface)); %change brightness of most recent layer
+    layer = length(v.surface); %change brightness of most recent layer
+    [brightness, alpha, colorMap, colorMin, cancelled] = ...
+        gui.utils.vertexColorBrightnessPrompt(v, layer);
+    if cancelled
+        return
+    end
+    MRIcroS('vertexColorBrightness',layer, brightness, alpha, colorMap, colorMin);
 end
 %end AddLayer_Callback()
 
