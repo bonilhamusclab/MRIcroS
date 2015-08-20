@@ -28,6 +28,14 @@ elseif (isnan(thresh)) || (isinf(thresh)) %if +Inf, use midpoint
 end;
 Vol = clipEdgesSub(Vol,thresh);
 FV = isosurface(Vol,thresh);
+if isempty(FV.vertices) 
+    if (min(Vol(:)) == max(Vol(:))) 
+        error('All voxels in this image have the same intensity: unable to create mesh');
+    end
+    thresh = min(Vol(:)) + eps;
+    fprintf('No vertices detected: will try again with threshold of %g',thresh);
+    FV = isosurface(Vol,thresh);
+end
 if (reduce ~= 1.0) %next: simplify mesh
     %orig = max(FV.faces(:));
     FV = reducepatch(FV,reduce);
@@ -40,6 +48,7 @@ if vertexColor %next compute vertex colors
     vertexColors = computeVertexColors(rawVol, faces, vertices, thresh);
 end
 %next: isosurface swaps the X and Y dimensions! size(Vol)
+
 i = 1;
 j = 2;
 vertices =  vertices(:,[1:i-1,j,i+1:j-1,i,j+1:end]);

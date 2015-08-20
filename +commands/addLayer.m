@@ -2,7 +2,7 @@ function addLayer(v,filename,varargin)
 % --- add an image as a new layer on top of previously opened images
 %  inputs:
 %   filename
-%       * can be .nii, .nii.gz, .vtk, .gii, .pial, .nv
+%       * can be .nii, .nii.gz, .vtk, .gii, .pial, .nv, .stl
 %   reduce (optional)
 %       * applies to surfaces (pial/NV) and volumes (NiFTI)
 %       * must be between 0 and 1
@@ -52,7 +52,7 @@ addLayerSub(v, isBackground, filename, reduce, reduceMesh, smooth, thresh, verte
 
 function addLayerSub(v, isBackground,  filename, reduce, reduceMesh, smooth, thresh, vertexColor)
 %function addSurface(v, isBackground, readFileFn, filename, reduce, smooth, thresh)
-% filename: pial, nv, nii, nii.gz, vtk, gii image to open
+% filename: pial, nv, nii, nii.gz, vtk, stl, gii image to open
 % reduce: 
 % --- open pial or nv surface image
 if isequal(filename,0), return; end;

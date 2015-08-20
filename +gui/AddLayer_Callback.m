@@ -1,7 +1,7 @@
 function AddLayer_Callback(promptForValues, obj, ~)
 % --- add a new voxel image or mesh as a layer with default options
 v=guidata(obj);
-supportedFileExts = '*.nii;*.hdr;*.nii.gz;*.vtk;*.nv;*.pial;*.ply;*.trk;*.mat';
+supportedFileExts = '*.nii;*.hdr;*.nii.gz;*.vtk;*.nv;*.pial;*.ply;*.trk;*.stl;*.mat';
 supportedFileDescs = 'NIfTI/VTK/NV/Pial/PLY/trk/mat';
 
 if utils.isGiftiInstalled()

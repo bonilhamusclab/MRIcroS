@@ -60,7 +60,8 @@ v = drawing.createDemoObjects(v);
 %v.surface(2) = sphereFV;
 %viewing preferences - color, material, camera position, light position
 %v.vprefs.demoObjects = true; %denote simulated objects
-v.vprefs.colors = [0.7 0.7 0.9 0.7; 1 0 0 1.0; 0 1 0 0.7; 0 0 1 0.7; 0.5 0.5 0 0.7; 0.5 0 0.5 0.7; 0 0.5 0.5 0.7]; %rgba for each layer CRZ
+%v.vprefs.colors = [0.7 0.7 0.9 0.7; 1 0 0 1.0; 0 1 0 0.7; 0 0 1 0.7; 0.5 0.5 0 0.7; 0.5 0 0.5 0.7; 0 0.5 0.5 0.7]; %rgba for each layer CRZ
+v.vprefs.colors = [0.7 0.7 0.9 1.0; 1 0 0 1.0; 0 1 0 0.7; 0 0 1 0.7; 0.5 0.5 0 0.7; 0.5 0 0.5 0.7; 0 0.5 0.5 0.7]; %rgba for each layer CRZ
 v.vprefs.edgeColors = v.vprefs.colors;
 v.vprefs.showEdges = zeros(size(v.vprefs.colors, 1),1);
 
@@ -68,7 +69,9 @@ v.vprefs.materialKaKdKsn = [0.6 0.4 0.4 100.0];%ambient/diffuse/specular strengt
 v.vprefs.backFaceLighting = 1;
 v.vprefs.azLight = 0; %light azimuth relative to camera
 v.vprefs.elLight = 90; %light elevation relative to camera
+%v.vprefs.elLight = 10; %light elevation relative to camera - 6767
 v.vprefs.camLight = [];
+v.vprefs.lightangle = [];
 v.vprefs.az = 45; %camera azimuth
 v.vprefs.el = 10; %camera elevation
 v.echoCommands = false; %do not echo user actions to command window

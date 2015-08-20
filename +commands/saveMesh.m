@@ -18,6 +18,8 @@ for i=1:length(v.surface)
             v.surface(i).faces,filename, v.surface(i).colorMap, v.surface(i).colorMin);
     elseif fileUtils.isVtk(filename)
         fileUtils.vtk.writeVtk(v.surface(i).vertices,v.surface(i).faces,filename);
+    elseif fileUtils.isStl(filename)
+        fileUtils.stl.writeStl(v.surface(i).vertices,v.surface(i).faces,filename);
     else
         if ~isempty(v.surface(i).vertexColors) %PLY only supports RGB, not scalar
             v.surface(i).vertexColors = utils.magnitudesToColors(v.surface(i).vertexColors, v.surface(i).colorMap);

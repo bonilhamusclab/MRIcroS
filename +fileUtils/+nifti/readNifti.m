@@ -44,8 +44,8 @@ end
 hdr = spm_vol_Sub(filename, data);
 if ~open4D
     hdr.dim = hdr.dim(1:3); %no non-spatial dimensions
-    Hdr.private.dime(5:8) = 1; %no non-spatial dimensions
-    Hdr.private.dime(1) = 3; %3D file
+    %hdr.private.dime(5:8) = 1; %no non-spatial dimensions
+    %hdr.private.dime(1) = 3; %3D file
     
 end
 if nargout < 2, return; end; %only read image if requested
@@ -86,6 +86,7 @@ if numel(hdr.dim) > 3
 else
     nVol = 1; %3D data has only a single volume
 end
+fprintf('%d NIfTI volume(s) each %dx%dx%d voxels with %d bits per voxel\n',nVol, hdr.dim(1),hdr.dim(2),hdr.dim(3), bitpix);
 myvox = hdr.dim(1)*hdr.dim(2)*hdr.dim(3)*nVol;
 %ensure file is large enough
 imgbytes = myvox * (bitpix/8); %image bytes plus offset
@@ -126,6 +127,10 @@ else
 	Hdr.dt = [h.dime.datatype 1];
 end;
 Hdr.pinfo = [h.dime.scl_slope; h.dime.scl_inter; h.dime.vox_offset];
+if Hdr.pinfo(1) == 0.0
+    Hdr.pinfo(1) = 1.0;
+    fprintf('Warning: header specifies image scaling as ZERO (no variance) - assuming you meant ONE.');
+end
 if fileUtils.isExt('.hdr',filename)
 	[pth, nam] = fileparts(filename);
     Hdr.fname =  fullfile(pth, [nam '.img']); %if file.hdr then set to file.img

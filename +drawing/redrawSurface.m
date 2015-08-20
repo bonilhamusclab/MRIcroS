@@ -59,7 +59,10 @@ end;
 set(gca,'DataAspectRatio',[1 1 1])
 axis vis3d off; %tight
 h = rotate3d; 
+
+set( h, 'ActionPreCallback', @gui.perspectiveChange_Callback); %called when user changes perspective
 set( h, 'ActionPostCallback', @gui.perspectiveChange_Callback); %called when user changes perspective
+%set( h, 'ActionPostCallback', @gui.perspectiveChange_Callback); %called when user changes perspective
 set(h,'Enable','on');
 view( v.vprefs.az,  v.vprefs.el);
 %v.vprefs.camLight = camlight( v.vprefs.azLight, v.vprefs.elLight);
@@ -67,7 +70,9 @@ if ~isempty(v.vprefs.camLight)
     delete(v.vprefs.camLight); % - delete previous lights!
 end
 %v.vprefs.camLight = camlight( v.vprefs.azLight, v.vprefs.elLight);
-v.vprefs.camLight = camlight( 0, 90);
+v.vprefs.camLight = camlight( 0, 90); %2015 consider changing to 0,10 6767
+%v.vprefs.camLight = camlight('headlight');
+%v.vprefs.lightangle= lightangle(0, 90);
 material( v.vprefs.materialKaKdKsn);
 guidata(v.hMainFigure,v);%store settings
 %end redrawSurface()
