@@ -46,7 +46,6 @@ if ~open4D
     hdr.dim = hdr.dim(1:3); %no non-spatial dimensions
     %hdr.private.dime(5:8) = 1; %no non-spatial dimensions
     %hdr.private.dime(1) = 3; %3D file
-    
 end
 if nargout < 2, return; end; %only read image if requested
 if strcmpi(fext,'.hdr') || strcmpi(fext,'.img') %analyze style .hdr and .img pairs
