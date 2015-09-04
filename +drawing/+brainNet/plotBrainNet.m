@@ -21,12 +21,12 @@ v = guidata(v.hMainFigure);%load data
 layer = utils.fieldIndex(v, 'surface');
 v.surface(layer).colorMap = utils.colorTables(1);
 v.surface(layer).colorMin = 0;
-[xSph ySph zSph] = sphere(12); 
+[xSph, ySph, zSph] = sphere(12); 
 FV = surf2patch(xSph, ySph, zSph,'triangles'); %use triangles to save to PLY
 
 half = size(FV.faces,1);
 %FV.faces(1:half, :) = fliplr(FV.faces(1:half,:))
-FV.faces(half+1:end, :) = fliplr(FV.faces(half+1:end,:))
+FV.faces(half+1:end, :) = fliplr(FV.faces(half+1:end,:));
 %FV.faces(:, :) = fliplr(FV.faces(:,:));
 
 
@@ -75,7 +75,11 @@ numEdges = sum(edgesBinary(:));
 usedEdges = edges(edgeIdxs);
 
 edgeRange =max(usedEdges(:)) -  min(usedEdges(:)); %'range' does not exist in Matlab 2012
-normalizedEdges = (edges(:) - min(usedEdges(:)))./edgeRange;
+if edgeRange > 0
+    normalizedEdges = (edges(:) - min(usedEdges(:)))./edgeRange;
+else
+    normalizedEdges = edges(:)/max(usedEdges(:));
+end
 %normalizedEdges = (edges(:) - min(edges(:)))./range(edges(:));
 kThick = 2;
 edgeColors = utils.magnitudesToColors(normalizedEdges, colorMap);
