@@ -1,5 +1,5 @@
 function [faces, vertices] = readStl(fileName)
-% function [faces, vertices] = readPial(fileName, patchReductionFactor)
+% function [faces, vertices] = readStl(fileName)
 %inputs:
 %	fileName: the nv file to open
 %	patchReductionFactor: optional param specifying whether to reduce faces
