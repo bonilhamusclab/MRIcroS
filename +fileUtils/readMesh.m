@@ -29,6 +29,8 @@ elseif fileUtils.isPial(filename)
     [faces, vertices] = fileUtils.pial.readPial(filename);
 elseif fileUtils.isStl(filename)
     [faces, vertices] = fileUtils.stl.readStl(filename);
+elseif fileUtils.isObj(filename)
+    [faces, vertices] = fileUtils.obj.readObj(filename);
 elseif fileUtils.isMat(filename)
     [faces, vertices, vertexColors, colorMap, colorMin] = fileUtils.mat.readMat(filename);
 elseif fileUtils.isGifti(filename)
