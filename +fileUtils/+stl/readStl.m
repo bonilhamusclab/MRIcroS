@@ -40,6 +40,7 @@ vertices = reshape(vertices',3,(3 * num_tri))';
 faces = 1: (3 * num_tri);
 faces = reshape(faces,3, num_tri)';
 fclose(fid);
+
 %WARNING STL does not record redundancy in vertices. This uses needless
 %memory and hinders vertex smoothing. Lets reduce this: 
 % http://www.mathworks.com/matlabcentral/fileexchange/29986-patch-slim--patchslim-m-

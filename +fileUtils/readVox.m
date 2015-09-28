@@ -36,6 +36,7 @@ if isempty(FV.vertices)
     fprintf('No vertices detected: will try again with threshold of %g',thresh);
     FV = isosurface(Vol,thresh);
 end
+
 if (reduce ~= 1.0) %next: simplify mesh
     %orig = max(FV.faces(:));
     FV = reducepatch(FV,reduce);
