@@ -21,7 +21,9 @@ if (nargin > 1) && isnumeric(varargin{2}) %16 Oct 2014
     reduce = varargin{2};
 end
 
-if fileUtils.isPly(filename)
+if fileUtils.isVisa(filename)
+    [faces, vertices] = fileUtils.visa.readVisa(filename);
+elseif fileUtils.isPly(filename)
     [faces, vertices, vertexColors] = fileUtils.ply.readPly(filename);
 elseif fileUtils.isNv(filename)
     [faces, vertices] = fileUtils.nv.readNv(filename);

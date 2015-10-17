@@ -6,13 +6,22 @@ function plotHandles = plotTrack(header, data, fiberSpacing, fiber_len)
 	dataLen = length(data);
 	ptr = 1;
 	renderedFiberIndex = 0;
+	
+%	fiber_len = 2
+%	fiberSpacing
+	
     plotHandles = zeros(1,ceil(dataLen/fiberSpacing));
 	while ptr < dataLen
 		fiber = utils.trk.extractFiber(data, header, ptr);
 		ptr = utils.trk.skipFibers(data, header, ptr, fiberSpacing);
 		[~, nPoints] = size(fiber);
 		if nPoints>fiber_len
+
 			rasFiber = voxToRasFn(fiber);
+			%if renderedFiberIndex == 0
+			%	fiber
+			%	rasFiber
+			%end
             renderedFiberIndex = renderedFiberIndex + 1;
 			plotHandles(renderedFiberIndex) = drawing.trk.plotFiber(rasFiber);
             hold on

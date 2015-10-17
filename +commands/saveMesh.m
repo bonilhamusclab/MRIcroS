@@ -6,7 +6,14 @@ for i=1:length(v.surface)
     if (i > 1) 
         filename = fullfile(path, [file num2str(i) ext]);
     end;
-    if fileUtils.isGifti(filename)
+    if fileUtils.isDae(filename)
+        if (exist('gifti.m', 'file') == 2)
+            g = gifti(v.surface(i));
+            save(g,filename,'Collada');
+        else
+            fprintf('Error: Unable to save Collada files (.dae) - make sure SPM is installed');
+        end;
+    elseif fileUtils.isGifti(filename)
         if (exist('gifti.m', 'file') == 2)
             g = gifti(v.surface(i));
             save(g,filename,'GZipBase64Binary');
