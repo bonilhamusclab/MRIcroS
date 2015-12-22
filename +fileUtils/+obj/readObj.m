@@ -15,12 +15,21 @@ num_f=0;
 tline = fgets(fid);
 while ischar(tline)
     A=strread(tline,'%s','delimiter',' ');
-    if strcmpi(A(1),'v'), num_v = num_v + 1; end;
-    if strcmpi(A(1),'f'), num_f = num_f + 1; end;
+    if length(A) > 1
+        if strcmpi(A(1),'v'), num_v = num_v + 1; end;
+        if strcmpi(A(1),'f'), num_f = num_f + 1; end;
+        %
+    end
     tline = fgets(fid);
 end
 fclose(fid);
-if (num_f < 1) || (num_v < 3), fprintf('Unable to read this file'); return; end;
+if (num_f < 1) || (num_v < 3)
+    faces = [];
+    vertices =[];
+    fprintf('Unable to read this file');
+    return; 
+end;
+fprintf('Obj file has %d vertices and %d faces\n', num_v, num_f);
 %2nd pass : read items
 fid=fopen(fileName);
 num_v=0;
@@ -30,21 +39,23 @@ faces= zeros([num_f, 3]);
 tline = fgets(fid);
 while ischar(tline)
     A=strread(tline,'%s','delimiter',' ');
-    if strcmpi(A(1),'v'), 
-        num_v = num_v + 1;
-        vertices(num_v, 1) = str2double(char(A(2)));
-        vertices(num_v, 2) = str2double(char(A(3)));
-        vertices(num_v, 3) = str2double(char(A(4)));
-    end;
-    if strcmpi(A(1),'f')
-        num_f = num_f + 1;
-        % we need to handle f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3
-        A2=strread(char(A(2)),'%s','delimiter','/');
-        A3=strread(char(A(3)),'%s','delimiter','/');
-        A4=strread(char(A(4)),'%s','delimiter','/');
-        faces(num_f, 1) = str2double(char(A2(1)));
-        faces(num_f, 2) = str2double(char(A3(1)));
-        faces(num_f, 3) = str2double(char(A4(1)));
+    if length(A) > 1
+        if strcmpi(A(1),'v'), 
+            num_v = num_v + 1;
+            vertices(num_v, 1) = str2double(char(A(2)));
+            vertices(num_v, 2) = str2double(char(A(3)));
+            vertices(num_v, 3) = str2double(char(A(4)));
+        end;
+        if strcmpi(A(1),'f')
+            num_f = num_f + 1;
+            % we need to handle f v1/vt1/vn1 v2/vt2/vn2 v3/vt3/vn3
+            A2=strread(char(A(2)),'%s','delimiter','/');
+            A3=strread(char(A(3)),'%s','delimiter','/');
+            A4=strread(char(A(4)),'%s','delimiter','/');
+            faces(num_f, 1) = str2double(char(A2(1)));
+            faces(num_f, 2) = str2double(char(A3(1)));
+            faces(num_f, 3) = str2double(char(A4(1)));
+        end;
     end;
     tline = fgets(fid);
 end

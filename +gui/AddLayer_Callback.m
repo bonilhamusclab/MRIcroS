@@ -1,8 +1,8 @@
 function AddLayer_Callback(promptForValues, obj, ~)
 % --- add a new voxel image or mesh as a layer with default options
 v=guidata(obj);
-supportedFileExts = '*.nii;*.hdr;*.nii.gz;*.vtk;*.nv;*.pial;*.ply;*.trk;*.stl;*.mat';
-supportedFileDescs = 'NIfTI/VTK/NV/Pial/PLY/trk/mat';
+supportedFileExts = '*.nii;*.hdr;*.nii.gz;*.vtk;*.nv;*.pial;*.ply;*.trk;*.obj;*.stl;*.mat;*.mz3';
+supportedFileDescs = 'NIfTI/VTK/NV/Pial/PLY/trk/obj/mat/mz3';
 
 if utils.isGiftiInstalled()
     supportedFileExts = [supportedFileExts ';*.gii'];
@@ -34,22 +34,22 @@ reduce = 1;
 thresh = '';
 smooth = '';
 vertexColor = '';%assume user does not want vertex colors
-if(promptForValues)  
+if(promptForValues)
     if fileUtils.isMesh(filename)
         if fileUtils.isNv(filename) || fileUtils.isPial(filename)
             [reduce, cancelled] = promptNvPialDialogSub(reduce);
             if(cancelled)
-                disp('load cancelled'); 
+                disp('load cancelled');
                 return;
             end
         else
-           disp('no options for meshes'); 
+           disp('no options for meshes');
         end
     else
         reduce = '0.05'; %supply reasonable default values
         thresh = 'Inf';
         smooth = '0';
-        vertexColor = '0'; 
+        vertexColor = '0';
         [thresh, reduce, smooth, vertexColor, cancelled] = promptOptionsDialogSub(filename,num2str(thresh),num2str(reduce),num2str(smooth),num2str(vertexColor));
         if(cancelled), disp('load cancelled'); return; end;
     end
@@ -73,14 +73,14 @@ answer = inputdlg(prompt,dlg_title,1,def);
 cancelled = isempty(answer);
 if cancelled
     thresh = NaN; reduce = NaN; smooth = NaN; vertexColor = NaN;
-    return; 
+    return;
 end;
 thresh = str2double(answer(1));
 reduce = str2double(answer(2));
 smooth = round(str2double(answer(3)))*2+1; %e.g. +1 for 3x3x3, +2 for 5x5x5
 vertexColor = str2double(answer(4));
 %end promptOptionsDialogSub()
-    
+
 function [reduce, cancelled] = promptNvPialDialogSub(defReduce)
 prompt = {'Reduce Path, e.g. 0.5 means half resolution (0..1):'};
 dlg_title = 'Select options for loading Nv/Pial';

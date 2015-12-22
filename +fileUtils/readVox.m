@@ -7,6 +7,7 @@ function [faces, vertices, vertexColors] = readVox (filename, reduce, smooth, th
 
 vertexColors = [];
 if (reduce > 1) || (reduce <= 0), reduce = 1; end;
+if ~exist('vertexColor','var'), vertexColor = false; end;
 [Hdr, Vol] = fileUtils.nifti.readNifti(filename);
 Vol = double(Vol);
 Vol(isnan(Vol)) = 0; 
@@ -43,6 +44,7 @@ if (reduce ~= 1.0) %next: simplify mesh
     %fprintf('reduced to %d -> %d vertices (%.2f)\n', orig, max(FV.faces(:)), reduce);
 end;
 faces = FV.faces;
+faces = flipdim(faces,2); %correct triangle winding
 vertices = FV.vertices;
 clear('FV');
 if vertexColor %next compute vertex colors
