@@ -29,7 +29,10 @@ function [faces, vertices] = readVisa(filename)
 % ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 % POSSIBILITY OF SUCH DAMAGE.
 
-if nargin==0, filename=fn_getfile({'*.vtk;*.tri;*.mesh'}); end
+if nargin==0, 
+    [files,pth] = uigetfile({'*.vtk;*.tri;*.mesh'},'Select the Image[s]');
+    filename=fullfile(pth,files); 
+end
 if isempty(findstr(filename,'.')), filename = [filename '.vtk']; end
 
 
@@ -72,13 +75,12 @@ case 'mesh'
         [lbindian, COUNT] = fread(fid, 4, 'uchar') ;
         [arg_size, COUNT] = fread(fid, 1, 'uint32') ;
         [VOID, COUNT] = fread(fid, arg_size, 'uchar') ;
-        
         [vertex_per_face, COUNT] = fread(fid, 1, 'uint32') ;
         [mesh_time, COUNT] = fread(fid, 1, 'uint32') ;
         
         [mesh_step, COUNT] = fread(fid, 1, 'uint32') ;
         [vertex_number, COUNT] = fread(fid, 1, 'uint32') ;
-        
+        vertex_number
         [vertex, COUNT] = fread(fid, 3*vertex_number, 'float32') ;
         [arg_size, COUNT] = fread(fid, 1, 'uint32') ;
         vertex=reshape(vertex,3,vertex_number)';

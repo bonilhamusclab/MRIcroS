@@ -5,6 +5,7 @@ function [faces, vertices, vertexColors, colorMap, colorMin] = readMesh(varargin
 %Examples
 % readMesh('myImg.vtk');
 % readMesh('myImg.vtk',0.5); % 50% reduction
+
 vertexColors = [];
 colorMap = utils.colorTables(1);
 colorMin = 0;
@@ -21,7 +22,6 @@ if (nargin > 1) && isnumeric(varargin{2}) %16 Oct 2014
     reduce = varargin{2};
 end
 tic
-
 if fileUtils.isMz3(filename)
     [faces, vertices, vertexColors] = fileUtils.mz3.readMz3(filename);
 elseif fileUtils.isVisa(filename)
@@ -47,6 +47,9 @@ else
      faces = gii.faces';
      vertices = gii.vertices';
 end;
+
+
+
 toc
 if isempty(vertexColors) && (reduce < 1) && (reduce > 0)
     fv.faces = faces;

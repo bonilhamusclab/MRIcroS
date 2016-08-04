@@ -26,7 +26,7 @@ function writeMz3(filename, face, vertex,vertexColors,alpha)
 %  12-15: UINT32 : NSKIP bytes to skip (0 for current version)
 % The header is 16+NSKIP bytes long
 % Note: for better compression integer data is transposed (interleaved)
-%  FACE DATA: if isFACE, next 12*NFACE bytes 
+%  FACE DATA: if isFACE, next 12*NFACE bytes
 %   +0..3: INT32 : 1st index of 1st triangle
 %   +0..3: INT32 : 1st index of 2nd triangle
 %   +0..3: INT32 : 1st index of 3rd triangle
@@ -52,7 +52,7 @@ function writeMz3(filename, face, vertex,vertexColors,alpha)
 %   ...
 %   ++     FLOAT32 : intensity for NVERT vertex
 
-if ~exist('vertexColors','var'), vertexColors = []; end; 
+if ~exist('vertexColors','var'), vertexColors = []; end;
 if isempty(vertex) && isempty(vertexColors) && isempty(face), return; end;
 if isempty(face)
     nFace = 0;
@@ -71,7 +71,7 @@ if ~isempty(vertexColors) && (size(vertexColors,2) == 3)
     isRGBA = true;
     if (nVert > 0) && (size(vertexColors,1) ~= nVert), error('Number of vertices and colors must match');  end;
     nVert = size(vertexColors,1);
-    
+
 end
 isScalar = false;
 if ~isempty(vertexColors) && (size(vertexColors,2) == 1)
@@ -91,7 +91,7 @@ fwrite(fid, 23117, 'uint16'); %MAGIC SIG to catch ftp conversion errors http://e
 fwrite(fid, attr, 'uint16'); %attr = ATTRIBUTES
 fwrite(fid, nFace, 'uint32'); %nFace
 fwrite(fid, nVert, 'uint32'); %nVert
-fwrite(fid, 0, 'uint32'); %nSkip - bytes to skip 
+fwrite(fid, 0, 'uint32'); %nSkip - bytes to skip
 if isFace
     face = face - 1; %this format indexes from 0
     fwrite(fid,face','int32'); %triangle indices
@@ -110,8 +110,9 @@ if isScalar
 end
 fclose(fid);
 %compress data
-system(sprintf('gzip -9 %s', filename));
-% gzip(filename); %compress
+% system(sprintf('/Users/rorden/Downloads/zopfli-master/zopfli -i100 %s', filename));
+% system(sprintf('gzip -9 %s', filename));
+ gzip(filename); %compress
 % delete(filename); %delete uncompressed
 movefile([filename '.gz'], filename); %rename
 %end writeMz3()

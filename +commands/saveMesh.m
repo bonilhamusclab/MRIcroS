@@ -16,7 +16,7 @@ for i=1:length(v.surface)
     elseif fileUtils.isGifti(filename)
         if (exist('gifti.m', 'file') == 2)
             g = gifti(v.surface(i));
-            save(g,filename,'GZipBase64Binary');
+            save(g,filename,'GZipBase64Binary'); % save(g,filename,'ASCII');
         else
             fprintf('Error: Unable to save GIfTI files - make sure SPM is installed');
         end;

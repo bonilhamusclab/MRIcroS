@@ -1,13 +1,13 @@
 function [hdr, img] = readNifti(filename, open4D)
 %function [hdr, img] = readNifti(filename)
-%load NIfTI (.nii, .nii.gz, .hdr/.img) image and header 
+%load NIfTI (.nii, .nii.gz, .hdr/.img) image and header
 % filename: image to open
 %To do:
 %  endian: rare, currently detected and reported but not handled
 %Examples
-% hdr = nii_loadhdrimg('myimg.nii');
-% [hdr, img] = nii_loadhdrimg('myimg.nii');
-% [hdr, img] = nii_loadhdrimg('img4d.nii', true);
+% hdr = readNifti('myimg.nii');
+% [hdr, img] = readNifti('myimg.nii');
+% [hdr, img] = readNifti('img4d.nii', true);
 
 if ~exist('filename','var')  %fnmFA not specified
    [A,Apth] = uigetfile({'*.nii;*.gz;*.hdr;';'*.*'},'Select image');
@@ -73,12 +73,12 @@ switch hdr.dt(1)
       bitpix = 32; myprecision = 'single';%'float32';
    case  64,
       bitpix = 64; myprecision = 'double';%'float64';
-   case 512 
+   case 512
       bitpix = 16; myprecision = 'uint16';
-   case 768 
+   case 768
       bitpix = 32; myprecision = 'uint32';
    otherwise
-      error('This datatype is not supported'); 
+      error('This datatype is not supported');
 end
 if numel(hdr.dim) > 3
     nVol = prod(hdr.dim(4:end));
@@ -148,7 +148,7 @@ machine = 'ieee-le';
 %read header key
 hk.sizeof_hdr = typecast(data(1:4),'int32');
 if swapbytes(hk.sizeof_hdr) == 348
-   error('%s error: NIfTI image has foreign endian (solution: convert with dcm2nii)',mfilename); 
+   error('%s error: NIfTI image has foreign endian (solution: convert with dcm2nii)',mfilename);
 end
 if hk.sizeof_hdr ~= 348
     error('%s error: first byte of NIfTI image should be 348',mfilename);
