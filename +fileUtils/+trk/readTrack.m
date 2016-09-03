@@ -60,5 +60,5 @@ function header = getHeader(fid)
 	header.swap_zx                   = fread(fid, 1, 'uchar');
 	header.n_count                   = fread(fid, 1, 'int')';
 	header.version                   = fread(fid, 1, 'int')';
-	header.hdr_size                  = fread(fid, 1, 'int')';
+	header.hdr_size                  = fread(fid, 1, 'int')'; 
 %end getHeader()
