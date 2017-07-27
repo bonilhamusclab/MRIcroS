@@ -2,20 +2,21 @@ function [faces, vertices, vertexColors] = readVox (filename, reduce, smooth, th
 % filename: nii or nii.gz image to open
 % thresh : isosurface threshold, e.g. if 1 then voxels less than 1 are transparent
 %          "Inf" or "-Inf" for automatic thresholds
-% reduce : reduction factor 0..1, e.g. 0.05 will simplify mesh to 5% of original size 
+% reduce : reduction factor 0..1, e.g. 0.05 will simplify mesh to 5% of original size
 % --- convert voxel image to triangle surface mesh
 
 vertexColors = [];
 if (reduce > 1) || (reduce <= 0), reduce = 1; end;
+if ~exist('vertexColor','var'), vertexColor = false; end;
 [Hdr, Vol] = fileUtils.nifti.readNifti(filename);
 Vol = double(Vol);
-Vol(isnan(Vol)) = 0; 
+Vol(isnan(Vol)) = 0;
 rawVol = Vol;
 smooth = round(smooth); %smooth MUST be an integer
 if smooth > 0 %blur image prior to edge extraction
     if mod(smooth,2) == 0
         smooth = smooth+1;
-        fprintf('Note: Smooth diameter incremented. Smooth must be an odd number (voxel diameter of kernel)\n'); 
+        fprintf('Note: Smooth diameter incremented. Smooth must be an odd number (voxel diameter of kernel)\n');
     end;
     fprintf('Applying gaussian smooth with %d voxel diameter\n',round(smooth));
     Vol = smooth3(Vol,'gaussian',round(smooth), round(smooth) * 0.2167);
@@ -28,8 +29,8 @@ elseif (isnan(thresh)) || (isinf(thresh)) %if +Inf, use midpoint
 end;
 Vol = clipEdgesSub(Vol,thresh);
 FV = isosurface(Vol,thresh);
-if isempty(FV.vertices) 
-    if (min(Vol(:)) == max(Vol(:))) 
+if isempty(FV.vertices)
+    if (min(Vol(:)) == max(Vol(:)))
         error('All voxels in this image have the same intensity: unable to create mesh');
     end
     thresh = min(Vol(:)) + eps;
@@ -43,6 +44,7 @@ if (reduce ~= 1.0) %next: simplify mesh
     %fprintf('reduced to %d -> %d vertices (%.2f)\n', orig, max(FV.faces(:)), reduce);
 end;
 faces = FV.faces;
+faces = flipdim(faces,2); %correct triangle winding
 vertices = FV.vertices;
 clear('FV');
 if vertexColor %next compute vertex colors
@@ -53,6 +55,9 @@ end
 i = 1;
 j = 2;
 vertices =  vertices(:,[1:i-1,j,i+1:j-1,i,j+1:end]);
+%TO DO: I think lines above are the same as
+% vertices=vertices(:,[2,1,3])
+
 
 %BELOW: SLOW for loop for converting from slice indices to mm
 %for vx = 1:size( vertices,1) %slow - must be a way to do this with bsxfun
@@ -99,7 +104,7 @@ if range ~= 0 %normalize for range 0 (black) to 1 (white)
     %we could use a histogram
     % http://angeljohnsy.blogspot.com/2011/04/matlab-code-histogram-equalization.html?m=1
     %instead, since range is 0..1 we will use power function to make median = 0.5
-    % to determine power exponent, we compute Logarithm to an arbitrary base http://en.wikipedia.org/wiki/Logarithm 
+    % to determine power exponent, we compute Logarithm to an arbitrary base http://en.wikipedia.org/wiki/Logarithm
     mdn = median(clr(:));
     pow = log(0.5)/log(mdn);
     clr = power(clr, pow);

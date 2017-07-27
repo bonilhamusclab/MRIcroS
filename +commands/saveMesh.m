@@ -3,13 +3,20 @@ function saveMesh(v, filename)
 % requires SPM
 [path,file,ext] = fileparts(filename);
 for i=1:length(v.surface)
-    if (i > 1) 
+    if (i > 1)
         filename = fullfile(path, [file num2str(i) ext]);
     end;
-    if fileUtils.isGifti(filename)
+    if fileUtils.isDae(filename)
         if (exist('gifti.m', 'file') == 2)
             g = gifti(v.surface(i));
-            save(g,filename,'GZipBase64Binary');
+            save(g,filename,'Collada');
+        else
+            fprintf('Error: Unable to save Collada files (.dae) - make sure SPM is installed');
+        end;
+    elseif fileUtils.isGifti(filename)
+        if (exist('gifti.m', 'file') == 2)
+            g = gifti(v.surface(i));
+            save(g,filename,'GZipBase64Binary'); % save(g,filename,'ASCII');
         else
             fprintf('Error: Unable to save GIfTI files - make sure SPM is installed');
         end;
@@ -18,6 +25,10 @@ for i=1:length(v.surface)
             v.surface(i).faces,filename, v.surface(i).colorMap, v.surface(i).colorMin);
     elseif fileUtils.isVtk(filename)
         fileUtils.vtk.writeVtk(v.surface(i).vertices,v.surface(i).faces,filename);
+    elseif fileUtils.isObj(filename)
+        fileUtils.obj.writeObj(v.surface(i).vertices,v.surface(i).faces,filename);
+    elseif fileUtils.isMz3(filename)
+        fileUtils.mz3.writeMz3(filename, v.surface(i).faces, v.surface(i).vertices);
     elseif fileUtils.isStl(filename)
         fileUtils.stl.writeStl(v.surface(i).vertices,v.surface(i).faces,filename);
     else

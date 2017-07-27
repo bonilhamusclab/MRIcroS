@@ -1,8 +1,8 @@
-function addTrack(v, filename, varargin)	
+function addTrack(v, filename, varargin)
 %MRIcroS('addTrack','dti.trk')
 %MRIcroS('addTrack','dti.trk', 100)
 %MRIcroS('addTrack','dti.trk', 50, 10)
-%inputs: 
+%inputs:
 % 1) filename
 %   Optional:
 % 2) trackSpacing: 1/x tracks will be sampled (default 100)
@@ -11,8 +11,8 @@ function addTrack(v, filename, varargin)
 
 [filename, isFound] = fileUtils.isFileFound(v, filename);
 if ~isFound
-    fprintf('Unable to find "%s"\n',filename); 
-    return; 
+    fprintf('Unable to find "%s"\n',filename);
+    return;
 end;
 
 inputs = parseInputParamsSub(varargin);

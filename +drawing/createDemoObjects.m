@@ -36,4 +36,7 @@ range = max(clr) - min(clr);
 if range ~= 0 %normalize for range 0 (black) to 1 (white)
     sphereFV.vertexColors = (clr - min(clr)) / range; %save colors as Scalar not RGB
 end 
+sphereFV.faces = flipdim(sphereFV.faces,2); %correct triangle winding
+cubeFV.faces = flipdim(cubeFV.faces,2); %correct triangle winding
+
 %end createDemoObjects()

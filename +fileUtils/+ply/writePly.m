@@ -7,7 +7,10 @@ function writePly(vertex,vertexColors,face,filename, alpha)
 % filename: name to save object
 % alpha: (optional) if provided, sets transparency of vertex colors, range 0..1
 % --- creates binary format ply file, e.g. for meshlab
- 
+
+%Next line reverse triangle winding
+% face = flipdim(face,2);
+
 [fid,Msg] = fopen(filename,'Wt');
 if fid == -1, error(Msg); end;
 [~,~,endian] = computer;

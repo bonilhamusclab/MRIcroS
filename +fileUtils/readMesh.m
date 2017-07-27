@@ -5,10 +5,11 @@ function [faces, vertices, vertexColors, colorMap, colorMin] = readMesh(varargin
 %Examples
 % readMesh('myImg.vtk');
 % readMesh('myImg.vtk',0.5); % 50% reduction
+
 vertexColors = [];
 colorMap = utils.colorTables(1);
 colorMin = 0;
-if (nargin) && (ischar(varargin{1})) 
+if (nargin) && (ischar(varargin{1}))
  filename = varargin{1};
 else
 	error('readMesh expects filename');
@@ -20,8 +21,12 @@ reduce = 1;
 if (nargin > 1) && isnumeric(varargin{2}) %16 Oct 2014
     reduce = varargin{2};
 end
-
-if fileUtils.isPly(filename)
+tic
+if fileUtils.isMz3(filename)
+    [faces, vertices, vertexColors] = fileUtils.mz3.readMz3(filename);
+elseif fileUtils.isVisa(filename)
+    [faces, vertices] = fileUtils.visa.readVisa(filename);
+elseif fileUtils.isPly(filename)
     [faces, vertices, vertexColors] = fileUtils.ply.readPly(filename);
 elseif fileUtils.isNv(filename)
     [faces, vertices] = fileUtils.nv.readNv(filename);
@@ -39,9 +44,13 @@ elseif fileUtils.isGifti(filename)
     vertices = double(gii.vertices); %convert to double or reducepatch fails
 else
     [gii.vertices, gii.faces] = fileUtils.vtk.readVtk(filename);
-     faces = gii.faces'; 
-     vertices = gii.vertices'; 
+     faces = gii.faces';
+     vertices = gii.vertices';
 end;
+
+
+
+toc
 if isempty(vertexColors) && (reduce < 1) && (reduce > 0)
     fv.faces = faces;
     fv.vertices = vertices;

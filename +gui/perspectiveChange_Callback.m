@@ -2,10 +2,11 @@ function perspectiveChange_Callback(obj,evd)
 % --- reposition light after camera is moved, store new camera azimuth/elevation
 v=guidata(obj);
 camlight(v.vprefs.camLight, 0,40);
+%camlight(v.vprefs.camLight,'headlight')
 guidata(v.hMainFigure,v);%store settings
-
-
+drawnow
 return; %CRX - DISABLE - LOTS OF FLICKER
+
 v=guidata(obj);
 %camlight(v.vprefs.camLight, v.vprefs.azLight,v.vprefs.elLight);
 camlight(v.vprefs.camLight, 'headlight');
