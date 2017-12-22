@@ -26,9 +26,9 @@ data = baos.toByteArray;
 machine = 'ieee-le';
 magic = typecast(data(1:2),'uint16');
 if magic ~= 23117, fprintf('Signature is not MZ3\n'); return; end;
-%attr reports attributes and version 
+%attr reports attributes and version
 attr = typecast(data(3:4),'uint16');
-if (attr == 0) || (attr > 7), fprintf('This file uses unsupported features\n'); end;
+if (attr == 0) || (attr > 15), fprintf('This file uses (future) unsupported features\n'); end;
 isFace = bitand(attr,1);
 isVert = bitand(attr,2);
 isRGBA = bitand(attr,4);
@@ -70,7 +70,7 @@ end
 if isSCALAR
     vertbytes = nVert * 4; %each vertex has 1 byte float
     vertexColors = typecast(data(hdrSz+1:hdrSz+vertbytes),'single');
-    vertexColors = double(vertices); %matlab wants doubles 
+    vertexColors = double(vertices); %matlab wants doubles
     hdrSz = hdrSz + vertbytes;
 end
 %end readMz3()

@@ -1,4 +1,4 @@
-function writeObk(vertex,face,filename)
+function writeObj(vertex,face,filename)
 %function writeObj(vertex,faces,filename)
 % --- save Face/Vertex data as WaveFront Object format file
 %inputs:
@@ -10,6 +10,8 @@ function writeObk(vertex,face,filename)
 
 [nF nFd] =size(face);
 [nV nVd] =size(vertex);
+nF
+nV
 if (nF <1) || (nV <3 || (nFd ~=3) || (nVd ~=3)), warning('Problem with writeObj'); return; end; 
 fid = fopen(filename, 'wt');
 fprintf(fid, '# WaveFront Object format image created with MRIcroS\n');
