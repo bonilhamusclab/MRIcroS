@@ -1,6 +1,6 @@
 function writeMz3(filename, face, vertex,vertexColors,alpha)
 %function writeNv(vertex,faces,filename)
-% --- save Face/Vertex data as BrainNet format file
+% --- save Face/Vertex data as Surfice MZ3 format file
 %inputs:
 % vertex: Vx3 array with X,Y,Z coordinates of each vertex
 % vertexColors: Vx0 (empty), Vx1 (scalar) or Vx3 (RGB) colors for each vertex
@@ -10,13 +10,13 @@ function writeMz3(filename, face, vertex,vertexColors,alpha)
 %Example
 % [f,v,c] = fileUtils.ply.readPly('stroke.ply');
 % fileUtils.mz3.writeMz3('stroke.mz3',f,v,c)
-%TRIB format specifications:
+%MZ3 format specifications:
 %  Faces indexed from 0: a triangle of the first 3 vertices is  0,1,2
 %  Always LITTLE endian: endian can be determined by reading signature
 % HEADER: first 32 bytes
 %  bytes : type : notes
 %  0-1: UINT16 : MAGIC signature = integer 23117 = 'MZ'
-%  2-3: UINT16 : ATTR attributes bitfield reporting stored data:
+%  2-3: UINT16 : ATTR attributes bitfield reporting stored data (value larger than 15 indicates future version):
 %        bitand(ATTR,1) = 1 : isFACE File includes FACE indices
 %        bitand(ATTR,2) = 2 : isVERT File includes VERT vertices
 %        bitand(ATTR,4) = 4 : isRGBA File includes RGBA values (one per vertex)
@@ -116,4 +116,3 @@ fclose(fid);
 % delete(filename); %delete uncompressed
 movefile([filename '.gz'], filename); %rename
 %end writeMz3()
-

@@ -1,31 +1,42 @@
-function [faces, vertices, vertexColors] = readMz3(filename)
-%function [faces, vertices, vertexColors] = readMz3(fileName)
+function [faces, vertices, vertexColors, data] = readMz3(filename)
+%function [faces, vertices, vertexColors, data] = readMz3(fileName)
 %inputs:
 %	filename: the nv file to open
 %outputs:
 %  faces: face matrix where cols are xyz and each row is face
 %  vertices: vertices matrix where cols are xyz and each row a vertex
 %  vertexColors: Vx0 (empty), Vx1 (scalar) or Vx3 (RGB) colors for each vertex
+%  data: raw uncompressed bytes of mz3 file
 %Mz3 is the native format of Surf Ice, it is small and fast to read
 %if ~exist('filename','var'), filename = 'stroke.mz3'; end;
 faces = [];
 vertices = [];
 vertexColors = [];
 if ~exist(filename,'file'), return; end;
-%Decode gzip data
-% http://undocumentedmatlab.com/blog/savezip-utility
-% http://www.mathworks.com/matlabcentral/fileexchange/39526-byte-encoding-utilities/content/encoder/gzipdecode.m
-streamCopier = com.mathworks.mlwidgets.io.InterruptibleStreamCopier.getInterruptibleStreamCopier;
-baos = java.io.ByteArrayOutputStream;
-fis  = java.io.FileInputStream(filename);
-zis  = java.util.zip.GZIPInputStream(fis);
-streamCopier.copyStream(zis,baos);
-fis.close;
-data = baos.toByteArray;
-%mz3 ALWAYS little endian
-machine = 'ieee-le';
+% Check if this is Octave:
+persistent isoct;
+if isempty(isoct),
+    isoct = exist('OCTAVE_VERSION','builtin') ~= 0;
+end
+% If it's Octave, use the built-in gzip stream:
+if isoct,
+    fid = fopen(filename,'rz','l');
+    data = uint8(fread(fid,'uint8'));
+    fclose(fid);
+else
+    % Decode gzip data using Java if this is Matlab
+    % http://undocumentedmatlab.com/blog/savezip-utility
+    % http://www.mathworks.com/matlabcentral/fileexchange/39526-byte-encoding-utilities/content/encoder/gzipdecode.m
+    streamCopier = com.mathworks.mlwidgets.io.InterruptibleStreamCopier.getInterruptibleStreamCopier;
+    baos = java.io.ByteArrayOutputStream;
+    fis  = java.io.FileInputStream(filename);
+    zis  = java.util.zip.GZIPInputStream(fis);
+    streamCopier.copyStream(zis,baos);
+    fis.close;
+    data = baos.toByteArray;
+end
 magic = typecast(data(1:2),'uint16');
-if magic ~= 23117, fprintf('Signature is not MZ3\n'); return; end;
+if magic ~= 23117, error('Signature is not MZ3\n'); return; end;
 %attr reports attributes and version
 attr = typecast(data(3:4),'uint16');
 if (attr == 0) || (attr > 15), fprintf('This file uses (future) unsupported features\n'); end;
@@ -70,7 +81,7 @@ end
 if isSCALAR
     vertbytes = nVert * 4; %each vertex has 1 byte float
     vertexColors = typecast(data(hdrSz+1:hdrSz+vertbytes),'single');
-    vertexColors = double(vertices); %matlab wants doubles
+    vertexColors = double(vertexColors); %matlab wants doubles
     hdrSz = hdrSz + vertbytes;
 end
 %end readMz3()
