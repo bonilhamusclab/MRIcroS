@@ -13,9 +13,10 @@ function writeMz3(filename, face, vertex,vertexColors,alpha)
 %MZ3 format specifications:
 %  Faces indexed from 0: a triangle of the first 3 vertices is  0,1,2
 %  Always LITTLE endian: endian can be determined by reading signature
+%  Optionally: may be GZ compressed (two detect: first two bytes are signature, GZip = 0x1f8B, raw = 0x4D5A )
 % HEADER: first 32 bytes
 %  bytes : type : notes
-%  0-1: UINT16 : MAGIC signature = integer 23117 = 'MZ'
+%  0-1: UINT16 : MAGIC signature hex = 0x4D5A integer = 23117, ASCII = 'MZ'
 %  2-3: UINT16 : ATTR attributes bitfield reporting stored data (value larger than 15 indicates future version):
 %        bitand(ATTR,1) = 1 : isFACE File includes FACE indices
 %        bitand(ATTR,2) = 2 : isVERT File includes VERT vertices
@@ -51,6 +52,7 @@ function writeMz3(filename, face, vertex,vertexColors,alpha)
 %   +8..11: FLOAT32: intensity for 3rd vertex
 %   ...
 %   ++     FLOAT32 : intensity for NVERT vertex
+
 
 if ~exist('vertexColors','var'), vertexColors = []; end;
 if isempty(vertex) && isempty(vertexColors) && isempty(face), return; end;
