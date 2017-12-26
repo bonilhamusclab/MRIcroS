@@ -13,27 +13,35 @@ faces = [];
 vertices = [];
 vertexColors = [];
 if ~exist(filename,'file'), return; end;
-% Check if this is Octave:
-persistent isoct;
-if isempty(isoct),
-    isoct = exist('OCTAVE_VERSION','builtin') ~= 0;
-end
-% If it's Octave, use the built-in gzip stream:
-if isoct,
-    fid = fopen(filename,'rz','l');
-    data = uint8(fread(fid,'uint8'));
+try
+    % Check if this is Octave:
+    persistent isoct;
+    if isempty(isoct),
+        isoct = exist('OCTAVE_VERSION','builtin') ~= 0;
+    end
+    % If it's Octave, use the built-in gzip stream:
+    if isoct,
+        fid = fopen(filename,'rz','l');
+        data = uint8(fread(fid,'uint8'));
+        fclose(fid);
+    else
+        % Decode gzip data using Java if this is Matlab
+        % http://undocumentedmatlab.com/blog/savezip-utility
+        % http://www.mathworks.com/matlabcentral/fileexchange/39526-byte-encoding-utilities/content/encoder/gzipdecode.m
+        streamCopier = com.mathworks.mlwidgets.io.InterruptibleStreamCopier.getInterruptibleStreamCopier;
+        baos = java.io.ByteArrayOutputStream;
+        fis  = java.io.FileInputStream(filename);
+        zis  = java.util.zip.GZIPInputStream(fis);
+        streamCopier.copyStream(zis,baos);
+        fis.close;
+        data = baos.toByteArray;
+    end
+catch
+    
+    fid = fopen(filename,'r','ieee-le');
+    data = fread(fid);
     fclose(fid);
-else
-    % Decode gzip data using Java if this is Matlab
-    % http://undocumentedmatlab.com/blog/savezip-utility
-    % http://www.mathworks.com/matlabcentral/fileexchange/39526-byte-encoding-utilities/content/encoder/gzipdecode.m
-    streamCopier = com.mathworks.mlwidgets.io.InterruptibleStreamCopier.getInterruptibleStreamCopier;
-    baos = java.io.ByteArrayOutputStream;
-    fis  = java.io.FileInputStream(filename);
-    zis  = java.util.zip.GZIPInputStream(fis);
-    streamCopier.copyStream(zis,baos);
-    fis.close;
-    data = baos.toByteArray;
+    data = uint8(data);
 end
 magic = typecast(data(1:2),'uint16');
 if magic ~= 23117, error('Signature is not MZ3\n'); return; end;
