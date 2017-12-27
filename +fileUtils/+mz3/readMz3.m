@@ -12,7 +12,7 @@ function [faces, vertices, vertexColors, data] = readMz3(filename)
 faces = [];
 vertices = [];
 vertexColors = [];
-if ~exist(filename,'file'), return; end;
+if ~exist(filename,'file'), error('Unable to find MZ3 file named "%s"', filename); return; end;
 try
     % Check if this is Octave:
     persistent isoct;
