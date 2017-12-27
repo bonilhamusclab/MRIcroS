@@ -12,8 +12,9 @@ function writeMz3(filename, face, vertex,vertexColors,alpha)
 % fileUtils.mz3.writeMz3('stroke.mz3',f,v,c)
 %MZ3 format specifications:
 %  Faces indexed from 0: a triangle of the first 3 vertices is  0,1,2
-%  Always LITTLE endian: endian can be determined by reading signature
-%  Optionally: may be GZ compressed (two detect: first two bytes are signature, GZip = 0x1f8B, raw = 0x4D5A )
+%  Always LITTLE endian
+%  First two bytes are a signature for detecting format, next two bytes reveal features and version
+%  Optionally: may be GZ compressed (read first two bytes to detect: GZip = 0x1f8B, raw = 0x4D5A )
 % HEADER: first 32 bytes
 %  bytes : type : notes
 %  0-1: UINT16 : MAGIC signature hex = 0x4D5A integer = 23117, ASCII = 'MZ'
@@ -43,16 +44,26 @@ function writeMz3(filename, face, vertex,vertexColors,alpha)
 %  RGBA DATA: if isRGBA next 4*NVERT bytes
 %   +0: UINT8: red for first vertex
 %   +1: UINT8: red for 2nd vertex
-%   +2: UINT8: red for 3rd vertex
 %   ...
-%   ++     UINT8 : blue for NVERT vertex
+%   ++  UINT8 : red for NVERT vertex
+%   ++: UINT8: green for first vertex
+%   ++: UINT8: green for 2nd vertex
+%   ...
+%   ++  UINT8 : green for NVERT vertex
+%   ++: UINT8: blue for first vertex
+%   ++: UINT8: blue for 2nd vertex
+%   ...
+%   ++  UINT8 : blue for NVERT vertex
+%   ++: UINT8: alpha for first vertex
+%   ++: UINT8: alpha for 2nd vertex
+%   ...
+%   ++     UINT8 : alpha for NVERT vertex
 %  SCALAR DATA: if isSCALAR next 4*NVERT bytes
 %   +0..3: FLOAT32: intensity for first vertex
 %   +4..7: FLOAT32: intensity for 2nd vertex
 %   +8..11: FLOAT32: intensity for 3rd vertex
 %   ...
 %   ++     FLOAT32 : intensity for NVERT vertex
-
 
 if ~exist('vertexColors','var'), vertexColors = []; end;
 if isempty(vertex) && isempty(vertexColors) && isempty(face), return; end;
